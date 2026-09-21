@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · wufeng 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · wufeng 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · wufeng</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · wufeng</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">我的网址导航</h3><div class="grid"><a class="item" href="http://www.xiaolvji.com/u/wufeng" target="_blank" data-domain="xiaolvji.com" title="效率集导航">效率集导航</a><a class="item" href="https://www.bidianer.com/" target="_blank" data-domain="bidianer.com" title="笔点导航">笔点导航</a><a class="item" href="http://ilxdh.com/diy" target="_blank" data-domain="ilxdh.com" title="龙轩导航">龙轩导航</a><a class="item" href="http://www.296296.xyz/" target="_blank" data-domain="296296.xyz" title="个性主页">个性主页</a><a class="item" href="https://ttsmaker.cn/" target="_blank" data-domain="ttsmaker.cn" title="在线马克配音">在线马克配音</a><a class="item" href="https://www.jspoo.com/" target="_blank" data-domain="jspoo.com" title="聚神铺导航">聚神铺导航</a><a class="item" href="https://image.baidu.com/search/index?tn=baiduimage&amp;ipn=r&amp;ct=201326592&amp;cl=2&amp;lm=-1&amp;st=-1&amp;fm=detail&amp;hs=0&amp;xthttps=111110&amp;sf=1&amp;fmq=1713767239197_R&amp;pv=&amp;ic=0&amp;nc=1&amp;z=&amp;se=&amp;showtab=0&amp;fb=0&amp;width=&amp;height=&amp;face=0&amp;istype=2&amp;ie=utf-8&amp;word=bdaitpzs%E7%99%BE%E5%BA%A6AI%E5%9B%BE%E7%89%87%E5%8A%A9%E6%89%8Bbdaitpzs&amp;oq=%E5%9B%BE%E7%89%87&amp;rsp=-1&amp;toolType=-1&amp;fr=home&amp;sa=searchpromo_shijian_photohp_edit&amp;showMask=1" target="_blank" data-domain="image.baidu.com" title="百度AI图片助手">百度AI图片助手</a><a class="item" href="https://raphael.app/zh" target="_blank" data-domain="raphael.app" title="AI图像生成">AI图像生成</a><a class="item" href="https://fmhy.net/" target="_blank" data-domain="fmhy.net" title="自由媒体哎呀">自由媒体哎呀</a><a class="item" href="http://www.youruanhui.com/" target="_blank" data-domain="youruanhui.com" title="优软汇">优软汇</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">常用查询网站</h3><div class="grid"><a class="item" href="http://www.12306.cn/mormhweb/" target="_blank" data-domain="12306.cn" title="12306客服">12306客服</a><a class="item" href="http://tools.2345.com/kuaidi.htm" target="_blank" data-domain="tools.2345.com" title="快递查询">快递查询</a><a class="item" href="https://bus.mapbar.com/jilin/xianlu/" target="_blank" data-domain="bus.mapbar.com" title="公交线路查询">公交线路查询</a><a class="item" href="http://www.ip138.com/" target="_blank" data-domain="ip138.com" title="ip138 查询网">ip138 查询网</a><a class="item" href="http://tools.2345.com/" target="_blank" data-domain="tools.2345.com" title="实用查询工具">实用查询工具</a><a class="item" href="http://hl.zdic.net/" target="_blank" data-domain="hl.zdic.net" title="汉典老黄历">汉典老黄历</a><a class="item" href="http://www.zdic.net/" target="_blank" data-domain="zdic.net" title="汉典网页版">汉典网页版</a><a class="item" href="http://www.beijing-time.org/" target="_blank" data-domain="beijing-time.org" title="北京时间校对">北京时间校对</a><a class="item" href="http://www.cankaoxiaoxi.com/" target="_blank" data-domain="cankaoxiaoxi.com" title="参考消息">参考消息</a><a class="item" href="https://www.huanqiu.com/" target="_blank" data-domain="huanqiu.com" title="环球网">环球网</a><a class="item" href="http://tv.cctv.com/" target="_blank" data-domain="tv.cctv.com" title="CCTV节目">CCTV节目</a><a class="item" href="https://naozhong.net.cn/shijian/" target="_blank" data-domain="naozhong.net.cn" title="网页时钟">网页时钟</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">原版系统镜像</h3><div class="grid"><a class="item" href="https://github.com/rcmaehl/WhyNotWin11" target="_blank" data-domain="github.com" title="能安装Win11吗">能安装Win11吗</a><a class="item" href="https://next.itellyou.cn/" target="_blank" data-domain="next.itellyou.cn" title="NEXT,我告诉你">NEXT,我告诉你</a><a class="item" href="https://www.pe8.com/msdn/" target="_blank" data-domain="pe8.com" title="山己几子木">山己几子木</a><a class="item" href="https://hellowindows.cn/" target="_blank" data-domain="hellowindows.cn" title="HelloWindows">HelloWindows</a><a class="item" href="https://bbs.pcbeta.com/forum.php?gid=213" target="_blank" data-domain="bbs.pcbeta.com" title="远景论坛">远景论坛</a><a class="item" href="http://www.songyongzhi.com/" target="_blank" data-domain="songyongzhi.com" title="宋永志博客">宋永志博客</a><a class="item" href="https://www.pc521.net/" target="_blank" data-domain="pc521.net" title="不忘初心">不忘初心</a><a class="item" href="https://www.xiuxitong.com/" target="_blank" data-domain="xiuxitong.com" title="修系统">修系统</a><a class="item" href="http://wsks.net/" target="_blank" data-domain="wsks.net" title="顽石博客">顽石博客</a><a class="item" href="http://bbs.wuyou.net/?756995" target="_blank" data-domain="bbs.wuyou.net" title="溯汐潮-空间">溯汐潮-空间</a><a class="item" href="http://blog.sina.com.cn/s/articlelist_3903551938_0_1.html" target="_blank" data-domain="blog.sina.com.cn" title="山里来的博客">山里来的博客</a><a class="item" href="http://twm000.top/" target="_blank" data-domain="twm000.top" title="三蛋精简系统">三蛋精简系统</a><a class="item" href="http://y-os.net/" target="_blank" data-domain="y-os.net" title="Y-OS工作室">Y-OS工作室</a><a class="item" href="https://www.ampc8.com/" target="_blank" data-domain="ampc8.com" title="AM电脑吧">AM电脑吧</a><a class="item" href="https://learn.microsoft.com/zh-cn/windows/release-health/release-information" target="_blank" data-domain="learn.microsoft.com" title="Win10版本信息">Win10版本信息</a><a class="item" href="https://learn.microsoft.com/zh-cn/windows/release-health/windows11-release-information" target="_blank" data-domain="learn.microsoft.com" title="Win11版本信息">Win11版本信息</a><a class="item" href="https://baijiahao.baidu.com/s?id=1708431847737503740&amp;wfr=spider&amp;for=pc" target="_blank" data-domain="baijiahao.baidu.com" title="CPU代数区别">CPU代数区别</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">Ghost系统站</h3><div class="grid"><a class="item" href="http://bbs.wuyou.net/home.php?mod=space&amp;uid=436997" target="_blank" data-domain="bbs.wuyou.net" title="雨晨Win10系统">雨晨Win10系统</a><a class="item" href="http://ycgsotf.lofter.com/tag/%E9%9B%A8%E6%99%A8win7" target="_blank" data-domain="ycgsotf.lofter.com" title="雨晨Win7">雨晨Win7</a><a class="item" href="http://www.chunjingban.com.cn/" target="_blank" data-domain="chunjingban.com.cn" title="纯净版系统">纯净版系统</a><a class="item" href="http://www.xitonggho.com/?gho" target="_blank" data-domain="xitonggho.com" title="系统Gho">系统Gho</a><a class="item" href="http://www.qiuyexitong.com/" target="_blank" data-domain="qiuyexitong.com" title="秋叶系统">秋叶系统</a><a class="item" href="http://bfgho.com/xz/" target="_blank" data-domain="bfgho.com" title="冰封系统">冰封系统</a><a class="item" href="http://bbs.x6x8.com/forum-29-1.html" target="_blank" data-domain="bbs.x6x8.com" title="遐想系统">遐想系统</a><a class="item" href="http://www.ylmf123.com/index.html" target="_blank" data-domain="ylmf123.com" title="雨林木风">雨林木风</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=404635&amp;extra=" target="_blank" data-domain="bbs.wuyou.net" title="256内存Win7">256内存Win7</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">WinPE启动盘</h3><div class="grid"><a class="item" href="http://www.wepe.com.cn/download.html" target="_blank" data-domain="wepe.com.cn" title="微PE工具箱">微PE工具箱</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=436456" target="_blank" data-domain="bbs.wuyou.net" title="微PE6合盘2.3">微PE6合盘2.3</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=427677" target="_blank" data-domain="bbs.wuyou.net" title="微PE6合盘2.2">微PE6合盘2.2</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=427710" target="_blank" data-domain="bbs.wuyou.net" title="微PE4合盘">微PE4合盘</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=427573" target="_blank" data-domain="bbs.wuyou.net" title="无垠PE合盘">无垠PE合盘</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=426930" target="_blank" data-domain="bbs.wuyou.net" title="无垠PE网络">无垠PE网络</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=427457" target="_blank" data-domain="bbs.wuyou.net" title="无垠PE维护">无垠PE维护</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=414659" target="_blank" data-domain="bbs.wuyou.net" title="微PE2.0万能盘">微PE2.0万能盘</a><a class="item" href="http://www.jsspe.com/" target="_blank" data-domain="jsspe.com" title="技术师启动">技术师启动</a><a class="item" href="http://www.laomaotao.net/" target="_blank" data-domain="laomaotao.net" title="老毛桃PE9.5">老毛桃PE9.5</a><a class="item" href="https://www.itsk.com/portal.php" target="_blank" data-domain="itsk.com" title="IT优启通v3.7">IT优启通v3.7</a><a class="item" href="http://www.xyboot.com/" target="_blank" data-domain="xyboot.com" title="杏雨梨云PE">杏雨梨云PE</a><a class="item" href="http://www.jisupe.com/bangzhuzhongxin/98.html" target="_blank" data-domain="jisupe.com" title="设置U盘启动">设置U盘启动</a><a class="item" href="http://pe.udashi.com/html/36.html" target="_blank" data-domain="pe.udashi.com" title="U盘克隆工具">U盘克隆工具</a><a class="item" href="http://www.xz7.com/downinfo/353254.html" target="_blank" data-domain="xz7.com" title="装机员PE6.1">装机员PE6.1</a><a class="item" href="https://www.gndown.com/15634.html" target="_blank" data-domain="gndown.com" title="系统引导修复">系统引导修复</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">硬盘安装工具</h3><div class="grid"><a class="item" href="https://www.423down.com/2478.html" target="_blank" data-domain="423down.com" title="WinNTSetup4.6.3.1">WinNTSetup4.6.3.1</a><a class="item" href="https://www.423down.com/systemsoft/systembackup" target="_blank" data-domain="423down.com" title="423备份还原类">423备份还原类</a><a class="item" href="http://www.xitongzhijia.net/soft/2789.html#J_download" target="_blank" data-domain="xitongzhijia.net" title="OneKey 14.5.8">OneKey 14.5.8</a><a class="item" href="http://www.xitongzhijia.net/soft/12145.html" target="_blank" data-domain="xitongzhijia.net" title="OneKey14.5.8">OneKey14.5.8</a><a class="item" href="http://www.upantool.com/qidong/ghost/3092.html" target="_blank" data-domain="upantool.com" title="量产-OneKey">量产-OneKey</a><a class="item" href="https://www.xyboot.com/201708obr/" target="_blank" data-domain="xyboot.com" title="OBR 备份还原">OBR 备份还原</a><a class="item" href="https://www.sysceo.com/Software-softwarei-id-253.html" target="_blank" data-domain="sysceo.com" title="SGIMINI5.0">SGIMINI5.0</a><a class="item" href="http://www.doshome.com/159.html" target="_blank" data-domain="doshome.com" title="一键Ghost硬盘">一键Ghost硬盘</a><a class="item" href="http://www.diskgenius.cn/download.php" target="_blank" data-domain="diskgenius.cn" title="DiskGenius">DiskGenius</a><a class="item" href="http://www.disktool.cn/download.html" target="_blank" data-domain="disktool.cn" title="傲梅分区助手">傲梅分区助手</a><a class="item" href="http://www.smzy.com/smzy/down414259.html" target="_blank" data-domain="smzy.com" title="整数分区计算器">整数分区计算器</a><a class="item" href="http://www.crsky.com/soft/76916.html" target="_blank" data-domain="crsky.com" title="引导扇区维护">引导扇区维护</a><a class="item" href="http://www.th-sjy.com/?p=1512" target="_blank" data-domain="th-sjy.com" title="软碟通v9.7.6">软碟通v9.7.6</a><a class="item" href="https://www.423down.com/5078.html" target="_blank" data-domain="423down.com" title="Ghost+浏览器">Ghost+浏览器</a><a class="item" href="http://www.wishdown.com/soft/37777.html" target="_blank" data-domain="wishdown.com" title="分辨率设置">分辨率设置</a><a class="item" href="http://www.greenxf.com/soft/128094.html" target="_blank" data-domain="greenxf.com" title="分辨率调节器">分辨率调节器</a></div></div><div class="cat-sub" id="cat-8"><h3 class="cat-sub-title">系统激活工具</h3><div class="grid"><a class="item" href="https://www.onlinedown.net/soft/580556.htm" target="_blank" data-domain="onlinedown.net" title="XP原版激活">XP原版激活</a><a class="item" href="http://www.th-sjy.com/?p=1105" target="_blank" data-domain="th-sjy.com" title="KMS激活AAct">KMS激活AAct</a><a class="item" href="http://www.wmzhe.com/soft-33567.html" target="_blank" data-domain="wmzhe.com" title="Win7激活工具">Win7激活工具</a><a class="item" href="https://www.ypojie.com/4339.html" target="_blank" data-domain="ypojie.com" title="HWIDGen 62.01">HWIDGen 62.01</a><a class="item" href="https://www.wrfou.com/digitallicense.html" target="_blank" data-domain="wrfou.com" title="数字激活W10">数字激活W10</a><a class="item" href="https://www.423down.com/8824.html" target="_blank" data-domain="423down.com" title="数字永久激活1.4.1">数字永久激活1.4.1</a><a class="item" href="https://www.423down.com/1202.html" target="_blank" data-domain="423down.com" title="全能激活神器">全能激活神器</a><a class="item" href="http://www.bfgho.com/cjwt/364.html" target="_blank" data-domain="bfgho.com" title="教改专数字激活">教改专数字激活</a></div></div><div class="cat-sub" id="cat-9"><h3 class="cat-sub-title">驱动安装工具</h3><div class="grid"><a class="item" href="https://pan.baidu.com/s/1c2eJbsG#list/path=%2F&amp;parentPath=%2F" target="_blank" data-domain="pan.baidu.com" title="驱动助理网卡版">驱动助理网卡版</a><a class="item" href="https://www.423down.com/5768.html" target="_blank" data-domain="423down.com" title="驱动精灵单文件">驱动精灵单文件</a><a class="item" href="http://www.drivergenius.com/" target="_blank" data-domain="drivergenius.com" title="驱动精灵网卡">驱动精灵网卡</a><a class="item" href="https://www.423down.com/581.html" target="_blank" data-domain="423down.com" title="驱动人生单文件">驱动人生单文件</a><a class="item" href="http://qd.160.com/" target="_blank" data-domain="qd.160.com" title="驱动人生网卡">驱动人生网卡</a><a class="item" href="http://drivers.160.com/universal/dtl/114837.html" target="_blank" data-domain="drivers.160.com" title="USB 3.0 驱动">USB 3.0 驱动</a><a class="item" href="http://drivers.160.com/universal/dtl/114836.html" target="_blank" data-domain="drivers.160.com" title="USB 2.0 驱动">USB 2.0 驱动</a></div></div><div class="cat-sub" id="cat-10"><h3 class="cat-sub-title">运行库和组件</h3><div class="grid"><a class="item" href="https://www.ghpym.com/yxkhj.html" target="_blank" data-domain="ghpym.com" title="运行库合集">运行库合集</a><a class="item" href="https://www.423down.com/10835.html" target="_blank" data-domain="423down.com" title="运行库合集64">运行库合集64</a><a class="item" href="https://www.microsoft.com/zh-cn/download/details.aspx?id=25150" target="_blank" data-domain="microsoft.com" title=".NET 3.5SP1">.NET 3.5SP1</a><a class="item" href="https://www.microsoft.com/zh-cn/download/details.aspx?id=17718" target="_blank" data-domain="microsoft.com" title=".NET 4 独立包">.NET 4 独立包</a><a class="item" href="https://msdn.microsoft.com/zh-cn/library/5a4x27ek(v=vs.110).aspx" target="_blank" data-domain="msdn.microsoft.com" title=".NET4.5-4.72">.NET4.5-4.72</a><a class="item" href="https://docs.microsoft.com/en-us/dotnet/framework/deployment/deployment-guide-for-developers#command_line_options" target="_blank" data-domain="docs.microsoft.com" title=".NET 4.7.2">.NET 4.7.2</a><a class="item" href="https://dotnet.microsoft.com/zh-cn/download/dotnet-framework/net481" target="_blank" data-domain="dotnet.microsoft.com" title="NET4. 8.">NET4. 8.</a><a class="item" href="https://dotnet.microsoft.com/zh-cn/download/dotnet" target="_blank" data-domain="dotnet.microsoft.com" title="8.0-10.0">8.0-10.0</a><a class="item" href="https://www.423down.com/9434.html" target="_blank" data-domain="423down.com" title="Win7补丁包">Win7补丁包</a></div></div><div class="cat-sub" id="cat-11"><h3 class="cat-sub-title">必装软件下载</h3><div class="grid"><a class="item" href="https://apphot.cc/121.html" target="_blank" data-domain="apphot.cc" title="WinRAR 6.24">WinRAR 6.24</a><a class="item" href="https://www.423down.com/778.html" target="_blank" data-domain="423down.com" title="WinRAR 6.24注册版">WinRAR 6.24注册版</a><a class="item" href="https://www.rarlab.com/download.htm" target="_blank" data-domain="rarlab.com" title="WinRAR 6">WinRAR 6</a><a class="item" href="https://www.7-zip.org/" target="_blank" data-domain="7-zip.org" title="7-Zip官方">7-Zip官方</a><a class="item" href="https://sparanoid.com/lab/7z/" target="_blank" data-domain="sparanoid.com" title="7-Zip官方中文">7-Zip官方中文</a><a class="item" href="https://haozip.2345.cc/" target="_blank" data-domain="haozip.2345.cc" title="2345好压">2345好压</a><a class="item" href="https://pinyin.sogou.com/" target="_blank" data-domain="pinyin.sogou.com" title="搜狗输入法10.5">搜狗输入法10.5</a><a class="item" href="http://www.freewb.org/#" target="_blank" data-domain="freewb.org" title="极点五笔7.13">极点五笔7.13</a><a class="item" href="https://www.423down.com/10289.html" target="_blank" data-domain="423down.com" title="迅雷11去广告">迅雷11去广告</a><a class="item" href="https://dl.xunlei.com/" target="_blank" data-domain="dl.xunlei.com" title="迅雷11官方">迅雷11官方</a><a class="item" href="https://flowus.cn/share/773f5493-c11a-4022-bef1-1a700748beee" target="_blank" data-domain="flowus.cn" title="装机必备">装机必备</a></div></div><div class="cat-sub" id="cat-12"><h3 class="cat-sub-title">右键菜单设置</h3><div class="grid"><a class="item" href="http://www.pc6.com/softview/SoftView_17823.html" target="_blank" data-domain="pc6.com" title="XP超级右键3.0">XP超级右键3.0</a><a class="item" href="http://www.pc6.com/softview/SoftView_38674.html" target="_blank" data-domain="pc6.com" title="XP右键扩展1.0">XP右键扩展1.0</a><a class="item" href="http://www.pc6.com/softview/SoftView_61094.html" target="_blank" data-domain="pc6.com" title="右键管家1.2">右键管家1.2</a><a class="item" href="http://www.qqtn.com/down/47866.html" target="_blank" data-domain="qqtn.com" title="Win7右键扩展">Win7右键扩展</a><a class="item" href="http://www.pc6.com/softview/SoftView_93741.html" target="_blank" data-domain="pc6.com" title="右键增强定制">右键增强定制</a><a class="item" href="http://www.th-sjy.com/?p=1122" target="_blank" data-domain="th-sjy.com" title="右键菜单设定">右键菜单设定</a><a class="item" href="https://www.423down.com/10369.html" target="_blank" data-domain="423down.com" title="Win右键管理3.3.3.1">Win右键管理3.3.3.1</a><a class="item" href="http://www.cr173.com/soft/26626.html" target="_blank" data-domain="cr173.com" title="XP取得所有权">XP取得所有权</a><a class="item" href="http://www.cr173.com/soft/52404.html" target="_blank" data-domain="cr173.com" title="打开文件位置">打开文件位置</a><a class="item" href="https://zhidao.baidu.com/question/44877687.html" target="_blank" data-domain="zhidao.baidu.com" title="加-右键新建项">加-右键新建项</a><a class="item" href="https://cnxiaobai.com/articles/2021/06/24/1624549520049.html" target="_blank" data-domain="cnxiaobai.com" title="MyHash校验">MyHash校验</a><a class="item" href="http://wuyou.net/forum.php?mod=viewthread&amp;tid=178909" target="_blank" data-domain="wuyou.net" title="GoHash校验">GoHash校验</a><a class="item" href="http://www.winwin7.com/soft/36220.html" target="_blank" data-domain="winwin7.com" title="Hash1.04">Hash1.04</a><a class="item" href="https://www.423down.com/9391.html" target="_blank" data-domain="423down.com" title="Hash 1.05">Hash 1.05</a><a class="item" href="https://www.423down.com/4522.html" target="_blank" data-domain="423down.com" title="右键看图">右键看图</a></div></div><div class="cat-sub" id="cat-13"><h3 class="cat-sub-title">系统瘦身减肥</h3><div class="grid"><a class="item" href="https://github.com/Chuyu-Team/Dism-Multi-language/releases/tag/v10.1.1002.2" target="_blank" data-domain="github.com" title="Dism++10..1002.2">Dism++10..1002.2</a><a class="item" href="http://www.xitongzhijia.net/soft/24076.html" target="_blank" data-domain="xitongzhijia.net" title="更新清理8.19">更新清理8.19</a><a class="item" href="https://www.weidown.com/xitongfuzhu/19028.html" target="_blank" data-domain="weidown.com" title="360系统盘瘦身">360系统盘瘦身</a><a class="item" href="http://www.cr173.com/soft/8807.html" target="_blank" data-domain="cr173.com" title="XP减肥专家">XP减肥专家</a></div></div><div class="cat-sub" id="cat-14"><h3 class="cat-sub-title">检测设置绿软</h3><div class="grid"><a class="item" href="https://www.423down.com/887.html" target="_blank" data-domain="423down.com" title="Aida64绿色版">Aida64绿色版</a><a class="item" href="https://www.423down.com/887.html" target="_blank" data-domain="423down.com" title="Aida64 至尊版">Aida64 至尊版</a><a class="item" href="http://www.th-sjy.com/?p=1116" target="_blank" data-domain="th-sjy.com" title="Aida64商业版">Aida64商业版</a><a class="item" href="https://www.423down.com/3732.html" target="_blank" data-domain="423down.com" title="鲁大师绿单版">鲁大师绿单版</a><a class="item" href="https://www.xitongzhijia.net/soft/17167.html" target="_blank" data-domain="xitongzhijia.net" title="XP-OEM">XP-OEM</a><a class="item" href="http://www.cr173.com/soft/41914.html" target="_blank" data-domain="cr173.com" title="Win7/8-OEM">Win7/8-OEM</a><a class="item" href="https://www.ggzha.com/pc/12331.html" target="_blank" data-domain="ggzha.com" title="Win10 OEM">Win10 OEM</a><a class="item" href="https://www.ghxi.com/registryfinder.html" target="_blank" data-domain="ghxi.com" title="注册表管理">注册表管理</a><a class="item" href="https://www.crsky.com/soft/16860.html" target="_blank" data-domain="crsky.com" title="注册表定位器">注册表定位器</a><a class="item" href="http://mofang.ruanmei.com/" target="_blank" data-domain="mofang.ruanmei.com" title="软媒魔方绿色">软媒魔方绿色</a><a class="item" href="http://bbs.realqwh.cn/read-htm-tid-757227.html" target="_blank" data-domain="bbs.realqwh.cn" title="一键优化Win7">一键优化Win7</a><a class="item" href="http://bbs.realqwh.cn/read-htm-tid-829522.html" target="_blank" data-domain="bbs.realqwh.cn" title="一键优化Win10">一键优化Win10</a><a class="item" href="http://bbs.realqwh.cn/read-htm-tid-815879.html" target="_blank" data-domain="bbs.realqwh.cn" title="一键优化Win11">一键优化Win11</a><a class="item" href="https://www.423down.com/9402.html" target="_blank" data-domain="423down.com" title="W10 Manager">W10 Manager</a><a class="item" href="https://www.423down.com/3471.html" target="_blank" data-domain="423down.com" title="WiseCare365">WiseCare365</a><a class="item" href="http://www.th-sjy.com/?p=1791" target="_blank" data-domain="th-sjy.com" title="Glary Utilities">Glary Utilities</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=386543" target="_blank" data-domain="bbs.wuyou.net" title="屏幕亮度调整">屏幕亮度调整</a><a class="item" href="https://www.52pojie.cn/thread-1662167-1-1.html" target="_blank" data-domain="52pojie.cn" title="台式机亮度调节">台式机亮度调节</a><a class="item" href="http://810619.xyz:888/index.php?share/folder&amp;user=1&amp;sid=ZS4yPCWN" target="_blank" data-domain="810619.xyz:888" title="任务栏透明居中">任务栏透明居中</a><a class="item" href="http://www.classicshell.net/downloads/" target="_blank" data-domain="classicshell.net" title="W10开始菜单">W10开始菜单</a><a class="item" href="https://www.423down.com/12348.html" target="_blank" data-domain="423down.com" title="W10开始菜单">W10开始菜单</a><a class="item" href="https://www.pc521.net/win10-20h120h221h1-ico.html" target="_blank" data-domain="pc521.net" title="太阳谷图标">太阳谷图标</a><a class="item" href="https://www.pc6.com/softview/SoftView_106890.html" target="_blank" data-domain="pc6.com" title="检测CPU支持安装系统位数">检测CPU支持安装系统位数</a></div></div><div class="cat-sub" id="cat-15"><h3 class="cat-sub-title">清理卸载工具</h3><div class="grid"><a class="item" href="https://www.423down.com/1944.html" target="_blank" data-domain="423down.com" title="金山垃圾清理">金山垃圾清理</a><a class="item" href="https://www.423down.com/716.html" target="_blank" data-domain="423down.com" title="CCleanerv6.05">CCleanerv6.05</a><a class="item" href="http://www.qiuquan.cc/systemtool/wisediskcleaner.html" target="_blank" data-domain="qiuquan.cc" title="Wise Disk Clsk">Wise Disk Clsk</a><a class="item" href="https://www.423down.com/7736.html" target="_blank" data-domain="423down.com" title="注册表清理11.1">注册表清理11.1</a><a class="item" href="https://www.henrypp.org/product/memreduct" target="_blank" data-domain="henrypp.org" title="内存清理-用">内存清理-用</a><a class="item" href="http://www.xitongzhijia.net/soft/69976.html" target="_blank" data-domain="xitongzhijia.net" title="内存释放专家">内存释放专家</a><a class="item" href="http://www.th-sjy.com/?p=2124" target="_blank" data-domain="th-sjy.com" title="微软内存清理">微软内存清理</a><a class="item" href="http://shajincheng.com/" target="_blank" data-domain="shajincheng.com" title="进程截杀器">进程截杀器</a><a class="item" href="https://www.423down.com/868.html" target="_blank" data-domain="423down.com" title="Uninstall Tool">Uninstall Tool</a><a class="item" href="https://www.423down.com/7732.html" target="_blank" data-domain="423down.com" title="IObit Uninstall">IObit Uninstall</a><a class="item" href="https://www.423down.com/6178.html" target="_blank" data-domain="423down.com" title="Total Uninstal">Total Uninstal</a><a class="item" href="https://mydown.yesky.com/pcsoft/263954.html" target="_blank" data-domain="mydown.yesky.com" title="完美卸载31.16">完美卸载31.16</a><a class="item" href="https://www.ghxi.com/hibituninstaller.html" target="_blank" data-domain="ghxi.com" title="HiBitUninstaller v2.7.7">HiBitUninstaller v2.7.7</a><a class="item" href="https://www.52pojie.cn/thread-1700612-1-1.html" target="_blank" data-domain="52pojie.cn" title="Wise Force Deleter">Wise Force Deleter</a><a class="item" href="https://www.voidtools.com/zh-cn/" target="_blank" data-domain="voidtools.com" title="快速搜索文件">快速搜索文件</a></div></div><div class="cat-sub" id="cat-16"><h3 class="cat-sub-title">办公用office</h3><div class="grid"><a class="item" href="http://www.opdown.com/soft/3565.html" target="_blank" data-domain="opdown.com" title="office兼容包">office兼容包</a><a class="item" href="https://www.wlrjy.com/Soft/6754.html" target="_blank" data-domain="wlrjy.com" title="2003 5in1">2003 5in1</a><a class="item" href="https://tools.pdf24.org/zh/all-tools" target="_blank" data-domain="tools.pdf24.org" title="PDF24">PDF24</a><a class="item" href="https://www.xb21cn.com/267.html" target="_blank" data-domain="xb21cn.com" title="2007三合一1">2007三合一1</a><a class="item" href="http://www.xitongzhijia.net/soft/2544.html" target="_blank" data-domain="xitongzhijia.net" title="2007 3in1兼容">2007 3in1兼容</a><a class="item" href="https://www.423down.com/4189.html" target="_blank" data-domain="423down.com" title="2007-3H1">2007-3H1</a><a class="item" href="http://www.xitongzhijia.net/soft/3825.html" target="_blank" data-domain="xitongzhijia.net" title="2007完整版32">2007完整版32</a><a class="item" href="http://www.xitongzhijia.net/soft/97335.html" target="_blank" data-domain="xitongzhijia.net" title="2007完整版64">2007完整版64</a><a class="item" href="http://www.cr173.com/soft/423390.html" target="_blank" data-domain="cr173.com" title="office强力卸载">office强力卸载</a><a class="item" href="https://www.pc6.com/softview/SoftView_48584.html" target="_blank" data-domain="pc6.com" title="鼠牛新建菜单">鼠牛新建菜单</a><a class="item" href="https://tool.pc528.net/calculator/" target="_blank" data-domain="tool.pc528.net" title="在线计算器">在线计算器</a><a class="item" href="https://www.taglyst.com/download-next" target="_blank" data-domain="taglyst.com" title="tagLyst">tagLyst</a></div></div><div class="cat-sub" id="cat-17"><h3 class="cat-sub-title">常用安装软件</h3><div class="grid"><a class="item" href="http://weixin.qq.com/" target="_blank" data-domain="weixin.qq.com" title="微信-电脑版">微信-电脑版</a><a class="item" href="https://www.52pojie.cn/thread-2070003-1-1.html" target="_blank" data-domain="52pojie.cn" title="微信防撤回">微信防撤回</a><a class="item" href="http://ie.2345.cc/" target="_blank" data-domain="ie.2345.cc" title="2345浏览器">2345浏览器</a><a class="item" href="http://pic.2345.com/" target="_blank" data-domain="pic.2345.com" title="2345看图王">2345看图王</a><a class="item" href="http://yrxitong.ysepan.com/" target="_blank" data-domain="yrxitong.ysepan.com" title="Flash Player特别版">Flash Player特别版</a><a class="item" href="https://guanjia.qq.com/" target="_blank" data-domain="guanjia.qq.com" title="电脑管家">电脑管家</a><a class="item" href="https://download.kugou.com/" target="_blank" data-domain="download.kugou.com" title="酷狗音乐pc版">酷狗音乐pc版</a><a class="item" href="https://potplayer.org/" target="_blank" data-domain="potplayer.org" title="PotPlayer播放器">PotPlayer播放器</a><a class="item" href="https://www.douyin.com/downloadpage/pc" target="_blank" data-domain="douyin.com" title="抖音PC客户端">抖音PC客户端</a><a class="item" href="https://im.qq.com/pcqq" target="_blank" data-domain="im.qq.com" title="腾讯QQpc版">腾讯QQpc版</a><a class="item" href="http://pan.baidu.com/download" target="_blank" data-domain="pan.baidu.com" title="百度网盘PC版">百度网盘PC版</a><a class="item" href="https://www.360.cn/" target="_blank" data-domain="360.cn" title="360软件网站">360软件网站</a><a class="item" href="http://office.qq.com/" target="_blank" data-domain="office.qq.com" title="TIM-办公QQ">TIM-办公QQ</a><a class="item" href="https://www.weiyun.com/download.html" target="_blank" data-domain="weiyun.com" title="微云和同步">微云和同步</a><a class="item" href="http://app.iqiyi.com/pc/wnplayer/index.html" target="_blank" data-domain="app.iqiyi.com" title="爱奇艺客户端">爱奇艺客户端</a><a class="item" href="http://www.cr173.com/soft/30766.html" target="_blank" data-domain="cr173.com" title="Win7摄像头">Win7摄像头</a><a class="item" href="http://www.443w.com/tts/?tag=%E6%9C%97%E8%AF%BB%E5%A5%B3%E5%85%8D%E8%B4%B9%E7%89%88%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85" target="_blank" data-domain="443w.com" title="朗读女">朗读女</a><a class="item" href="http://www.443w.com/tts/?post=2" target="_blank" data-domain="443w.com" title="Lily  绿化版">Lily  绿化版</a><a class="item" href="http://www.cr173.com/soft/21379.html" target="_blank" data-domain="cr173.com" title="SRS音频增强">SRS音频增强</a><a class="item" href="http://www.yyzsoft.com/videocutter.html" target="_blank" data-domain="yyzsoft.com" title="视频剪切合并大师">视频剪切合并大师</a><a class="item" href="https://pixpinapp.com/" target="_blank" data-domain="pixpinapp.com" title="截动图">截动图</a><a class="item" href="https://www.mefcl.com/fonger/6207" target="_blank" data-domain="mefcl.com" title="方格音乐">方格音乐</a><a class="item" href="https://github.com/darktohka" target="_blank" data-domain="github.com" title="Flash Player">Flash Player</a><a class="item" href="https://ttsmaker.cn/" target="_blank" data-domain="ttsmaker.cn" title="文本在线转语音">文本在线转语音</a></div></div><div class="cat-sub" id="cat-18"><h3 class="cat-sub-title">常用绿色软件</h3><div class="grid"><a class="item" href="https://www.423down.com/660.html" target="_blank" data-domain="423down.com" title="FSCapture截图">FSCapture截图</a><a class="item" href="http://bbs.wuyou.net/forum.php?mod=viewthread&amp;tid=437962&amp;extra=" target="_blank" data-domain="bbs.wuyou.net" title="图片去水印10.23">图片去水印10.23</a><a class="item" href="https://magicstudio.com/zh/magiceraser/" target="_blank" data-domain="magicstudio.com" title="在线删除图片物体">在线删除图片物体</a><a class="item" href="https://github.com/lyswhut/lx-music-desktop/releases" target="_blank" data-domain="github.com" title="洛雪音乐助手">洛雪音乐助手</a><a class="item" href="https://fsylr.com/22212.html" target="_blank" data-domain="fsylr.com" title="MusicTools 1.9.7.8">MusicTools 1.9.7.8</a><a class="item" href="https://www.423down.com/13979.html" target="_blank" data-domain="423down.com" title="MusicThief">MusicThief</a><a class="item" href="http://www.smskb.com/soft/html/10.html" target="_blank" data-domain="smskb.com" title="盛名时刻表">盛名时刻表</a><a class="item" href="http://www.lltskb.com/" target="_blank" data-domain="lltskb.com" title="路路通时刻表">路路通时刻表</a><a class="item" href="http://www.softwareok.com/?Download=Q-Dir" target="_blank" data-domain="softwareok.com" title="Q-Dir四窗管理">Q-Dir四窗管理</a><a class="item" href="https://tablacus.github.io/explorer_en.html" target="_blank" data-domain="tablacus.github.io" title="文件管理器">文件管理器</a><a class="item" href="http://www.th-sjy.com/?p=113" target="_blank" data-domain="th-sjy.com" title="XY资源管理器">XY资源管理器</a><a class="item" href="http://cn.ejie.me/" target="_blank" data-domain="cn.ejie.me" title="Clover资源管理">Clover资源管理</a><a class="item" href="http://www.anxz.com/down/992.html" target="_blank" data-domain="anxz.com" title="友益文书商注">友益文书商注</a><a class="item" href="http://www.cr173.com/soft/21477.html" target="_blank" data-domain="cr173.com" title="CHM电子书">CHM电子书</a><a class="item" href="http://www.wodown.com/soft/16572.html" target="_blank" data-domain="wodown.com" title="Word转换器">Word转换器</a><a class="item" href="https://www.crsky.com/soft/14304.html" target="_blank" data-domain="crsky.com" title="桌面计算器">桌面计算器</a><a class="item" href="http://www.softwareok.com/?Download=TheAeroClock" target="_blank" data-domain="softwareok.com" title="桌面时钟">桌面时钟</a><a class="item" href="http://www.softwareok.com/?Download=ClassicDesktopClock&amp;goto=../Download/ClassicDesktopClock_x64_Portable.zip" target="_blank" data-domain="softwareok.com" title="桌面时钟">桌面时钟</a><a class="item" href="https://www.423down.com/1829.html" target="_blank" data-domain="423down.com" title="实用万年历">实用万年历</a><a class="item" href="http://www.dayanzai.me/serenescreen-marine-aquarium.html" target="_blank" data-domain="dayanzai.me" title="水族箱屏保">水族箱屏保</a><a class="item" href="http://www.cross-plus-a.com/cn/bportable.htm" target="_blank" data-domain="cross-plus-a.com" title="Balabolka">Balabolka</a><a class="item" href="http://www.pc6.com//softview/SoftView_55048.html" target="_blank" data-domain="pc6.com" title="TTS-TXT朗读">TTS-TXT朗读</a><a class="item" href="http://www.cr173.com/soft/61966.html" target="_blank" data-domain="cr173.com" title="Win7TTS修复">Win7TTS修复</a><a class="item" href="http://www.cr173.com/soft/18853.html" target="_blank" data-domain="cr173.com" title="龙卷风收音机">龙卷风收音机</a><a class="item" href="http://www.everyonepiano.cn/Software.html" target="_blank" data-domain="everyonepiano.cn" title="人人钢琴">人人钢琴</a><a class="item" href="https://www.cnblogs.com/vinlxc/p/11347744.html" target="_blank" data-domain="cnblogs.com" title="音乐标签1.0.9">音乐标签1.0.9</a><a class="item" href="https://www.52pojie.cn/thread-1279623-1-1.html" target="_blank" data-domain="52pojie.cn" title="MP3剪切合并大师">MP3剪切合并大师</a><a class="item" href="http://www.yx12345.com/pcpd/7068/941.html#pcrjxzwai" target="_blank" data-domain="yx12345.com" title="mp3音量增大">mp3音量增大</a><a class="item" href="https://www.greenxf.com/soft/184884.html" target="_blank" data-domain="greenxf.com" title="MP3音量放大">MP3音量放大</a><a class="item" href="https://www.binfensoft.cn/archives/420" target="_blank" data-domain="binfensoft.cn" title="批量修改文件名4.01">批量修改文件名4.01</a></div></div><div class="cat-sub" id="cat-19"><h3 class="cat-sub-title">软件下载网一</h3><div class="grid"><a class="item" href="https://www.423down.com/" target="_blank" data-domain="423down.com" title="423down">423down</a><a class="item" href="https://www.ghxi.com/" target="_blank" data-domain="ghxi.com" title="果核剥壳">果核剥壳</a><a class="item" href="https://www.gndown.com/" target="_blank" data-domain="gndown.com" title="绿软小站">绿软小站</a><a class="item" href="https://www.weidown.com/" target="_blank" data-domain="weidown.com" title="微当下载">微当下载</a><a class="item" href="https://www.laomoit.com/" target="_blank" data-domain="laomoit.com" title="殁漂遥 分享">殁漂遥 分享</a><a class="item" href="http://blog.sina.com.cn/s/blog_89a729a40102wjwp.html" target="_blank" data-domain="blog.sina.com.cn" title="飞扬时空微博">飞扬时空微博</a><a class="item" href="https://www.mefcl.com/" target="_blank" data-domain="mefcl.com" title="MEFCL分享">MEFCL分享</a><a class="item" href="https://apphot.cc/" target="_blank" data-domain="apphot.cc" title="烈火-汉化">烈火-汉化</a><a class="item" href="http://bbs.wuyou.net/forum.php" target="_blank" data-domain="bbs.wuyou.net" title="无忧启动论坛">无忧启动论坛</a><a class="item" href="https://bbs.pcbeta.com/" target="_blank" data-domain="bbs.pcbeta.com" title="远景论坛">远景论坛</a><a class="item" href="http://bbs.realqwh.cn/" target="_blank" data-domain="bbs.realqwh.cn" title="秋无痕论坛">秋无痕论坛</a><a class="item" href="http://www.pc6.com/" target="_blank" data-domain="pc6.com" title="PC6下载站">PC6下载站</a><a class="item" href="http://www.cr173.com/" target="_blank" data-domain="cr173.com" title="西西软件园">西西软件园</a><a class="item" href="https://www.wlrjy.com/" target="_blank" data-domain="wlrjy.com" title="未来软件园">未来软件园</a><a class="item" href="http://www.xiazaiba.com/" target="_blank" data-domain="xiazaiba.com" title="下载吧软件站">下载吧软件站</a><a class="item" href="http://www.xdowns.com/" target="_blank" data-domain="xdowns.com" title="绿色软件联盟">绿色软件联盟</a><a class="item" href="https://www.ithome.com/bibei/" target="_blank" data-domain="ithome.com" title="之家装机必备">之家装机必备</a><a class="item" href="http://www.3xiazai.com/" target="_blank" data-domain="3xiazai.com" title="独木成林">独木成林</a><a class="item" href="http://www.wmzhe.com/" target="_blank" data-domain="wmzhe.com" title="完美下载站">完美下载站</a><a class="item" href="https://www.toprender.com/forum-286-1.html" target="_blank" data-domain="toprender.com" title="计算机工具大全">计算机工具大全</a><a class="item" href="http://iyoung.ysepan.com/" target="_blank" data-domain="iyoung.ysepan.com" title="飞扬时空">飞扬时空</a><a class="item" href="https://www.itrmb.com/index-1.htm" target="_blank" data-domain="itrmb.com" title="数字人民币">数字人民币</a><a class="item" href="http://303078115.ysepan.com/" target="_blank" data-domain="303078115.ysepan.com" title="日照信鸽">日照信鸽</a><a class="item" href="https://xiageba.com/" target="_blank" data-domain="xiageba.com" title="下歌吧">下歌吧</a></div></div><div class="cat-sub" id="cat-20"><h3 class="cat-sub-title">软件下载网二</h3><div class="grid"><a class="item" href="http://www.th-sjy.com/" target="_blank" data-domain="th-sjy.com" title="th_sjy汉化博客">th_sjy汉化博客</a><a class="item" href="http://www.qiuquan.cc/" target="_blank" data-domain="qiuquan.cc" title="QiuQuan秋泉">QiuQuan秋泉</a><a class="item" href="https://www.52pojie.cn/" target="_blank" data-domain="52pojie.cn" title="吾爱破解论坛">吾爱破解论坛</a><a class="item" href="http://www.dayanzai.me/" target="_blank" data-domain="dayanzai.me" title="大眼仔旭">大眼仔旭</a><a class="item" href="http://www.flighty.cn/" target="_blank" data-domain="flighty.cn" title="轻狂志少轻狂">轻狂志少轻狂</a><a class="item" href="https://www.landiannews.com/" target="_blank" data-domain="landiannews.com" title="蓝点网">蓝点网</a><a class="item" href="http://www.xingkbjm.com/" target="_blank" data-domain="xingkbjm.com" title="星空不寂寞">星空不寂寞</a><a class="item" href="https://www.luochenzhimu.com/" target="_blank" data-domain="luochenzhimu.com" title="落尘之木博客">落尘之木博客</a><a class="item" href="http://www.hxlive.cn/" target="_blank" data-domain="hxlive.cn" title="寒星随意录">寒星随意录</a><a class="item" href="http://www.yxnet.net/" target="_blank" data-domain="yxnet.net" title="易分享">易分享</a><a class="item" href="http://www.yishimei.cn/" target="_blank" data-domain="yishimei.cn" title="亦是美网络">亦是美网络</a><a class="item" href="https://file.cnxiaobai.com/" target="_blank" data-domain="file.cnxiaobai.com" title="cnxiaobai博客">cnxiaobai博客</a></div></div><div class="cat-sub" id="cat-21"><h3 class="cat-sub-title">TIM-我的文档</h3><div class="grid"><a class="item" href="https://docs.qq.com/" target="_blank" data-domain="docs.qq.com" title="腾讯文档">腾讯文档</a><a class="item" href="https://docs.qq.com/doc/DV1Z6SW5RQ3BRVkRm" target="_blank" data-domain="docs.qq.com" title="Win7备忘录">Win7备忘录</a><a class="item" href="https://docs.qq.com/doc/DQkZtSGNWTkNnbUJz?&amp;u=8a0538eb143340a2972980b364d0bf42" target="_blank" data-domain="docs.qq.com" title="Win10备忘录">Win10备忘录</a><a class="item" href="https://docs.qq.com/doc/BjMOaN1qEfvQ0Tl3iA3UeKEU1j179X1CGdBq2" target="_blank" data-domain="docs.qq.com" title="驱动和组件">驱动和组件</a><a class="item" href="https://docs.qq.com/doc/DV1RRWG9qYkpPeHhn" target="_blank" data-domain="docs.qq.com" title="W10激活410年">W10激活410年</a><a class="item" href="https://docs.qq.com/doc/DV01qQmxQUEFiU0Np" target="_blank" data-domain="docs.qq.com" title="W10数字激活">W10数字激活</a><a class="item" href="https://docs.qq.com/doc/BjMOaN1qEfvQ0BoK2Y4Xhb3L2tT2zu3wzrkH2" target="_blank" data-domain="docs.qq.com" title="快速启动栏">快速启动栏</a><a class="item" href="https://docs.qq.com/doc/BjMOaN1qEfvQ0Jdx9p376Kzh2aQ5ID0rctEl0?ADUIN=244849380&amp;ADSESSION=1522307241&amp;ADTAG=CLIENT.QQ.5549_.0&amp;ADPUBNO=26784" target="_blank" data-domain="docs.qq.com" title="注册表批处理">注册表批处理</a><a class="item" href="https://docs.qq.com/doc/DV0ZoWVJYT29wU3pO" target="_blank" data-domain="docs.qq.com" title="四窗口管理">四窗口管理</a></div></div><div class="cat-sub" id="cat-22"><h3 class="cat-sub-title">音乐网站类</h3><div class="grid"><a class="item" href="https://github.com/lyswhut/lx-music-mobile/releases" target="_blank" data-domain="github.com" title="lx-music-app">lx-music-app</a><a class="item" href="https://tunefree.fun/" target="_blank" data-domain="tunefree.fun" title="TuneFree Next">TuneFree Next</a><a class="item" href="https://kun-music.netlify.app/" target="_blank" data-domain="kun-music.netlify.app" title="重坤音乐">重坤音乐</a><a class="item" href="http://mc.alger.fun/#/" target="_blank" data-domain="mc.alger.fun" title="风抑云音乐">风抑云音乐</a><a class="item" href="http://www.lt0911.icu:86/" target="_blank" data-domain="lt0911.icu:86" title="龙腾音乐搜索">龙腾音乐搜索</a><a class="item" href="https://www.yuque.com/u28291231/sbz24g/wlvoa1dcvlv3ov69?singleDoc#" target="_blank" data-domain="yuque.com" title="语雀音乐软件">语雀音乐软件</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · wufeng", "children": [{"id": 2, "name": "我的网址导航", "children": []}, {"id": 3, "name": "常用查询网站", "children": []}, {"id": 4, "name": "原版系统镜像", "children": []}, {"id": 5, "name": "Ghost系统站", "children": []}, {"id": 6, "name": "WinPE启动盘", "children": []}, {"id": 7, "name": "硬盘安装工具", "children": []}, {"id": 8, "name": "系统激活工具", "children": []}, {"id": 9, "name": "驱动安装工具", "children": []}, {"id": 10, "name": "运行库和组件", "children": []}, {"id": 11, "name": "必装软件下载", "children": []}, {"id": 12, "name": "右键菜单设置", "children": []}, {"id": 13, "name": "系统瘦身减肥", "children": []}, {"id": 14, "name": "检测设置绿软", "children": []}, {"id": 15, "name": "清理卸载工具", "children": []}, {"id": 16, "name": "办公用office", "children": []}, {"id": 17, "name": "常用安装软件", "children": []}, {"id": 18, "name": "常用绿色软件", "children": []}, {"id": 19, "name": "软件下载网一", "children": []}, {"id": 20, "name": "软件下载网二", "children": []}, {"id": 21, "name": "TIM-我的文档", "children": []}, {"id": 22, "name": "音乐网站类", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

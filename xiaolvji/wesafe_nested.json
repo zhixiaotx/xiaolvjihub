@@ -1,0 +1,863 @@
+{
+  "meta": {
+    "source": "https://www.xiaolvji.com/u/wesafe",
+    "site_name": "效率集 · wesafe",
+    "note": "效率集用户分享页 · 单层级文件夹套集合级 L1 成两级树 · logo 取源站 data: favicon，缺失用 favicon.im 兜底",
+    "site_count": 108,
+    "generated": "2026-09-21"
+  },
+  "categories": [
+    {
+      "name": "效率集 · wesafe",
+      "sites": [],
+      "children": [
+        {
+          "name": "政府机关",
+          "sites": [
+            {
+              "name": "应急管理部",
+              "url": "https://www.mem.gov.cn/",
+              "domain": "mem.gov.cn",
+              "logo": "https://favicon.im/mem.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "生态环境部",
+              "url": "http://www.mee.gov.cn/",
+              "domain": "mee.gov.cn",
+              "logo": "https://favicon.im/mee.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "卫生健康委员会",
+              "url": "http://www.nhc.gov.cn/wjw/index.shtml",
+              "domain": "nhc.gov.cn",
+              "logo": "https://favicon.im/nhc.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "公安部",
+              "url": "http://www.mps.gov.cn/",
+              "domain": "mps.gov.cn",
+              "logo": "https://favicon.im/mps.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "应急管理部消防救援局",
+              "url": "http://www.119.gov.cn/xiaofang/",
+              "domain": "119.gov.cn",
+              "logo": "https://favicon.im/119.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "中国政府网",
+              "url": "http://www.gov.cn/",
+              "domain": "gov.cn",
+              "logo": "https://favicon.im/gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "市场监督管理总局",
+              "url": "http://www.samr.gov.cn/",
+              "domain": "samr.gov.cn",
+              "logo": "https://favicon.im/samr.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "中国人大网",
+              "url": "http://www.npc.gov.cn/",
+              "domain": "npc.gov.cn",
+              "logo": "https://favicon.im/npc.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "安全科学研究院",
+              "url": "http://www.chinasafety.ac.cn/",
+              "domain": "chinasafety.ac.cn",
+              "logo": "https://favicon.im/chinasafety.ac.cn",
+              "desc": ""
+            },
+            {
+              "name": "安全生产协会",
+              "url": "http://www.china-safety.org.cn/",
+              "domain": "china-safety.org.cn",
+              "logo": "https://favicon.im/china-safety.org.cn",
+              "desc": ""
+            },
+            {
+              "name": "职业安全健康协会",
+              "url": "http://www.cosha.org.cn/",
+              "domain": "cosha.org.cn",
+              "logo": "https://favicon.im/cosha.org.cn",
+              "desc": ""
+            },
+            {
+              "name": "应急管理宣教网",
+              "url": "http://www.china-safety.org/",
+              "domain": "china-safety.org",
+              "logo": "https://favicon.im/china-safety.org",
+              "desc": ""
+            },
+            {
+              "name": "安全资格证书查询",
+              "url": "https://cx.mem.gov.cn/",
+              "domain": "cx.mem.gov.cn",
+              "logo": "https://favicon.im/cx.mem.gov.cn",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "地方政府",
+          "sites": [
+            {
+              "name": "江苏省人民政府",
+              "url": "http://www.jiangsu.gov.cn/",
+              "domain": "jiangsu.gov.cn",
+              "logo": "https://favicon.im/jiangsu.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "江苏省应急管理厅",
+              "url": "http://ajj.jiangsu.gov.cn/",
+              "domain": "ajj.jiangsu.gov.cn",
+              "logo": "https://favicon.im/ajj.jiangsu.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "江苏省生态环境厅",
+              "url": "http://hbt.jiangsu.gov.cn/",
+              "domain": "hbt.jiangsu.gov.cn",
+              "logo": "https://favicon.im/hbt.jiangsu.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "江苏省市场监督管理局",
+              "url": "http://scjgj.jiangsu.gov.cn/",
+              "domain": "scjgj.jiangsu.gov.cn",
+              "logo": "https://favicon.im/scjgj.jiangsu.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "江苏省卫生健康委员会",
+              "url": "http://wjw.jiangsu.gov.cn/",
+              "domain": "wjw.jiangsu.gov.cn",
+              "logo": "https://favicon.im/wjw.jiangsu.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "镇江市人民政府",
+              "url": "http://www.zhenjiang.gov.cn/",
+              "domain": "zhenjiang.gov.cn",
+              "logo": "https://favicon.im/zhenjiang.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "镇江新区",
+              "url": "http://www.zjna.gov.cn/zjxqgb/index.html#1",
+              "domain": "zjna.gov.cn",
+              "logo": "https://favicon.im/zjna.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "镇江市教育局",
+              "url": "http://jyj.zhenjiang.gov.cn/",
+              "domain": "jyj.zhenjiang.gov.cn",
+              "logo": "https://favicon.im/jyj.zhenjiang.gov.cn",
+              "desc": ""
+            },
+            {
+              "name": "镇江市教育考试书院",
+              "url": "https://zkb.zje.net.cn/ecloud_zz_ksy/zkzs/",
+              "domain": "zkb.zje.net.cn",
+              "logo": "https://favicon.im/zkb.zje.net.cn",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "学习网站",
+          "sites": [
+            {
+              "name": "教师网址导航",
+              "url": "http://www.xiaolvji.com/u/zhaohui",
+              "domain": "xiaolvji.com",
+              "logo": "https://favicon.im/xiaolvji.com",
+              "desc": ""
+            },
+            {
+              "name": "网易云课堂",
+              "url": "http://study.163.com",
+              "domain": "study.163.com",
+              "logo": "https://favicon.im/study.163.com",
+              "desc": ""
+            },
+            {
+              "name": "logo设计",
+              "url": "http://www.uugai.com/logoa/logo.php?page=5",
+              "domain": "uugai.com",
+              "logo": "https://favicon.im/uugai.com",
+              "desc": ""
+            },
+            {
+              "name": "站长工具",
+              "url": "https://rank.chinaz.com/",
+              "domain": "rank.chinaz.com",
+              "logo": "https://favicon.im/rank.chinaz.com",
+              "desc": ""
+            },
+            {
+              "name": "中国站长站",
+              "url": "https://alexa.chinaz.com/",
+              "domain": "alexa.chinaz.com",
+              "logo": "https://favicon.im/alexa.chinaz.com",
+              "desc": ""
+            },
+            {
+              "name": "流程自动化",
+              "url": "https://www.uibot.com.cn/",
+              "domain": "uibot.com.cn",
+              "logo": "https://favicon.im/uibot.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "轻松背单词",
+              "url": "http://www.qsbdc.com/",
+              "domain": "qsbdc.com",
+              "logo": "https://favicon.im/qsbdc.com",
+              "desc": ""
+            },
+            {
+              "name": "镇江中考",
+              "url": "http://www.zhongkaowu.com/zk/zt/zhenjiang/List_2.shtml",
+              "domain": "zhongkaowu.com",
+              "logo": "https://favicon.im/zhongkaowu.com",
+              "desc": ""
+            },
+            {
+              "name": "学堂在线",
+              "url": "https://next.xuetangx.com/",
+              "domain": "next.xuetangx.com",
+              "logo": "https://favicon.im/next.xuetangx.com",
+              "desc": ""
+            },
+            {
+              "name": "安全人",
+              "url": "https://appjxXANn3T5772.h5.xiaoeknow.com",
+              "domain": "appjxxann3t5772.h5.xiaoeknow.com",
+              "logo": "https://favicon.im/appjxxann3t5772.h5.xiaoeknow.com",
+              "desc": ""
+            },
+            {
+              "name": "国家数字化资源中心",
+              "url": "http://www.nerc.edu.cn/FrontEnd/default.html",
+              "domain": "nerc.edu.cn",
+              "logo": "https://favicon.im/nerc.edu.cn",
+              "desc": ""
+            },
+            {
+              "name": "泛在学习网",
+              "url": "http://www.mymooc.net.cn/web/Index.aspx",
+              "domain": "mymooc.net.cn",
+              "logo": "https://favicon.im/mymooc.net.cn",
+              "desc": ""
+            },
+            {
+              "name": "包图网",
+              "url": "https://ibaotu.com/",
+              "domain": "ibaotu.com",
+              "logo": "https://favicon.im/ibaotu.com",
+              "desc": ""
+            },
+            {
+              "name": "千图网",
+              "url": "https://www.58pic.com/",
+              "domain": "58pic.com",
+              "logo": "https://favicon.im/58pic.com",
+              "desc": ""
+            },
+            {
+              "name": "摄图网",
+              "url": "http://699pic.com/",
+              "domain": "699pic.com",
+              "logo": "https://favicon.im/699pic.com",
+              "desc": ""
+            },
+            {
+              "name": "图怪兽",
+              "url": "https://818ps.com/",
+              "domain": "818ps.com",
+              "logo": "https://favicon.im/818ps.com",
+              "desc": ""
+            },
+            {
+              "name": "镇江教育考试院",
+              "url": "https://zkb.zje.net.cn/ecloud_zz_ksy/",
+              "domain": "zkb.zje.net.cn",
+              "logo": "https://favicon.im/zkb.zje.net.cn",
+              "desc": ""
+            },
+            {
+              "name": "网易公开课",
+              "url": "https://open.163.com/special/ted10collection/#",
+              "domain": "open.163.com",
+              "logo": "https://favicon.im/open.163.com",
+              "desc": ""
+            },
+            {
+              "name": "RRC",
+              "url": "https://learningcentre.rrc.co.uk/",
+              "domain": "learningcentre.rrc.co.uk",
+              "logo": "https://favicon.im/learningcentre.rrc.co.uk",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "AI工具",
+          "sites": [
+            {
+              "name": "安全管理助手",
+              "url": "https://zgn166.smartapps.baidu.com/",
+              "domain": "zgn166.smartapps.baidu.com",
+              "logo": "https://favicon.im/zgn166.smartapps.baidu.com",
+              "desc": ""
+            },
+            {
+              "name": "DeepSeek",
+              "url": "https://www.deepseek.com/",
+              "domain": "deepseek.com",
+              "logo": "https://favicon.im/deepseek.com",
+              "desc": ""
+            },
+            {
+              "name": "AI 工具集",
+              "url": "https://ai-bot.cn/",
+              "domain": "ai-bot.cn",
+              "logo": "https://favicon.im/ai-bot.cn",
+              "desc": ""
+            },
+            {
+              "name": "未来百科",
+              "url": "https://nav.6aiq.com/",
+              "domain": "nav.6aiq.com",
+              "logo": "https://favicon.im/nav.6aiq.com",
+              "desc": ""
+            },
+            {
+              "name": "chatgpt",
+              "url": "https://chatgpt-future.com.cn/.1CFA",
+              "domain": "chatgpt-future.com.cn",
+              "logo": "https://favicon.im/chatgpt-future.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "chat",
+              "url": "https://ai.usesless.com/chat/",
+              "domain": "ai.usesless.com",
+              "logo": "https://favicon.im/ai.usesless.com",
+              "desc": ""
+            },
+            {
+              "name": "ChatGPT国内镜像",
+              "url": "https://gpt.youqu.pro/web/",
+              "domain": "gpt.youqu.pro",
+              "logo": "https://favicon.im/gpt.youqu.pro",
+              "desc": ""
+            },
+            {
+              "name": "文字转语音",
+              "url": "https://dash.beyondwords.io/dashboard/project/30331/content",
+              "domain": "dash.beyondwords.io",
+              "logo": "https://favicon.im/dash.beyondwords.io",
+              "desc": ""
+            },
+            {
+              "name": "声音克隆",
+              "url": "https://www.myvocal.ai/text-to-speech",
+              "domain": "myvocal.ai",
+              "logo": "https://favicon.im/myvocal.ai",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "在线读书",
+          "sites": [
+            {
+              "name": "配音",
+              "url": "https://neuhub.jd.com/ai/api/speech/tts?cu=true&utm_source=baidu-search&utm_medium=cpc&utm_campaign=t_262767352_baidusearch&utm_term=138478962236_0_aad36765bf6a48f4b40d4aaf9a72e48a",
+              "domain": "neuhub.jd.com",
+              "logo": "https://favicon.im/neuhub.jd.com",
+              "desc": ""
+            },
+            {
+              "name": "古筝",
+              "url": "https://new-play.tudou.com/v/XNDQwMTUzMDQ5Mg==?spm=a2h28.8313475.pl.45",
+              "domain": "new-play.tudou.com",
+              "logo": "https://favicon.im/new-play.tudou.com",
+              "desc": ""
+            },
+            {
+              "name": "知乎",
+              "url": "https://zhuanlan.zhihu.com/c_1033011630598193152",
+              "domain": "zhuanlan.zhihu.com",
+              "logo": "https://favicon.im/zhuanlan.zhihu.com",
+              "desc": ""
+            },
+            {
+              "name": "小说网",
+              "url": "https://www.maxreader.net/read/ChaoJiTuHaoLinYun/",
+              "domain": "maxreader.net",
+              "logo": "https://favicon.im/maxreader.net",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "EHS法规",
+          "sites": [
+            {
+              "name": "EHS法规网",
+              "url": "http://ehslaws.cn/",
+              "domain": "ehslaws.cn",
+              "logo": "https://favicon.im/ehslaws.cn",
+              "desc": ""
+            },
+            {
+              "name": "益戈法规",
+              "url": "https://www.ehsway.com",
+              "domain": "ehsway.com",
+              "logo": "https://favicon.im/ehsway.com",
+              "desc": ""
+            },
+            {
+              "name": "合规网",
+              "url": "http://www.csrcare.com/Law",
+              "domain": "csrcare.com",
+              "logo": "https://favicon.im/csrcare.com",
+              "desc": ""
+            },
+            {
+              "name": "环境健康安全网",
+              "url": "https://www.ehs.cn/search.php?mod=law&act=index",
+              "domain": "ehs.cn",
+              "logo": "https://favicon.im/ehs.cn",
+              "desc": ""
+            },
+            {
+              "name": "法规库-一点通",
+              "url": "http://www.1clicktong.com/LawWeb/index.htm?old=1",
+              "domain": "1clicktong.com",
+              "logo": "https://favicon.im/1clicktong.com",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "工具软件",
+          "sites": [
+            {
+              "name": "图悦-在线词频",
+              "url": "http://www.picdata.cn/picdata/",
+              "domain": "picdata.cn",
+              "logo": "https://favicon.im/picdata.cn",
+              "desc": ""
+            },
+            {
+              "name": "词汇分析",
+              "url": "https://wordcounter.net/",
+              "domain": "wordcounter.net",
+              "logo": "https://favicon.im/wordcounter.net",
+              "desc": ""
+            },
+            {
+              "name": "Test Your Vocabulary - Blog",
+              "url": "http://testyourvocab.com/blog/",
+              "domain": "testyourvocab.com",
+              "logo": "https://favicon.im/testyourvocab.com",
+              "desc": ""
+            },
+            {
+              "name": "英语词频统计",
+              "url": "http://www.wordcount.org/main.php",
+              "domain": "wordcount.org",
+              "logo": "https://favicon.im/wordcount.org",
+              "desc": ""
+            },
+            {
+              "name": "通译典",
+              "url": "http://tdict.com/index",
+              "domain": "tdict.com",
+              "logo": "https://favicon.im/tdict.com",
+              "desc": ""
+            },
+            {
+              "name": "英语语料库",
+              "url": "https://www.english-corpora.org/",
+              "domain": "english-corpora.org",
+              "logo": "https://favicon.im/english-corpora.org",
+              "desc": ""
+            },
+            {
+              "name": "大众制图-",
+              "url": "http://g.dituhui.com/apps?renqun_youhua=307844",
+              "domain": "g.dituhui.com",
+              "logo": "https://favicon.im/g.dituhui.com",
+              "desc": ""
+            },
+            {
+              "name": "大数据导航",
+              "url": "http://hao.199it.com/",
+              "domain": "hao.199it.com",
+              "logo": "https://favicon.im/hao.199it.com",
+              "desc": ""
+            },
+            {
+              "name": "系统修复",
+              "url": "http://www.ylmf888.com/win7/32/8238.html#download",
+              "domain": "ylmf888.com",
+              "logo": "https://favicon.im/ylmf888.com",
+              "desc": ""
+            },
+            {
+              "name": "软件商城",
+              "url": "http://shop.mghrj.com/",
+              "domain": "shop.mghrj.com",
+              "logo": "https://favicon.im/shop.mghrj.com",
+              "desc": ""
+            },
+            {
+              "name": "在线决策树",
+              "url": "https://online.visual-paradigm.com/cn/diagrams/features/decision-tree-software/",
+              "domain": "online.visual-paradigm.com",
+              "logo": "https://favicon.im/online.visual-paradigm.com",
+              "desc": ""
+            },
+            {
+              "name": "可可英语",
+              "url": "http://www.kekenet.com/",
+              "domain": "kekenet.com",
+              "logo": "https://favicon.im/kekenet.com",
+              "desc": ""
+            },
+            {
+              "name": "英语在线学习",
+              "url": "https://www.youtube.com/watch?v=g9m7ezjEsMA",
+              "domain": "youtube.com",
+              "logo": "https://favicon.im/youtube.com",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "网络互助",
+          "sites": [
+            {
+              "name": "水滴筹",
+              "url": "https://www.shuidichou.com/",
+              "domain": "shuidichou.com",
+              "logo": "https://favicon.im/shuidichou.com",
+              "desc": ""
+            },
+            {
+              "name": "轻松筹官网",
+              "url": "https://www.qschou.com/",
+              "domain": "qschou.com",
+              "logo": "https://favicon.im/qschou.com",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "EHS管理",
+          "sites": [
+            {
+              "name": "泰致德",
+              "url": "http://trainor.cn/",
+              "domain": "trainor.cn",
+              "logo": "https://favicon.im/trainor.cn",
+              "desc": ""
+            },
+            {
+              "name": "安全家",
+              "url": "https://www.hsehome.com/server",
+              "domain": "hsehome.com",
+              "logo": "https://favicon.im/hsehome.com",
+              "desc": ""
+            },
+            {
+              "name": "安环家",
+              "url": "http://www.anhuanjia.com/",
+              "domain": "anhuanjia.com",
+              "logo": "https://favicon.im/anhuanjia.com",
+              "desc": ""
+            },
+            {
+              "name": "EHS微服",
+              "url": "http://smart-ehs.com/FAQ",
+              "domain": "smart-ehs.com",
+              "logo": "https://favicon.im/smart-ehs.com",
+              "desc": ""
+            },
+            {
+              "name": "安全博客",
+              "url": "https://www.sohu.com/a/363708274_120068166?spm=smpc.author.fd-d.100.1589293473253IY7QNYO",
+              "domain": "sohu.com",
+              "logo": "https://favicon.im/sohu.com",
+              "desc": ""
+            },
+            {
+              "name": "技成培训",
+              "url": "https://www.jcpeixun.com/course/search?tid=1&keyword=%E5%AE%89%E5%85%A8",
+              "domain": "jcpeixun.com",
+              "logo": "https://favicon.im/jcpeixun.com",
+              "desc": ""
+            },
+            {
+              "name": "HSEnation",
+              "url": "https://hsenation.com/",
+              "domain": "hsenation.com",
+              "logo": "https://favicon.im/hsenation.com",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "博客",
+          "sites": [
+            {
+              "name": "数据化分析",
+              "url": "http://blog.sina.com.cn/s/articlelist_2616006187_0_1.html",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "刘万祥新浪博客",
+              "url": "http://blog.sina.com.cn/excelmap",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "小蚊子数据分析",
+              "url": "http://blog.sina.com.cn/xiaowenzi22",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "投资理财",
+          "sites": [
+            {
+              "name": "雪球网",
+              "url": "https://xueqiu.com/6301423150/359412135",
+              "domain": "xueqiu.com",
+              "logo": "https://favicon.im/xueqiu.com",
+              "desc": ""
+            },
+            {
+              "name": "房价排名走势",
+              "url": "https://www.anjuke.com/fangjia/quanguo2019/",
+              "domain": "anjuke.com",
+              "logo": "https://favicon.im/anjuke.com",
+              "desc": ""
+            },
+            {
+              "name": "网约车司机收入",
+              "url": "http://www.sohu.com/a/275287820_100191015",
+              "domain": "sohu.com",
+              "logo": "https://favicon.im/sohu.com",
+              "desc": ""
+            },
+            {
+              "name": "股票",
+              "url": "http://stockpage.10jqka.com.cn/",
+              "domain": "stockpage.10jqka.com.cn",
+              "logo": "https://favicon.im/stockpage.10jqka.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "数字江恩",
+              "url": "http://blog.sina.com.cn/s/articlelist_2342117515_5_2.html",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "混沌大学",
+              "url": "https://36kr.com/p/5301613",
+              "domain": "36kr.com",
+              "logo": "https://favicon.im/36kr.com",
+              "desc": ""
+            },
+            {
+              "name": "新浪财经",
+              "url": "https://finance.sina.com.cn/stock/",
+              "domain": "finance.sina.com.cn",
+              "logo": "https://favicon.im/finance.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "凯恩斯博客",
+              "url": "http://blog.sina.com.cn/s/articlelist_1284139322_0_1.html",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "技术博客",
+              "url": "http://www.luzexi.com/2019/11/09/%E6%80%9D%E8%B7%AF%E6%8E%A2%E8%AE%A831.html",
+              "domain": "luzexi.com",
+              "logo": "https://favicon.im/luzexi.com",
+              "desc": ""
+            },
+            {
+              "name": "镇江房产信息网",
+              "url": "http://www.zjfdc.net/",
+              "domain": "zjfdc.net",
+              "logo": "https://favicon.im/zjfdc.net",
+              "desc": ""
+            },
+            {
+              "name": "长线投资",
+              "url": "http://blog.sina.com.cn/u/2967148895",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "愚木",
+              "url": "http://blog.sina.com.cn/s/articlelist_1227190187_10_1.html",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            },
+            {
+              "name": "缠中说禅",
+              "url": "http://blog.sina.com.cn/s/articlelist_1215172700_10_10.html",
+              "domain": "blog.sina.com.cn",
+              "logo": "https://favicon.im/blog.sina.com.cn",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "国外网站",
+          "sites": [
+            {
+              "name": "世卫组织网站",
+              "url": "https://www.who.int/zh/",
+              "domain": "who.int",
+              "logo": "https://favicon.im/who.int",
+              "desc": ""
+            },
+            {
+              "name": "空难数据",
+              "url": "http://www.planecrashinfo.com/database.htm",
+              "domain": "planecrashinfo.com",
+              "logo": "https://favicon.im/planecrashinfo.com",
+              "desc": ""
+            },
+            {
+              "name": "飞机事故档案",
+              "url": "http://www.baaa-acro.com/",
+              "domain": "baaa-acro.com",
+              "logo": "https://favicon.im/baaa-acro.com",
+              "desc": ""
+            },
+            {
+              "name": "航空安全网",
+              "url": "https://aviation-safety.net/",
+              "domain": "aviation-safety.net",
+              "logo": "https://favicon.im/aviation-safety.net",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "游戏",
+          "sites": [
+            {
+              "name": "生存游戏",
+              "url": "http://www.yxdown.com/zt/sclyx/1/",
+              "domain": "yxdown.com",
+              "logo": "https://favicon.im/yxdown.com",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "安全教育",
+          "sites": [
+            {
+              "name": "学校安全教育",
+              "url": "https://www.xueanquan.com/Escapegame/List.aspx",
+              "domain": "xueanquan.com",
+              "logo": "https://favicon.im/xueanquan.com",
+              "desc": ""
+            },
+            {
+              "name": "急救在线培训",
+              "url": "http://www.zj120.net/zhongxingaikuang/zhongxinjianjie/",
+              "domain": "zj120.net",
+              "logo": "https://favicon.im/zj120.net",
+              "desc": ""
+            },
+            {
+              "name": "红会在线急救培训",
+              "url": "http://crcntc.org.cn/spring/login/index?modelId=zxxx",
+              "domain": "crcntc.org.cn",
+              "logo": "https://favicon.im/crcntc.org.cn",
+              "desc": ""
+            }
+          ],
+          "children": []
+        },
+        {
+          "name": "在线视频",
+          "sites": [
+            {
+              "name": "看美剧",
+              "url": "https://www.kankanmeiju.com/",
+              "domain": "kankanmeiju.com",
+              "logo": "https://favicon.im/kankanmeiju.com",
+              "desc": ""
+            },
+            {
+              "name": "影视",
+              "url": "https://libvio.me/",
+              "domain": "libvio.me",
+              "logo": "https://favicon.im/libvio.me",
+              "desc": ""
+            },
+            {
+              "name": "韩剧网",
+              "url": "https://www.022edu.net/vplay/138330-1-13.html",
+              "domain": "022edu.net",
+              "logo": "https://favicon.im/022edu.net",
+              "desc": ""
+            }
+          ],
+          "children": []
+        }
+      ]
+    }
+  ]
+}

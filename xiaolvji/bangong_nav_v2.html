@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · bangong 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · bangong 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · bangong</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · bangong</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">稍后阅读</h3><div class="grid"><a class="item" href="http://www.ftchinese.com/story/001073316" target="_blank" data-domain="ftchinese.com" title="中美科技产业模式日渐趋同">中美科技产业模式日渐趋同</a><a class="item" href="http://open.163.com/movie/2015/12/P/P/MBB33UV63_MBB3FH8PP.html" target="_blank" data-domain="open.163.com" title="马云斯坦福大学演讲">马云斯坦福大学演讲</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">OA平台</h3><div class="grid"><a class="item" href="http://vss.crv.com.cn/scm/logon/logon.jsp" target="_blank" data-domain="vss.crv.com.cn" title="华润万家">华润万家</a><a class="item" href="http://mail.wfjgj.com" target="_blank" data-domain="mail.wfjgj.com" title="王府井商场">王府井商场</a><a class="item" href="http://oa.chinawanda.com:1010/login.php" target="_blank" data-domain="oa.chinawanda.com:1010" title="万达">万达</a><a class="item" href="http://siam.rainbowcn.com/login" target="_blank" data-domain="siam.rainbowcn.com" title="天虹">天虹</a><a class="item" href="http://shop.capitaland.com.cn/admin/login" target="_blank" data-domain="shop.capitaland.com.cn" title="凯德">凯德</a><a class="item" href="http://oa.newyanshamall.com:7001/defaultroot/login.jsp" target="_blank" data-domain="oa.newyanshamall.com:7001" title="金源燕莎">金源燕莎</a><a class="item" href="http://oa.cofcotrading.com/seeyon/index.jsp" target="_blank" data-domain="oa.cofcotrading.com" title="中粮">中粮</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">工作常用</h3><div class="grid"><a class="item" href="http://wx.qq.com" target="_blank" data-domain="wx.qq.com" title="微信网页版">微信网页版</a><a class="item" href="http://mail.crvanguard.com.cn" target="_blank" data-domain="mail.crvanguard.com.cn" title="邮箱">邮箱</a><a class="item" href="http://192.168.8.123:8080/login" target="_blank" data-domain="192.168.8.123:8080" title="公司ERP">公司ERP</a><a class="item" href="http://192.68.8.168:8080/login.jsp" target="_blank" data-domain="192.68.8.168:8080" title="财务对接">财务对接</a><a class="item" href="http://mail.163.com" target="_blank" data-domain="mail.163.com" title="163邮箱">163邮箱</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">工作文档</h3><div class="grid"><a class="item" href="http://pan.baidu.com/s/1jIDpumi" target="_blank" data-domain="pan.baidu.com" title="报销单模版">报销单模版</a><a class="item" href="http://pan.baidu.com/s/1qXEiKJa" target="_blank" data-domain="pan.baidu.com" title="月报模版">月报模版</a><a class="item" href="http://pan.baidu.com/s/1jHLg8Fs" target="_blank" data-domain="pan.baidu.com" title="季报模版">季报模版</a><a class="item" href="http://pan.baidu.com/s/1pLblwxH" target="_blank" data-domain="pan.baidu.com" title="请假单">请假单</a><a class="item" href="http://pan.baidu.com/s/1kVQKxcN" target="_blank" data-domain="pan.baidu.com" title="新员工社保申请表">新员工社保申请表</a><a class="item" href="http://pan.baidu.com/s/1eSxOx0I" target="_blank" data-domain="pan.baidu.com" title="经管新员工培训">经管新员工培训</a><a class="item" href="http://pan.baidu.com/s/1eRK8OX8" target="_blank" data-domain="pan.baidu.com" title="财务培训">财务培训</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">Firefox插件</h3><div class="grid"><a class="item" href="https://addons.mozilla.org/zh-CN/firefox/addon/adblock-plus/?src=cb-dl-users" target="_blank" data-domain="addons.mozilla.org" title="Adblock Plus">Adblock Plus</a><a class="item" href="https://addons.mozilla.org/zh-CN/firefox/addon/downthemall/?src=cb-dl-users" target="_blank" data-domain="addons.mozilla.org" title="DownThemAll!">DownThemAll!</a><a class="item" href="https://addons.mozilla.org/zh-CN/firefox/addon/greasemonkey/?src=cb-dl-users" target="_blank" data-domain="addons.mozilla.org" title="Greasemonkey">Greasemonkey</a><a class="item" href="https://addons.mozilla.org/zh-CN/firefox/addon/lastpass-password-manager/?src=cb-dl-users" target="_blank" data-domain="addons.mozilla.org" title="LastPass">LastPass</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">常用软件</h3><div class="grid"><a class="item" href="https://get.adobe.com/reader/" target="_blank" data-domain="get.adobe.com" title="Adobe Reader">Adobe Reader</a><a class="item" href="http://www.ghisler.com/download.htm" target="_blank" data-domain="ghisler.com" title="Total Commander">Total Commander</a><a class="item" href="https://todo.microsoft.com/" target="_blank" data-domain="todo.microsoft.com" title="MS To-Do">MS To-Do</a><a class="item" href="http://ftp.mozilla.org/pub/firefox/releases/" target="_blank" data-domain="ftp.mozilla.org" title="Firefox">Firefox</a><a class="item" href="http://www.foxmail.com/" target="_blank" data-domain="foxmail.com" title="Foxmail">Foxmail</a><a class="item" href="http://www.wps.cn/" target="_blank" data-domain="wps.cn" title="WPS">WPS</a><a class="item" href="http://pan.baidu.com/download" target="_blank" data-domain="pan.baidu.com" title="百度云管家">百度云管家</a><a class="item" href="http://xinshuru.com/index.html?p=win" target="_blank" data-domain="xinshuru.com" title="手心拼音">手心拼音</a><a class="item" href="http://www.bandisoft.com/bandizip/cn/" target="_blank" data-domain="bandisoft.com" title="BandiZip">BandiZip</a><a class="item" href="http://sd.360.cn/" target="_blank" data-domain="sd.360.cn" title="360杀毒">360杀毒</a><a class="item" href="http://player.qq.com/" target="_blank" data-domain="player.qq.com" title="QQ影音">QQ影音</a><a class="item" href="http://music.163.com/#/download" target="_blank" data-domain="music.163.com" title="网易云音乐">网易云音乐</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · bangong", "children": [{"id": 2, "name": "稍后阅读", "children": []}, {"id": 3, "name": "OA平台", "children": []}, {"id": 4, "name": "工作常用", "children": []}, {"id": 5, "name": "工作文档", "children": []}, {"id": 6, "name": "Firefox插件", "children": []}, {"id": 7, "name": "常用软件", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

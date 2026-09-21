@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · yzhrjd 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · yzhrjd 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · yzhrjd</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · yzhrjd</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">行业网址</h3><div class="grid"><a class="item" href="http://www.yangzhou.gov.cn/" target="_blank" data-domain="yangzhou.gov.cn" title="扬州市人民政府">扬州市人民政府</a><a class="item" href="http://gl.yangzhou.gov.cn/" target="_blank" data-domain="gl.yangzhou.gov.cn" title="扬州市广陵区人民政府">扬州市广陵区人民政府</a><a class="item" href="http://www.hj.gov.cn/" target="_blank" data-domain="hj.gov.cn" title="扬州市邗江区人民政府">扬州市邗江区人民政府</a><a class="item" href="http://www.jiangdu.gov.cn/" target="_blank" data-domain="jiangdu.gov.cn" title="扬州市江都区人民政府">扬州市江都区人民政府</a><a class="item" href="http://czj.yangzhou.gov.cn/" target="_blank" data-domain="czj.yangzhou.gov.cn" title="扬州市财政局">扬州市财政局</a><a class="item" href="http://www.mohurd.gov.cn/" target="_blank" data-domain="mohurd.gov.cn" title="中华人民共和国住房和城乡建设部">中华人民共和国住房和城乡建设部</a><a class="item" href="http://jsszfhcxjst.jiangsu.gov.cn/" target="_blank" data-domain="jsszfhcxjst.jiangsu.gov.cn" title="江苏省住房和城乡建设厅">江苏省住房和城乡建设厅</a><a class="item" href="http://yzzjj.yangzhou.gov.cn/" target="_blank" data-domain="yzzjj.yangzhou.gov.cn" title="扬州市住房和城乡建设局">扬州市住房和城乡建设局</a><a class="item" href="http://jshrss.jiangsu.gov.cn/" target="_blank" data-domain="jshrss.jiangsu.gov.cn" title="江苏省人力资源和社会保障厅">江苏省人力资源和社会保障厅</a><a class="item" href="http://hrss.yangzhou.gov.cn/" target="_blank" data-domain="hrss.yangzhou.gov.cn" title="扬州市人力资源和社会保障局">扬州市人力资源和社会保障局</a><a class="item" href="http://jshrss.jiangsu.gov.cn/col/col85519/index.html" target="_blank" data-domain="jshrss.jiangsu.gov.cn" title="江苏技能人才评价服务网">江苏技能人才评价服务网</a><a class="item" href="http://hrss.yangzhou.gov.cn/sbzx/" target="_blank" data-domain="hrss.yangzhou.gov.cn" title="扬州市社会保险基金管理中心">扬州市社会保险基金管理中心</a><a class="item" href="http://www.yzjgkg.cn/jgkg/" target="_blank" data-domain="yzjgkg.cn" title="扬州建工控股有限责任公司">扬州建工控股有限责任公司</a><a class="item" href="http://www.jstjbb.cn/Jstjbb/Index.aspx" target="_blank" data-domain="jstjbb.cn" title="江苏建筑业网统计信息频道">江苏建筑业网统计信息频道</a><a class="item" href="http://www.yzajz.com/" target="_blank" data-domain="yzajz.com" title="扬州市建筑安全监察站">扬州市建筑安全监察站</a><a class="item" href="http://jsb.nea.gov.cn/" target="_blank" data-domain="jsb.nea.gov.cn" title="国家能源局江苏监管办公室">国家能源局江苏监管办公室</a><a class="item" href="http://www.mem.gov.cn/" target="_blank" data-domain="mem.gov.cn" title="中华人民共和国应急管理部">中华人民共和国应急管理部</a><a class="item" href="http://yjglt.jiangsu.gov.cn/" target="_blank" data-domain="yjglt.jiangsu.gov.cn" title="江苏省应急管理厅">江苏省应急管理厅</a><a class="item" href="http://www.jspeima.com/" target="_blank" data-domain="jspeima.com" title="江苏省电力工程企业协会">江苏省电力工程企业协会</a><a class="item" href="http://hrss.yangzhou.gov.cn/yzjycyfw/index.html" target="_blank" data-domain="hrss.yangzhou.gov.cn" title="扬州就业创业服务">扬州就业创业服务</a><a class="item" href="http://jtyst.jiangsu.gov.cn/" target="_blank" data-domain="jtyst.jiangsu.gov.cn" title="江苏省交通运输厅">江苏省交通运输厅</a><a class="item" href="http://221.229.114.189/rcm/yzjob/" target="_blank" data-domain="221.229.114.189" title="扬州人才市场">扬州人才市场</a><a class="item" href="http://www.hjrc.cn/" target="_blank" data-domain="hjrc.cn" title="邗江人才市场">邗江人才市场</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">办公平台</h3><div class="grid"><a class="item" href="https://www.ningmengyun.com/" target="_blank" data-domain="ningmengyun.com" title="柠檬云财税">柠檬云财税</a><a class="item" href="http://www.gsxt.gov.cn/index.html" target="_blank" data-domain="gsxt.gov.cn" title="国家企业信用信息公示系统">国家企业信用信息公示系统</a><a class="item" href="http://gjzwfw.www.gov.cn/" target="_blank" data-domain="gjzwfw.www.gov.cn" title="国家政务服务平台">国家政务服务平台</a><a class="item" href="http://www.jszwfw.gov.cn/" target="_blank" data-domain="jszwfw.gov.cn" title="江苏政务服务">江苏政务服务</a><a class="item" href="http://49.77.204.6:17001/Website/#/login_htgj" target="_blank" data-domain="49.77.204.6:17001" title="建筑市场信用平台-合同归集">建筑市场信用平台-合同归集</a><a class="item" href="http://49.77.204.6:10081/SzjsWorkQY/srarchHome/SearchHome.html" target="_blank" data-domain="49.77.204.6:10081" title="证书查询">证书查询</a><a class="item" href="https://ybj.jszwfw.gov.cn/hsa-local/web/hallEnter/#/Index" target="_blank" data-domain="ybj.jszwfw.gov.cn" title="江苏省医疗保障局网上服务大厅">江苏省医疗保障局网上服务大厅</a><a class="item" href="https://etax.jiangsu.chinatax.gov.cn/" target="_blank" data-domain="etax.jiangsu.chinatax.gov.cn" title="国家税务总局江苏省电子税务局">国家税务总局江苏省电子税务局</a><a class="item" href="https://etax.jiangsu.chinatax.gov.cn/wangluofapiao/fpcy.action?sign=pageJump" target="_blank" data-domain="etax.jiangsu.chinatax.gov.cn" title="发票查询">发票查询</a><a class="item" href="https://jzsc.mohurd.gov.cn/data/company" target="_blank" data-domain="jzsc.mohurd.gov.cn" title="全国建筑市场监管公共服务平台">全国建筑市场监管公共服务平台</a><a class="item" href="http://49.77.204.6:17001/Website/#/" target="_blank" data-domain="49.77.204.6:17001" title="江苏省建筑市场监管与诚信信息一体化平台">江苏省建筑市场监管与诚信信息一体化平台</a><a class="item" href="http://58.213.147.241:7080/w/com/home" target="_blank" data-domain="58.213.147.241:7080" title="江苏省优质工程、省级工法及新技术应用示范管理系统">江苏省优质工程、省级工法及新技术应用示范管理系统</a><a class="item" href="http://61.132.39.91/pub/pubindex/doInit" target="_blank" data-domain="61.132.39.91" title="扬州市建筑市场信用管理信息系统">扬州市建筑市场信用管理信息系统</a><a class="item" href="http://61.132.39.94:8016/JSGCSB/" target="_blank" data-domain="61.132.39.94:8016" title="扬州建筑市场信用平台申报系统">扬州建筑市场信用平台申报系统</a><a class="item" href="http://www.cinsafe.com.cn/" target="_blank" data-domain="cinsafe.com.cn" title="江苏省建筑行业协会-建筑安全教育网">江苏省建筑行业协会-建筑安全教育网</a><a class="item" href="https://www.pqrc.org.cn/" target="_blank" data-domain="pqrc.org.cn" title="住房和城乡建设部执业资格注册中心">住房和城乡建设部执业资格注册中心</a><a class="item" href="http://rcgz.mohurd.gov.cn/" target="_blank" data-domain="rcgz.mohurd.gov.cn" title="住房城乡建设行业从业人员培训管理信息系统">住房城乡建设行业从业人员培训管理信息系统</a><a class="item" href="http://zscx.osta.org.cn/" target="_blank" data-domain="zscx.osta.org.cn" title="技术工人查询">技术工人查询</a><a class="item" href="http://cx.mem.gov.cn/" target="_blank" data-domain="cx.mem.gov.cn" title="特种作业操作证查询">特种作业操作证查询</a><a class="item" href="https://www.creditchina.gov.cn/chengxinwenhua/chengxindajiatan/" target="_blank" data-domain="creditchina.gov.cn" title="信用中国">信用中国</a><a class="item" href="https://js.122.gov.cn/" target="_blank" data-domain="js.122.gov.cn" title="交通安全综合服务平台">交通安全综合服务平台</a><a class="item" href="https://www.91job.org.cn/" target="_blank" data-domain="91job.org.cn" title="江苏24365大学生就业服务平台">江苏24365大学生就业服务平台</a><a class="item" href="https://jzszc.coc.gov.cn/link/index" target="_blank" data-domain="jzszc.coc.gov.cn" title="一级建造师注册管理信息系统">一级建造师注册管理信息系统</a><a class="item" href="https://jlgcs.mohurd.gov.cn/client/login/link" target="_blank" data-domain="jlgcs.mohurd.gov.cn" title="注册监理工程师管理系统">注册监理工程师管理系统</a><a class="item" href="https://jsjszcps.cn:8080/" target="_blank" data-domain="jsjszcps.cn:8080" title="江苏省建设工程职称申报评审管理系统">江苏省建设工程职称申报评审管理系统</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">招投标网</h3><div class="grid"><a class="item" href="http://cgb.yzu.edu.cn/cgxx/cggg/gcl.htm" target="_blank" data-domain="cgb.yzu.edu.cn" title="扬州大学">扬州大学</a><a class="item" href="http://www.yzpc.edu.cn/2511/list.htm" target="_blank" data-domain="yzpc.edu.cn" title="扬州科技学院">扬州科技学院</a><a class="item" href="http://www.yzcdc.com/index/news/index/functionid/19.html" target="_blank" data-domain="yzcdc.com" title="扬州市疾病预防控制中心">扬州市疾病预防控制中心</a><a class="item" href="http://www.yzwyft.com/news.asp?bigclassname=%E6%8B%9B%E6%A0%87%E5%85%AC%E5%91%8A" target="_blank" data-domain="yzwyft.com" title="扬州维扬发投">扬州维扬发投</a><a class="item" href="https://www.hjcjfz.com/news/10/" target="_blank" data-domain="hjcjfz.com" title="扬州市邗江城市建设发展有限公司">扬州市邗江城市建设发展有限公司</a><a class="item" href="https://www.chinahho.com/information" target="_blank" data-domain="chinahho.com" title="中国水务">中国水务</a><a class="item" href="http://cjsw.yzckjt.com/284/list.htm" target="_blank" data-domain="cjsw.yzckjt.com" title="江苏长江水务股份有限公司">江苏长江水务股份有限公司</a><a class="item" href="https://bid.js.sgcc.com.cn/" target="_blank" data-domain="bid.js.sgcc.com.cn" title="国家电网公司招标管理系统网站">国家电网公司招标管理系统网站</a><a class="item" href="https://ecp.sgcc.com.cn/ecp2.0/portal/#/" target="_blank" data-domain="ecp.sgcc.com.cn" title="国家电网新一代电子商务平台">国家电网新一代电子商务平台</a><a class="item" href="https://sgccetp.com.cn" target="_blank" data-domain="sgccetp.com.cn" title="国家电网有限公司 电子商务平台-电工交易专区">国家电网有限公司 电子商务平台-电工交易专区</a><a class="item" href="https://b2b.10086.cn/b2b/main/preIndex.html" target="_blank" data-domain="b2b.10086.cn" title="中国移动">中国移动</a><a class="item" href="https://hzs.coli688.com/" target="_blank" data-domain="hzs.coli688.com" title="中海地产">中海地产</a><a class="item" href="https://www.powerlong.com/inv/sup-info!begin.action" target="_blank" data-domain="powerlong.com" title="宝龙地产">宝龙地产</a><a class="item" href="https://a.vvupup.com/page/welcome.jsp" target="_blank" data-domain="a.vvupup.com" title="采筑网">采筑网</a><a class="item" href="http://www.365trade.com.cn/zbgg/index.jhtml" target="_blank" data-domain="365trade.com.cn" title="中招联合电子交易平台">中招联合电子交易平台</a><a class="item" href="http://www.chinabidding.com.cn/" target="_blank" data-domain="chinabidding.com.cn" title="中国采购与招标网">中国采购与招标网</a><a class="item" href="http://bulletin.cebpubservice.com/" target="_blank" data-domain="bulletin.cebpubservice.com" title="中国招标投标公共服务平台">中国招标投标公共服务平台</a><a class="item" href="http://www.infobidding.com/" target="_blank" data-domain="infobidding.com" title="招投标网">招投标网</a><a class="item" href="http://ecg.portjs.cn:20909/#/jiaoyi?index=1" target="_blank" data-domain="ecg.portjs.cn:20909" title="江苏省港口集团">江苏省港口集团</a><a class="item" href="https://ec.jsgx.net/" target="_blank" data-domain="ec.jsgx.net" title="国信慧采">国信慧采</a><a class="item" href="https://zbcg.jchc.cn/home_announcement?index=0" target="_blank" data-domain="zbcg.jchc.cn" title="江苏交通控股有限公司电子采购平台">江苏交通控股有限公司电子采购平台</a><a class="item" href="https://www.wxcq.com.cn/wuxicq/ggzy/sourse.html" target="_blank" data-domain="wxcq.com.cn" title="无锡产权交易所">无锡产权交易所</a><a class="item" href="https://www.yzw.cn/" target="_blank" data-domain="yzw.cn" title="云筑网">云筑网</a><a class="item" href="https://ec.ceec.net.cn/" target="_blank" data-domain="ec.ceec.net.cn" title="中国能建电子采购平台">中国能建电子采购平台</a><a class="item" href="https://www.cnncecp.com/" target="_blank" data-domain="cnncecp.com" title="中核集团电子采购平台">中核集团电子采购平台</a><a class="item" href="http://e.sinochemitc.com/cms/index.htm" target="_blank" data-domain="e.sinochemitc.com" title="中化招标">中化招标</a><a class="item" href="http://gyswy.liando.cn/suppliers-portal/" target="_blank" data-domain="gyswy.liando.cn" title="联东U谷">联东U谷</a><a class="item" href="https://chunshan.bcegc.com" target="_blank" data-domain="chunshan.bcegc.com" title="春山·星火">春山·星火</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">公共资源</h3><div class="grid"><a class="item" href="https://www.jszbtb.com/#/announcedetail/1" target="_blank" data-domain="jszbtb.com" title="江苏省招标投标公共服务平台">江苏省招标投标公共服务平台</a><a class="item" href="http://www.jszb.com.cn/jszb/" target="_blank" data-domain="jszb.com.cn" title="江苏省建设工程招标网">江苏省建设工程招标网</a><a class="item" href="http://jsggzy.jszwfw.gov.cn/" target="_blank" data-domain="jsggzy.jszwfw.gov.cn" title="江苏省公共资源交易网">江苏省公共资源交易网</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="扬州市公共资源交易中心">扬州市公共资源交易中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/hjfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="邗江分中心">邗江分中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/glfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="广陵分中心">广陵分中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/kfqfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="开发区分中心">开发区分中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/jdfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="江都分中心">江都分中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/yzfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="仪征分中心">仪征分中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/gyfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="高邮分中心">高邮分中心</a><a class="item" href="http://ggzyjyzx.yangzhou.gov.cn/byfzx/jyxx/index.html" target="_blank" data-domain="ggzyjyzx.yangzhou.gov.cn" title="宝应分中心">宝应分中心</a><a class="item" href="http://ggzy.taizhou.gov.cn/" target="_blank" data-domain="ggzy.taizhou.gov.cn" title="泰州市公共资源交易网">泰州市公共资源交易网</a><a class="item" href="https://www.etrading.cn/" target="_blank" data-domain="etrading.cn" title="新点电子交易平台">新点电子交易平台</a><a class="item" href="https://yizheng.etrading.cn/" target="_blank" data-domain="yizheng.etrading.cn" title="新点电子交易平台-仪征专区">新点电子交易平台-仪征专区</a><a class="item" href="https://www.365gpm.com/" target="_blank" data-domain="365gpm.com" title="阳光e采云">阳光e采云</a><a class="item" href="http://221.231.11.22:8099/" target="_blank" data-domain="221.231.11.22:8099" title="江苏省盐南高新区公共资源交易电子化服务平台">江苏省盐南高新区公共资源交易电子化服务平台</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">信息公开</h3><div class="grid"><a class="item" href="http://www.yangtzeinvest.com/GroupAnnouncement" target="_blank" data-domain="yangtzeinvest.com" title="扬子江集团">扬子江集团</a><a class="item" href="http://www.yzckjt.com/ztbxx/list.htm" target="_blank" data-domain="yzckjt.com" title="城建控股">城建控股</a><a class="item" href="https://www.yzjtcyjt.com/joomla/index.php/xmzb" target="_blank" data-domain="yzjtcyjt.com" title="交通产业集团">交通产业集团</a><a class="item" href="http://yz-kjjt.com/html/zbxx/" target="_blank" data-domain="yz-kjjt.com" title="科教集团">科教集团</a><a class="item" href="https://kfq.yangzhou.gov.cn/zfxxgk/fdzdgknr/zfcg/index.html" target="_blank" data-domain="kfq.yangzhou.gov.cn" title="经济技术开发区">经济技术开发区</a><a class="item" href="https://stkjxc.yangzhou.gov.cn/zfxxgk/fdzdgknr/zfcg/index.html" target="_blank" data-domain="stkjxc.yangzhou.gov.cn" title="生态科技新城">生态科技新城</a><a class="item" href="https://sxh.yangzhou.gov.cn/zbtb/zbgg/index.html" target="_blank" data-domain="sxh.yangzhou.gov.cn" title="蜀冈-瘦西湖风景名胜区">蜀冈-瘦西湖风景名胜区</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/index.html" target="_blank" data-domain="hj.gov.cn" title="邗江区">邗江区</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/yzgxqchjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="扬州高新区">扬州高新区</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/wykfq/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="维扬开发区">维扬开发区</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/gzz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="瓜洲镇">瓜洲镇</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/jwjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="蒋王街道">蒋王街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/hsjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="邗上街道">邗上街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/sqjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="双桥街道">双桥街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/xsjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="新盛街道">新盛街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/xhjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="西湖街道">西湖街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/zxjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="竹西街道">竹西街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/ymz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="杨庙镇">杨庙镇</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/gqjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="甘泉街道">甘泉街道</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/ysz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="杨寿镇">杨寿镇</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/hsz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="槐泗镇">槐泗镇</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/fxz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="方巷镇">方巷镇</a><a class="item" href="http://www.hj.gov.cn/zfxxgk/zjdzfxxgk/gdz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="公道镇">公道镇</a><a class="item" href="http://gl.yangzhou.gov.cn/zfxxgk/fdzdgknr/zjdyqxxgk/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="广陵区">广陵区</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/jjkfq/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="经济开发区">经济开发区</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/glxc/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="广陵新城">广陵新城</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/dnxc/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="东南新城">东南新城</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/spcyy/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="食品产业园">食品产业园</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/tqz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="头桥镇">头桥镇</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/ldz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="李典镇">李典镇</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/stz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="沙头镇">沙头镇</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/wtz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="湾头镇">湾头镇</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/twjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="汤汪街道">汤汪街道</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/qjjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="曲江街道">曲江街道</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/wfjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="文峰街道">文峰街道</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/dgjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="东关街道">东关街道</a><a class="item" href="http://gl.yangzhou.gov.cn/zwgk/zjdyqxxgk/whjd/fdzdgknr/tzgg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="汶河街道">汶河街道</a><a class="item" href="http://www.jiangdu.gov.cn/zfxxgk/fdzdgknr/xzjdyqxxgk/index.html" target="_blank" data-domain="jiangdu.gov.cn" title="江都区">江都区</a><a class="item" href="http://www.yizheng.gov.cn/zfxxgk/yqxzbmxxgkml/index.html" target="_blank" data-domain="yizheng.gov.cn" title="仪征市">仪征市</a><a class="item" href="http://www.yizheng.gov.cn/zfxxgk/yqxzbmxxgkml/yqxz/dyz/fdzdgknr/tzgg/index.html" target="_blank" data-domain="yizheng.gov.cn" title="大仪镇">大仪镇</a><a class="item" href="https://gaoyou.yangzhou.gov.cn/zwgk/xzxxgk/index.html" target="_blank" data-domain="gaoyou.yangzhou.gov.cn" title="高邮市">高邮市</a><a class="item" href="https://baoying.yangzhou.gov.cn/zfxxgk/zqxxgk/index.html" target="_blank" data-domain="baoying.yangzhou.gov.cn" title="宝应县">宝应县</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">政府采购</h3><div class="grid"><a class="item" href="http://www.ccgp.gov.cn/" target="_blank" data-domain="ccgp.gov.cn" title="中国政府采购网">中国政府采购网</a><a class="item" href="http://www.ccgp-jiangsu.gov.cn/" target="_blank" data-domain="ccgp-jiangsu.gov.cn" title="江苏省政府采购网">江苏省政府采购网</a><a class="item" href="http://zfcg.yangzhou.gov.cn" target="_blank" data-domain="zfcg.yangzhou.gov.cn" title="扬州市政府采购网">扬州市政府采购网</a><a class="item" href="http://gl.yangzhou.gov.cn/zfxxgk/fdzdgknr/ggzypz/zfcg/index.html" target="_blank" data-domain="gl.yangzhou.gov.cn" title="广陵区政府采购网">广陵区政府采购网</a><a class="item" href="https://www.hj.gov.cn/zfcgw/index.html" target="_blank" data-domain="hj.gov.cn" title="邗江区政府采购网">邗江区政府采购网</a><a class="item" href="http://www.jiangdu.gov.cn/ztzl/jdqzfcgw/index.html" target="_blank" data-domain="jiangdu.gov.cn" title="江都区政府采购网">江都区政府采购网</a><a class="item" href="http://zfcg.yizheng.cn/" target="_blank" data-domain="zfcg.yizheng.cn" title="仪征市政府采购网">仪征市政府采购网</a><a class="item" href="https://gaoyou.yangzhou.gov.cn/gyszfcgw/index.html" target="_blank" data-domain="gaoyou.yangzhou.gov.cn" title="高邮市政府采购网">高邮市政府采购网</a><a class="item" href="https://baoying.yangzhou.gov.cn/byxzfcgw/index.html" target="_blank" data-domain="baoying.yangzhou.gov.cn" title="宝应县政府采购网">宝应县政府采购网</a><a class="item" href="https://njgc.jfh.com/" target="_blank" data-domain="njgc.jfh.com" title="南京公共采购信息网">南京公共采购信息网</a></div></div><div class="cat-sub" id="cat-8"><h3 class="cat-sub-title">造价信息</h3><div class="grid"><a class="item" href="http://www.hj.gov.cn/zfxxgk/bmzfxxgk/sjj/fdzdgknr/tzgg/index.html" target="_blank" data-domain="hj.gov.cn" title="扬州市邗江区审计局">扬州市邗江区审计局</a><a class="item" href="http://www.cecm.net.cn/" target="_blank" data-domain="cecm.net.cn" title="中国电力工程造价信息网">中国电力工程造价信息网</a><a class="item" href="http://49.77.204.6:10081/continue/" target="_blank" data-domain="49.77.204.6:10081" title="江苏省造价管理信息系统">江苏省造价管理信息系统</a><a class="item" href="https://zjgl.yzjwx.com:7777/" target="_blank" data-domain="zjgl.yzjwx.com:7777" title="扬州市工程造价管理系统">扬州市工程造价管理系统</a><a class="item" href="https://copper.ccmn.cn/copperprice/cjxh/" target="_blank" data-domain="copper.ccmn.cn" title="长江铜业网">长江铜业网</a><a class="item" href="https://www.banksteel.com/" target="_blank" data-domain="banksteel.com" title="钢银电商">钢银电商</a><a class="item" href="https://download.bqpoint.com/?softtypecode=01" target="_blank" data-domain="download.bqpoint.com" title="新点计价软件">新点计价软件</a></div></div><div class="cat-sub" id="cat-9"><h3 class="cat-sub-title">培训学习</h3><div class="grid"><a class="item" href="http://www.chsi.com.cn/" target="_blank" data-domain="chsi.com.cn" title="学信网">学信网</a><a class="item" href="http://www.cpta.com.cn/" target="_blank" data-domain="cpta.com.cn" title="中国人事考试网">中国人事考试网</a><a class="item" href="http://jshrss.jiangsu.gov.cn/col/col57253/index.html" target="_blank" data-domain="jshrss.jiangsu.gov.cn" title="江苏人事考试网">江苏人事考试网</a><a class="item" href="http://hrss.yangzhou.gov.cn/yzrsks/" target="_blank" data-domain="hrss.yangzhou.gov.cn" title="扬州人事考试网">扬州人事考试网</a><a class="item" href="https://bm.yzjp.org.cn/#/" target="_blank" data-domain="bm.yzjp.org.cn" title="扬州市建设培训在线学习平台（建造师/安全员继续教育）">扬州市建设培训在线学习平台（建造师/安全员继续教育）</a><a class="item" href="http://czj.yangzhou.gov.cn/yzczjx/jypxg/czj_yzkj_jypx.shtml" target="_blank" data-domain="czj.yangzhou.gov.cn" title="扬州市会计人员继续教育培训">扬州市会计人员继续教育培训</a><a class="item" href="http://tiku.zhikao666.com" target="_blank" data-domain="tiku.zhikao666.com" title="安全员题库">安全员题库</a><a class="item" href="http://jiangsu.nomax.vip/tip/" target="_blank" data-domain="jiangsu.nomax.vip" title="江苏省网上报名系统">江苏省网上报名系统</a><a class="item" href="http://jiangsu.nomax.vip/bas/" target="_blank" data-domain="jiangsu.nomax.vip" title="江苏省人事考试网上业务办理平台">江苏省人事考试网上业务办理平台</a><a class="item" href="http://www.jscen.com/" target="_blank" data-domain="jscen.com" title="江苏建设教育网">江苏建设教育网</a><a class="item" href="http://58.213.147.239:8080/KSPXFront/Web2/Pages/Common/WebReadCard.aspx" target="_blank" data-domain="58.213.147.239:8080" title="身份证自助读卡">身份证自助读卡</a><a class="item" href="http://js.bm.zjcloud.net.cn/login" target="_blank" data-domain="js.bm.zjcloud.net.cn" title="江苏省建设类专业技术人员资格考试服务平台">江苏省建设类专业技术人员资格考试服务平台</a><a class="item" href="http://zg.cpta.com.cn/examfront" target="_blank" data-domain="zg.cpta.com.cn" title="全国专业技术人员资格考试报名服务平台">全国专业技术人员资格考试报名服务平台</a><a class="item" href="http://www.yzjp.org.cn/" target="_blank" data-domain="yzjp.org.cn" title="扬州建设培训考试网">扬州建设培训考试网</a><a class="item" href="https://www.aqscmnks.com/exam/View/login.php" target="_blank" data-domain="aqscmnks.com" title="安全生产模拟考试云平台">安全生产模拟考试云平台</a><a class="item" href="https://yzzj.subeiedu.com/#/home" target="_blank" data-domain="yzzj.subeiedu.com" title="扬州市专业技术人才继续教育基地">扬州市专业技术人才继续教育基地</a><a class="item" href="https://ycjy.jszjxh.com/w/portal/index" target="_blank" data-domain="ycjy.jszjxh.com" title="江苏省造价从业人员远程教育网">江苏省造价从业人员远程教育网</a><a class="item" href="http://kj.jscz.gov.cn" target="_blank" data-domain="kj.jscz.gov.cn" title="江苏省会计人员信息采集系统">江苏省会计人员信息采集系统</a><a class="item" href="http://kjexam.jsczt.cn" target="_blank" data-domain="kjexam.jsczt.cn" title="江苏会计考试">江苏会计考试</a><a class="item" href="http://kzp.mof.gov.cn/" target="_blank" data-domain="kzp.mof.gov.cn" title="全国会计资格评价网">全国会计资格评价网</a></div></div><div class="cat-sub" id="cat-10"><h3 class="cat-sub-title">邮箱网盘</h3><div class="grid"><a class="item" href="https://mail.qq.com/" target="_blank" data-domain="mail.qq.com" title="QQ邮箱">QQ邮箱</a><a class="item" href="https://mail.163.com/" target="_blank" data-domain="mail.163.com" title="163邮箱">163邮箱</a><a class="item" href="https://www.126.com/" target="_blank" data-domain="126.com" title="126邮箱">126邮箱</a><a class="item" href="https://www.yeah.net/" target="_blank" data-domain="yeah.net" title="yeah邮箱">yeah邮箱</a><a class="item" href="https://webmail30.189.cn/w2/" target="_blank" data-domain="webmail30.189.cn" title="189邮箱">189邮箱</a></div></div><div class="cat-sub" id="cat-11"><h3 class="cat-sub-title">办公工具</h3><div class="grid"><a class="item" href="https://ug.link/huarui" target="_blank" data-domain="ug.link" title="绿联云">绿联云</a><a class="item" href="https://www.deepseek.com/" target="_blank" data-domain="deepseek.com" title="DeepSeek">DeepSeek</a><a class="item" href="https://www.hllep.com/" target="_blank" data-domain="hllep.com" title="货拉拉">货拉拉</a><a class="item" href="https://cloud.hecom.cn/" target="_blank" data-domain="cloud.hecom.cn" title="红圈">红圈</a><a class="item" href="https://www.aliyundrive.com/s/PtZE78itwFc" target="_blank" data-domain="aliyundrive.com" title="常用软件">常用软件</a><a class="item" href="https://www.processon.com/" target="_blank" data-domain="processon.com" title="ProcessOn">ProcessOn</a><a class="item" href="https://smallpdf.com/cn" target="_blank" data-domain="smallpdf.com" title="PDF工具">PDF工具</a><a class="item" href="https://www.lanzou.com/" target="_blank" data-domain="lanzou.com" title="蓝奏·云存储">蓝奏·云存储</a><a class="item" href="https://team.qq.com/download/PCMgr_Setup.exe?pinid=BOF1FCVD" target="_blank" data-domain="team.qq.com" title="电脑管家下载（BOF1FCVD）">电脑管家下载（BOF1FCVD）</a></div></div><div class="cat-sub" id="cat-12"><h3 class="cat-sub-title">银行金融</h3><div class="grid"><a class="item" href="http://www.boc.cn/" target="_blank" data-domain="boc.cn" title="中国银行">中国银行</a></div></div><div class="cat-sub" id="cat-13"><h3 class="cat-sub-title">信息工具</h3><div class="grid"><a class="item" href="https://www.yangzhou.gov.cn/jyszzxhf/index.html" target="_blank" data-domain="yangzhou.gov.cn" title="寄语市长">寄语市长</a><a class="item" href="https://www.qcc.com/" target="_blank" data-domain="qcc.com" title="企查查">企查查</a><a class="item" href="http://www.jianshetong.net/" target="_blank" data-domain="jianshetong.net" title="建设通">建设通</a><a class="item" href="https://i.mi.com/" target="_blank" data-domain="i.mi.com" title="小米云服务">小米云服务</a><a class="item" href="http://cloud.huawei.com/" target="_blank" data-domain="cloud.huawei.com" title="华为云空间">华为云空间</a><a class="item" href="https://www.sf-express.com/cn/sc/" target="_blank" data-domain="sf-express.com" title="顺丰速运">顺丰速运</a><a class="item" href="https://passport.zhaopin.com/org/login" target="_blank" data-domain="passport.zhaopin.com" title="智联招聘">智联招聘</a><a class="item" href="http://yangzhou.ganji.com/" target="_blank" data-domain="yangzhou.ganji.com" title="赶集网">赶集网</a><a class="item" href="http://yz.58.com/" target="_blank" data-domain="yz.58.com" title="58同城">58同城</a><a class="item" href="https://www.sinopecsales.com/" target="_blank" data-domain="sinopecsales.com" title="中国石化加油卡网上营业厅">中国石化加油卡网上营业厅</a><a class="item" href="https://www.txffp.com/" target="_blank" data-domain="txffp.com" title="票根网">票根网</a><a class="item" href="https://www.lishidata.com/area/%E6%B1%9F%E8%8B%8F/%E6%89%AC%E5%B7%9E.html" target="_blank" data-domain="lishidata.com" title="扬州天气">扬州天气</a></div></div><div class="cat-sub" id="cat-14"><h3 class="cat-sub-title">购物娱乐</h3><div class="grid"><a class="item" href="https://kdocs.cn/l/cmkras6HzRNH" target="_blank" data-domain="kdocs.cn" title="影视导航">影视导航</a><a class="item" href="https://wap.bmysss.com/" target="_blank" data-domain="wap.bmysss.com" title="好看影院">好看影院</a><a class="item" href="https://www.fanli.com/" target="_blank" data-domain="fanli.com" title="返利网">返利网</a><a class="item" href="https://www.suning.com/" target="_blank" data-domain="suning.com" title="苏宁易购">苏宁易购</a><a class="item" href="https://www.mi.com/" target="_blank" data-domain="mi.com" title="小米商城">小米商城</a><a class="item" href="https://youpin.mi.com/" target="_blank" data-domain="youpin.mi.com" title="有品">有品</a><a class="item" href="http://www.tp-link.com.cn/" target="_blank" data-domain="tp-link.com.cn" title="TP-LINK">TP-LINK</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · yzhrjd", "children": [{"id": 2, "name": "行业网址", "children": []}, {"id": 3, "name": "办公平台", "children": []}, {"id": 4, "name": "招投标网", "children": []}, {"id": 5, "name": "公共资源", "children": []}, {"id": 6, "name": "信息公开", "children": []}, {"id": 7, "name": "政府采购", "children": []}, {"id": 8, "name": "造价信息", "children": []}, {"id": 9, "name": "培训学习", "children": []}, {"id": 10, "name": "邮箱网盘", "children": []}, {"id": 11, "name": "办公工具", "children": []}, {"id": 12, "name": "银行金融", "children": []}, {"id": 13, "name": "信息工具", "children": []}, {"id": 14, "name": "购物娱乐", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

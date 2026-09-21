@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · edcsion 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · edcsion 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · edcsion</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · edcsion</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">Efficiency</h3><div class="grid"><a class="item" href="http://www.weibo.com/u/5195355066/home?wvr=5&amp;c=spr_sinamkt_buy_hyww_weibo_p107" target="_blank" data-domain="weibo.com" title="微博">微博</a><a class="item" href="https://www.zhihu.com/" target="_blank" data-domain="zhihu.com" title="知乎">知乎</a><a class="item" href="https://www.douban.com/" target="_blank" data-domain="douban.com" title="豆瓣">豆瓣</a><a class="item" href="https://www.pinterest.com/" target="_blank" data-domain="pinterest.com" title="P站">P站</a><a class="item" href="https://mail.qq.com/" target="_blank" data-domain="mail.qq.com" title="QQ邮箱">QQ邮箱</a><a class="item" href="https://movie.douban.com/" target="_blank" data-domain="movie.douban.com" title="豆瓣电影">豆瓣电影</a><a class="item" href="http://www.52pojie.cn/" target="_blank" data-domain="52pojie.cn" title="吾爱破解">吾爱破解</a><a class="item" href="https://map.baidu.com/" target="_blank" data-domain="map.baidu.com" title="百度地图">百度地图</a><a class="item" href="http://www.smzdm.com/" target="_blank" data-domain="smzdm.com" title="什么值得买">什么值得买</a><a class="item" href="http://www.sanguosha.com/" target="_blank" data-domain="sanguosha.com" title="三国杀">三国杀</a><a class="item" href="https://www.ucl.ac.uk/bartlett/" target="_blank" data-domain="ucl.ac.uk" title="The Bartlett  – U C  L">The Bartlett  – U C  L</a><a class="item" href="https://www.aaschool.ac.uk/" target="_blank" data-domain="aaschool.ac.uk" title="AA学校">AA学校</a><a class="item" href="https://www.douyin.com/" target="_blank" data-domain="douyin.com" title="抖音-记录美好生活">抖音-记录美好生活</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">站点导航</h3><div class="grid"><a class="item" href="https://www.hao123.com/?tn=93112570_hao_pg" target="_blank" data-domain="hao123.com" title="hao123_导航">hao123_导航</a><a class="item" href="http://www.archiname.com/" target="_blank" data-domain="archiname.com" title="筑名导航">筑名导航</a><a class="item" href="http://www.sogou.com/docs/more.htm" target="_blank" data-domain="sogou.com" title="搜狗聚合">搜狗聚合</a><a class="item" href="http://www.archi123.com/#/" target="_blank" data-domain="archi123.com" title="知筑导航">知筑导航</a><a class="item" href="https://www.egouz.com/haowangzhan/topics/921.html" target="_blank" data-domain="egouz.com" title="图库导航">图库导航</a><a class="item" href="http://www.archiname.com/" target="_blank" data-domain="archiname.com" title="ArchiName筑名导航----建筑专业的网址之家">ArchiName筑名导航----建筑专业的网址之家</a><a class="item" href="http://www.guihuadaohang.com/" target="_blank" data-domain="guihuadaohang.com" title="规划导航网-城市规划人的上网首页">规划导航网-城市规划人的上网首页</a><a class="item" href="http://www.lubanlu.com/" target="_blank" data-domain="lubanlu.com" title="鲁班路 - 建筑网址 最专业的建筑网址大全">鲁班路 - 建筑网址 最专业的建筑网址大全</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">影视</h3><div class="grid"><a class="item" href="https://v.qq.com/?" target="_blank" data-domain="v.qq.com" title="腾讯视频">腾讯视频</a><a class="item" href="http://www.iqiyi.com/" target="_blank" data-domain="iqiyi.com" title="爱奇艺">爱奇艺</a><a class="item" href="http://www.youku.com/" target="_blank" data-domain="youku.com" title="优酷首页">优酷首页</a><a class="item" href="https://www.bilibili.com/" target="_blank" data-domain="bilibili.com" title="哔哩哔哩">哔哩哔哩</a><a class="item" href="https://www.youtube.com/" target="_blank" data-domain="youtube.com" title="YouTube">YouTube</a><a class="item" href="http://www.zimuzu.tv/" target="_blank" data-domain="zimuzu.tv" title="人人影视,">人人影视,</a><a class="item" href="http://neets.cc/" target="_blank" data-domain="neets.cc" title="neets">neets</a><a class="item" href="http://www.ttmj.cc/" target="_blank" data-domain="ttmj.cc" title="天天美剧">天天美剧</a><a class="item" href="http://www.meijutt.com/" target="_blank" data-domain="meijutt.com" title="好看的美剧">好看的美剧</a><a class="item" href="http://yixi.tv/" target="_blank" data-domain="yixi.tv" title="一席">一席</a><a class="item" href="https://www.meijumi.top/" target="_blank" data-domain="meijumi.top" title="美剧迷 - 美剧大全,最新好看的天天美剧下载,在线观看,美剧天堂">美剧迷 - 美剧大全,最新好看的天天美剧下载,在线观看,美剧天堂</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">建筑名站</h3><div class="grid"><a class="item" href="http://www.archdaily.cn/cn" target="_blank" data-domain="archdaily.cn" title="ArchDaily">ArchDaily</a><a class="item" href="http://www.ikuku.cn/" target="_blank" data-domain="ikuku.cn" title="在库言库">在库言库</a><a class="item" href="http://www.gooood.hk/" target="_blank" data-domain="gooood.hk" title="谷德设计网">谷德设计网</a><a class="item" href="http://www.iarch.cn/" target="_blank" data-domain="iarch.cn" title="专筑网">专筑网</a><a class="item" href="http://www.archcollege.com/" target="_blank" data-domain="archcollege.com" title="建筑学院">建筑学院</a><a class="item" href="http://www.archiposition.com/" target="_blank" data-domain="archiposition.com" title="有方">有方</a><a class="item" href="http://www.eeeetop.com/" target="_blank" data-domain="eeeetop.com" title="E拓建筑网">E拓建筑网</a><a class="item" href="http://www.abbs.com.cn/" target="_blank" data-domain="abbs.com.cn" title="ABBS建筑论坛">ABBS建筑论坛</a><a class="item" href="http://archgo.com/index.php" target="_blank" data-domain="archgo.com" title="ArchGo!">ArchGo!</a><a class="item" href="http://www.zcool.com.cn/" target="_blank" data-domain="zcool.com.cn" title="站酷 (ZCOOL)">站酷 (ZCOOL)</a><a class="item" href="http://bbs.zhulong.com/" target="_blank" data-domain="bbs.zhulong.com" title="筑龙论坛">筑龙论坛</a><a class="item" href="https://www.soujianzhu.cn/Norm/default.aspx" target="_blank" data-domain="soujianzhu.cn" title="建筑规范">建筑规范</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">建筑事务所</h3><div class="grid"><a class="item" href="http://www.d-a-s.cn/" target="_blank" data-domain="d-a-s.cn" title="绘造社">绘造社</a><a class="item" href="https://oma.eu/office" target="_blank" data-domain="oma.eu" title="OMA OFFICE">OMA OFFICE</a><a class="item" href="http://www.i-mad.com/" target="_blank" data-domain="i-mad.com" title="MAD">MAD</a><a class="item" href="http://www.urbanus.com.cn/" target="_blank" data-domain="urbanus.com.cn" title="URBANUS 都市实践">URBANUS 都市实践</a><a class="item" href="http://www.designandarchitecture.net/" target="_blank" data-domain="designandarchitecture.net" title="DNA">DNA</a><a class="item" href="https://www.gmp.de/de/" target="_blank" data-domain="gmp.de" title="gmp Architekten">gmp Architekten</a><a class="item" href="http://ww-ec.com/" target="_blank" data-domain="ww-ec.com" title="WinWin设计">WinWin设计</a><a class="item" href="http://lycs-arc.com/Home_CN" target="_blank" data-domain="lycs-arc.com" title="零壹城市">零壹城市</a><a class="item" href="http://www.peoples-architecture.com/pao_t/" target="_blank" data-domain="peoples-architecture.com" title="众建筑PAO">众建筑PAO</a><a class="item" href="https://www.fcjz.com/" target="_blank" data-domain="fcjz.com" title="非常建筑">非常建筑</a><a class="item" href="http://www.openarch.com/cn" target="_blank" data-domain="openarch.com" title="OPEN Architecture">OPEN Architecture</a><a class="item" href="http://www.jeannouvel.com/" target="_blank" data-domain="jeannouvel.com" title="Ateliers Jean Nouvel">Ateliers Jean Nouvel</a><a class="item" href="https://www.jiakun.com/" target="_blank" data-domain="jiakun.com" title="家琨建筑">家琨建筑</a><a class="item" href="http://www.deshaus.com/" target="_blank" data-domain="deshaus.com" title="大舍建筑">大舍建筑</a><a class="item" href="http://www.hyp-arch.com/" target="_blank" data-domain="hyp-arch.com" title="霍普股份">霍普股份</a><a class="item" href="http://www.neriandhu.com/en" target="_blank" data-domain="neriandhu.com" title="Neri&amp;Hu">Neri&amp;Hu</a><a class="item" href="http://www.spaceworkarchitects.com/" target="_blank" data-domain="spaceworkarchitects.com" title="在场建筑|SPACEWORK Architects">在场建筑|SPACEWORK Architects</a><a class="item" href="http://lacime-sh.com/" target="_blank" data-domain="lacime-sh.com" title="日清设计">日清设计</a><a class="item" href="http://www.shuishi.com/" target="_blank" data-domain="shuishi.com" title="水石设计">水石设计</a><a class="item" href="http://www.archi-union.com/" target="_blank" data-domain="archi-union.com" title="创盟">创盟</a><a class="item" href="http://www.standardarchitecture.cn/" target="_blank" data-domain="standardarchitecture.cn" title="标准营造">标准营造</a><a class="item" href="http://www.cscec.com.cn/" target="_blank" data-domain="cscec.com.cn" title="中国建筑">中国建筑</a><a class="item" href="https://www.csadi.com.cn/" target="_blank" data-domain="csadi.com.cn" title="中南建筑设计院股份有限公司">中南建筑设计院股份有限公司</a><a class="item" href="http://www.rlphk.com/eng/" target="_blank" data-domain="rlphk.com" title="Ronald Lu &amp; Partners">Ronald Lu &amp; Partners</a><a class="item" href="http://www.sako.co.jp/" target="_blank" data-domain="sako.co.jp" title="SAKO Architects">SAKO Architects</a><a class="item" href="http://www.tjad.cn/" target="_blank" data-domain="tjad.cn" title="同济大学建筑设计研究院(集团)有限公司">同济大学建筑设计研究院(集团)有限公司</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">建模软件</h3><div class="grid"><a class="item" href="http://www.sketchupbar.com/default.php" target="_blank" data-domain="sketchupbar.com" title="SketchUp吧">SketchUp吧</a><a class="item" href="http://www.sketchupbbs.com/" target="_blank" data-domain="sketchupbbs.com" title="SU云设计">SU云设计</a><a class="item" href="http://sketchupchina.com/" target="_blank" data-domain="sketchupchina.com" title="Sketchup China">Sketchup China</a><a class="item" href="http://www.sublog.net/" target="_blank" data-domain="sublog.net" title="紫天 SketchUp">紫天 SketchUp</a><a class="item" href="http://sketchuppro.cn/" target="_blank" data-domain="sketchuppro.cn" title="SketchUp博客 |">SketchUp博客 |</a></div></div><div class="cat-sub" id="cat-8"><h3 class="cat-sub-title">软件学习</h3><div class="grid"><a class="item" href="http://hanshilin.com/software/sketchup/" target="_blank" data-domain="hanshilin.com" title="韩世麟">韩世麟</a><a class="item" href="http://bbs.ncf-china.com/forum.php" target="_blank" data-domain="bbs.ncf-china.com" title="NCF">NCF</a><a class="item" href="http://www.uzing.net/" target="_blank" data-domain="uzing.net" title="活力网！">活力网！</a><a class="item" href="http://www.huisj.com/" target="_blank" data-domain="huisj.com" title="绘世界网">绘世界网</a><a class="item" href="http://www.caigle.org/" target="_blank" data-domain="caigle.org" title="钟育才的博客">钟育才的博客</a><a class="item" href="http://www.99ut.com/" target="_blank" data-domain="99ut.com" title="大师之路 Unify tutorial">大师之路 Unify tutorial</a><a class="item" href="http://www.toprender.com/" target="_blank" data-domain="toprender.com" title="顶渲网">顶渲网</a><a class="item" href="http://www.ganzhanhao.com/" target="_blank" data-domain="ganzhanhao.com" title="甘展豪的博客">甘展豪的博客</a><a class="item" href="http://blog.sina.com.cn/pstuozhanbu" target="_blank" data-domain="blog.sina.com.cn" title="PS拓展部">PS拓展部</a></div></div><div class="cat-sub" id="cat-9"><h3 class="cat-sub-title">软件资源</h3><div class="grid"><a class="item" href="http://www.lookae.com/" target="_blank" data-domain="lookae.com" title="LookAE.com |">LookAE.com |</a><a class="item" href="http://bbs.sheencity.com/portal.php" target="_blank" data-domain="bbs.sheencity.com" title="光辉城市">光辉城市</a><a class="item" href="http://www.sd173.com/system/" target="_blank" data-domain="sd173.com" title="最新官网绿色">最新官网绿色</a><a class="item" href="http://www.flighty.cn/" target="_blank" data-domain="flighty.cn" title="优质软件资源！">优质软件资源！</a><a class="item" href="http://www.yishimei.cn/network/290.html?=microKMS" target="_blank" data-domain="yishimei.cn" title="亦是美网络">亦是美网络</a><a class="item" href="https://www.kylebrush.com/" target="_blank" data-domain="kylebrush.com" title="PS画笔">PS画笔</a></div></div><div class="cat-sub" id="cat-10"><h3 class="cat-sub-title">图片资源</h3><div class="grid"><a class="item" href="https://visualizingarchitecture.com/project/cliff-retreat-aerial/" target="_blank" data-domain="visualizingarchitecture.com" title="Visualizing Architecture">Visualizing Architecture</a><a class="item" href="http://www.stockvault.net/" target="_blank" data-domain="stockvault.net" title="Free Stock Photos">Free Stock Photos</a><a class="item" href="http://www.publicdomainpictures.net/" target="_blank" data-domain="publicdomainpictures.net" title="公共领域的图片">公共领域的图片</a><a class="item" href="https://pixabay.com/" target="_blank" data-domain="pixabay.com" title="免费图片">免费图片</a><a class="item" href="http://www.imagefree.com/" target="_blank" data-domain="imagefree.com" title="Free Images">Free Images</a><a class="item" href="http://www.egouz.com/topics/5658.html" target="_blank" data-domain="egouz.com" title="FreePhotosBank">FreePhotosBank</a><a class="item" href="https://freerangestock.com/" target="_blank" data-domain="freerangestock.com" title="Freerange Stock">Freerange Stock</a><a class="item" href="http://www.freeimages.co.uk/" target="_blank" data-domain="freeimages.co.uk" title="Free Images">Free Images</a><a class="item" href="http://www.gratisography.com/" target="_blank" data-domain="gratisography.com" title="Gratisography">Gratisography</a><a class="item" href="http://www.ancestryimages.com/" target="_blank" data-domain="ancestryimages.com" title="Free stock images">Free stock images</a><a class="item" href="http://www.rgbstock.com/" target="_blank" data-domain="rgbstock.com" title="rgbstock.com">rgbstock.com</a><a class="item" href="https://commons.wikimedia.org/wiki/Main_Page?uselang=zh-cn" target="_blank" data-domain="commons.wikimedia.org" title="Main Page">Main Page</a><a class="item" href="https://unsplash.com/" target="_blank" data-domain="unsplash.com" title="Unsplash">Unsplash</a><a class="item" href="http://pickupimage.com/" target="_blank" data-domain="pickupimage.com" title="Free Images">Free Images</a><a class="item" href="http://www.everystockphoto.com/" target="_blank" data-domain="everystockphoto.com" title="everystockphoto">everystockphoto</a><a class="item" href="http://foter.com/" target="_blank" data-domain="foter.com" title="Free Stock Photos &amp; Images">Free Stock Photos &amp; Images</a><a class="item" href="http://compfight.com/" target="_blank" data-domain="compfight.com" title="A Flickr Search Tool">A Flickr Search Tool</a><a class="item" href="http://www.58pic.com/" target="_blank" data-domain="58pic.com" title="千图网">千图网</a><a class="item" href="http://www.freepik.com/snapographic" target="_blank" data-domain="freepik.com" title="Snapographic">Snapographic</a><a class="item" href="http://www.lifeofpix.com/" target="_blank" data-domain="lifeofpix.com" title="Free   photography">Free   photography</a><a class="item" href="http://www.freepik.com/snapographic/2" target="_blank" data-domain="freepik.com" title="Snapographic">Snapographic</a><a class="item" href="http://photopin.com/" target="_blank" data-domain="photopin.com" title="Free Photos">Free Photos</a><a class="item" href="http://publicdomainarchive.com/" target="_blank" data-domain="publicdomainarchive.com" title="Free Public  Images">Free Public  Images</a><a class="item" href="https://unsplash.com/" target="_blank" data-domain="unsplash.com" title="Free Photo">Free Photo</a><a class="item" href="http://littlevisuals.co/" target="_blank" data-domain="littlevisuals.co" title="Little Visuals">Little Visuals</a><a class="item" href="http://nos.twnsnd.co/" target="_blank" data-domain="nos.twnsnd.co" title="New Old Stock">New Old Stock</a><a class="item" href="http://cn.freeimages.com/" target="_blank" data-domain="cn.freeimages.com" title="Free Images">Free Images</a></div></div><div class="cat-sub" id="cat-11"><h3 class="cat-sub-title">商城</h3><div class="grid"><a class="item" href="https://www.tmall.com/?ali_trackid=2:mm_26632322_6858406_70736499:1502073330_242_1037326696" target="_blank" data-domain="tmall.com" title="天猫">天猫</a><a class="item" href="https://www.taobao.com/" target="_blank" data-domain="taobao.com" title="淘宝网">淘宝网</a><a class="item" href="https://re.jd.com/index/standard?re_dcp=2xE&amp;cu=true&amp;utm_source=mall.wuoufj.com&amp;utm_medium=uniongoubiao&amp;utm_campaign=t_1000019858_&amp;utm_term=24b22a42791f463a891e626e13501225&amp;abt=3" target="_blank" data-domain="re.jd.com" title="京东">京东</a><a class="item" href="https://ju.taobao.com/?ali_trackid=2:mm_26632322_6858406_121584174:1502073413_280_508122684" target="_blank" data-domain="ju.taobao.com" title="【聚划算】">【聚划算】</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · edcsion", "children": [{"id": 2, "name": "Efficiency", "children": []}, {"id": 3, "name": "站点导航", "children": []}, {"id": 4, "name": "影视", "children": []}, {"id": 5, "name": "建筑名站", "children": []}, {"id": 6, "name": "建筑事务所", "children": []}, {"id": 7, "name": "建模软件", "children": []}, {"id": 8, "name": "软件学习", "children": []}, {"id": 9, "name": "软件资源", "children": []}, {"id": 10, "name": "图片资源", "children": []}, {"id": 11, "name": "商城", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

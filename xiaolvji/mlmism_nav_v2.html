@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · mlmism 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · mlmism 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · mlmism</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · mlmism</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">马列毛图书馆</h3><div class="grid"><a class="item" href="http://alturl.com/vsy6y" target="_blank" data-domain="alturl.com" title="马列毛主义导航">马列毛主义导航</a><a class="item" href="https://redspread550284290.wordpress.com/communist-website-navigation/" target="_blank" data-domain="redspread550284290.wordpress.com" title="红色导航备份">红色导航备份</a><a class="item" href="https://maozhuyi.home.blog/" target="_blank" data-domain="maozhuyi.home.blog" title="马列毛图书馆">马列毛图书馆</a><a class="item" href="https://www.mebk.org/" target="_blank" data-domain="mebk.org" title="马恩资料库">马恩资料库</a><a class="item" href="http://www.cccpism.com/" target="_blank" data-domain="cccpism.com" title="苏联主义网">苏联主义网</a><a class="item" href="http://massalijn.nl/" target="_blank" data-domain="massalijn.nl" title="共产主义">共产主义</a><a class="item" href="http://www.honggehui.org/mzdbl/index.html" target="_blank" data-domain="honggehui.org" title="毛泽东博览">毛泽东博览</a><a class="item" href="https://github.com/ProletRevDicta/Prolet" target="_blank" data-domain="github.com" title="资料库2">资料库2</a><a class="item" href="https://pan.mebk.org/home?path=%2F" target="_blank" data-domain="pan.mebk.org" title="马恩网盘">马恩网盘</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">新闻</h3><div class="grid"><a class="item" href="https://www.newepoch.media/" target="_blank" data-domain="newepoch.media" title="新时代">新时代</a><a class="item" href="https://ci-ic.org/" target="_blank" data-domain="ci-ic.org" title="马列毛共产国际">马列毛共产国际</a><a class="item" href="https://vivelemaoisme.org/" target="_blank" data-domain="vivelemaoisme.org" title="毛主义万岁">毛主义万岁</a><a class="item" href="http://www.redspark.nu/" target="_blank" data-domain="redspark.nu" title="Redspark">Redspark</a><a class="item" href="http://jiliuwang.net/" target="_blank" data-domain="jiliuwang.net" title="激流网">激流网</a><a class="item" href="http://www.masseshere.com/" target="_blank" data-domain="masseshere.com" title="多数派">多数派</a><a class="item" href="https://foreignlanguages.press/" target="_blank" data-domain="foreignlanguages.press" title="马列毛出版社">马列毛出版社</a><a class="item" href="https://irn.red/" target="_blank" data-domain="irn.red" title="国际红色通讯">国际红色通讯</a><a class="item" href="http://www.idcommunism.com/" target="_blank" data-domain="idcommunism.com" title="保卫共产主义">保卫共产主义</a><a class="item" href="https://rotepresse.noblogs.org/" target="_blank" data-domain="rotepresse.noblogs.org" title="红色新闻">红色新闻</a><a class="item" href="https://clb.org.hk/zh-hans" target="_blank" data-domain="clb.org.hk" title="中国劳工报">中国劳工报</a><a class="item" href="https://matters.news/@Margaux1848" target="_blank" data-domain="matters.news" title="马各庄青年">马各庄青年</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">其他</h3><div class="grid"><a class="item" href="http://www.partijarada.org/" target="_blank" data-domain="partijarada.org" title="前南斯拉夫地区劳动党">前南斯拉夫地区劳动党</a><a class="item" href="http://www.demarcations-journal.org/" target="_blank" data-domain="demarcations-journal.org" title="《划清界限》马列毛主义杂志">《划清界限》马列毛主义杂志</a><a class="item" href="https://www.prisoncensorship.info/index" target="_blank" data-domain="prisoncensorship.info" title="毛主义国际主义者">毛主义国际主义者</a><a class="item" href="http://www.pcrrcp.ca/en/" target="_blank" data-domain="pcrrcp.ca" title="革命共产党（毛主义）">革命共产党（毛主义）</a><a class="item" href="https://www.socialistworld.net/" target="_blank" data-domain="socialistworld.net" title="工人国际委员会（托）">工人国际委员会（托）</a><a class="item" href="http://www.solidnet.org/home/" target="_blank" data-domain="solidnet.org" title="共产党和工人党国际会议">共产党和工人党国际会议</a><a class="item" href="http://bgia-hamburg.blogspot.de/" target="_blank" data-domain="bgia-hamburg.blogspot.de" title="反对帝国主义侵略联盟（BGIA）">反对帝国主义侵略联盟（BGIA）</a><a class="item" href="http://political-prisoners.net/" target="_blank" data-domain="political-prisoners.net" title="红色政治犯">红色政治犯</a><a class="item" href="https://www.revolutionaerer-aufbau.org/" target="_blank" data-domain="revolutionaerer-aufbau.org" title="革命建设">革命建设</a><a class="item" href="https://bu2021.ml/" target="_blank" data-domain="bu2021.ml" title="小论坛">小论坛</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">秘鲁、阿根廷</h3><div class="grid"><a class="item" href="https://pcp71028.wordpress.com/" target="_blank" data-domain="pcp71028.wordpress.com" title="秘鲁共产党">秘鲁共产党</a><a class="item" href="http://vnd-peru.blogspot.com/" target="_blank" data-domain="vnd-peru.blogspot.com" title="新民主协会">新民主协会</a><a class="item" href="http://www.redsun.org/" target="_blank" data-domain="redsun.org" title="红太阳杂志（秘鲁）">红太阳杂志（秘鲁）</a><a class="item" href="https://pcr.org.ar" target="_blank" data-domain="pcr.org.ar" title="阿根廷革命共产党">阿根廷革命共产党</a><a class="item" href="https://revistachispa.org" target="_blank" data-domain="revistachispa.org" title="《星火》杂志">《星火》杂志</a><a class="item" href="http://www.banderaroja.org/index.html" target="_blank" data-domain="banderaroja.org" title="秘鲁共产党（毛主义革命人民运动）">秘鲁共产党（毛主义革命人民运动）</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">印度、尼泊尔</h3><div class="grid"><a class="item" href="https://icspwindia.wordpress.com/" target="_blank" data-domain="icspwindia.wordpress.com" title="国际支持印度人民战争委员会">国际支持印度人民战争委员会</a><a class="item" href="http://virasam.org/" target="_blank" data-domain="virasam.org" title="进步作家协会">进步作家协会</a><a class="item" href="http://sanhati.com/" target="_blank" data-domain="sanhati.com" title="《团结》报">《团结》报</a><a class="item" href="http://thecpn.org/" target="_blank" data-domain="thecpn.org" title="尼泊尔共产党（毛）">尼泊尔共产党（毛）</a><a class="item" href="http://cpiml.org/" target="_blank" data-domain="cpiml.org" title="印共（马列）">印共（马列）</a><a class="item" href="https://indiensoli.wordpress.com/" target="_blank" data-domain="indiensoli.wordpress.com" title="印度的团结（纳萨尔）">印度的团结（纳萨尔）</a><a class="item" href="http://BANNEDTHOUGHT.NET" target="_blank" data-domain="bannedthought.net" title="印共毛文献局">印共毛文献局</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">中国香港&amp;台湾</h3><div class="grid"><a class="item" href="https://www.socialism.hk/" target="_blank" data-domain="socialism.hk" title="劳工论坛-社会主义行动（托）">劳工论坛-社会主义行动（托）</a><a class="item" href="https://marxist.tw/" target="_blank" data-domain="marxist.tw" title="火花-台湾国际马克思主义趋势（托）">火花-台湾国际马克思主义趋势（托）</a></div></div><div class="cat-sub" id="cat-8"><h3 class="cat-sub-title">菲律宾</h3><div class="grid"><a class="item" href="https://www.philippinerevolution.info/" target="_blank" data-domain="philippinerevolution.info" title="菲律宾革命网上中心">菲律宾革命网上中心</a><a class="item" href="https://ndfp.org/chinese-imperialist-motivations-and-initiatives-in-relation-to-us-and-other-imperialist-powers/" target="_blank" data-domain="ndfp.org" title="菲律宾民族民主阵线">菲律宾民族民主阵线</a></div></div><div class="cat-sub" id="cat-9"><h3 class="cat-sub-title">阿富汗</h3><div class="grid"><a class="item" href="http://www.sholajawid.org/" target="_blank" data-domain="sholajawid.org" title="阿富汗 （毛主义）共产党">阿富汗 （毛主义）共产党</a></div></div><div class="cat-sub" id="cat-10"><h3 class="cat-sub-title">美国、加拿大</h3><div class="grid"><a class="item" href="http://www.pcr-rcp.ca/en/" target="_blank" data-domain="pcr-rcp.ca" title="加拿大革命共产党（继承者）">加拿大革命共产党（继承者）</a><a class="item" href="http://www.pcrrcp.ca/en/" target="_blank" data-domain="pcrrcp.ca" title="加拿大革命共产党（中央委员会）">加拿大革命共产党（中央委员会）</a><a class="item" href="https://www.iskra-pcr-rcp.ca/en/home-2/" target="_blank" data-domain="iskra-pcr-rcp.ca" title="《火星》报">《火星》报</a><a class="item" href="http://mer-rsm.ca/" target="_blank" data-domain="mer-rsm.ca" title="革命学生运动">革命学生运动</a><a class="item" href="https://pwm-mfp.org/" target="_blank" data-domain="pwm-mfp.org" title="人民妇女运动-美">人民妇女运动-美</a><a class="item" href="https://incendiarynews.com/" target="_blank" data-domain="incendiarynews.com" title="《鼓动新闻》">《鼓动新闻》</a><a class="item" href="https://struggle-sessions.com/" target="_blank" data-domain="struggle-sessions.com" title="《批斗会》杂志">《批斗会》杂志</a><a class="item" href="https://www.cpusa.org/article_tag/japan/" target="_blank" data-domain="cpusa.org" title="美国共产党">美国共产党</a><a class="item" href="https://cpcml.ca/" target="_blank" data-domain="cpcml.ca" title="加拿大共产党（马列）">加拿大共产党（马列）</a><a class="item" href="https://communistpartyontario.ca/" target="_blank" data-domain="communistpartyontario.ca" title="加拿大共产党">加拿大共产党</a><a class="item" href="https://theredphoenixapl.org/" target="_blank" data-domain="theredphoenixapl.org" title="红凤凰-工人斗争">红凤凰-工人斗争</a><a class="item" href="https://tribuneofthepeople.news/" target="_blank" data-domain="tribuneofthepeople.news" title="美国人民论坛">美国人民论坛</a><a class="item" href="https://struggle-sessions.com/" target="_blank" data-domain="struggle-sessions.com" title="毛主义奋斗会-美">毛主义奋斗会-美</a><a class="item" href="https://redguardsaustin.wordpress.com/" target="_blank" data-domain="redguardsaustin.wordpress.com" title="奥斯汀红卫兵-美">奥斯汀红卫兵-美</a><a class="item" href="https://redguardscharlotte.wordpress.com/" target="_blank" data-domain="redguardscharlotte.wordpress.com" title="夏洛特红卫兵-美">夏洛特红卫兵-美</a><a class="item" href="https://kcmlm.wordpress.com" target="_blank" data-domain="kcmlm.wordpress.com" title="堪萨斯城红卫兵-美">堪萨斯城红卫兵-美</a><a class="item" href="https://redguardsla.org/" target="_blank" data-domain="redguardsla.org" title="洛杉矶红卫兵-美">洛杉矶红卫兵-美</a><a class="item" href="https://redguardspittsburgh.wordpress.com/" target="_blank" data-domain="redguardspittsburgh.wordpress.com" title="匹兹堡红卫兵-美">匹兹堡红卫兵-美</a><a class="item" href="https://communistworkers.wordpress.com/" target="_blank" data-domain="communistworkers.wordpress.com" title="对于共产党人">对于共产党人</a></div></div><div class="cat-sub" id="cat-11"><h3 class="cat-sub-title">巴西、哥伦比亚、智利、厄瓜多尔</h3><div class="grid"><a class="item" href="http://anovademocracia.com.br/" target="_blank" data-domain="anovademocracia.com.br" title="《新民主》报">《新民主》报</a><a class="item" href="http://www.ligaoperaria.org.br/1/" target="_blank" data-domain="ligaoperaria.org.br" title="工人联盟">工人联盟</a><a class="item" href="http://www.resistenciacamponesa.com/" target="_blank" data-domain="resistenciacamponesa.com" title="贫农联盟">贫农联盟</a><a class="item" href="https://brasilmfp.blogspot.com/" target="_blank" data-domain="brasilmfp.blogspot.com" title="人民妇女运动">人民妇女运动</a><a class="item" href="http://www.unidadevermelha.com/" target="_blank" data-domain="unidadevermelha.com" title="红色部队——革命青年联盟">红色部队——革命青年联盟</a><a class="item" href="https://cebraspo.blogspot.com/" target="_blank" data-domain="cebraspo.blogspot.com" title="巴西人民团结中心">巴西人民团结中心</a><a class="item" href="https://frenteindependentepopular.wordpress.com/" target="_blank" data-domain="frenteindependentepopular.wordpress.com" title="广泛独立阵线">广泛独立阵线</a><a class="item" href="https://www.revolucionobrera.com/" target="_blank" data-domain="revolucionobrera.com" title="革命工人联盟（马列毛）">革命工人联盟（马列毛）</a><a class="item" href="http://organizacionmaoista.blogspot.com" target="_blank" data-domain="organizacionmaoista.blogspot.com" title="重建哥伦比亚共产党毛主义组织">重建哥伦比亚共产党毛主义组织</a><a class="item" href="https://elcomuneroprensa.wordpress.com/" target="_blank" data-domain="elcomuneroprensa.wordpress.com" title="《社员》报">《社员》报</a><a class="item" href="http://elpueblo.cl/" target="_blank" data-domain="elpueblo.cl" title="《人民报》">《人民报》</a><a class="item" href="http://ferp-larebelionsejustifica.blogspot.com" target="_blank" data-domain="ferp-larebelionsejustifica.blogspot.com" title="人民和革命学生阵线">人民和革命学生阵线</a><a class="item" href="http://fdlp-ec.blogspot.com" target="_blank" data-domain="fdlp-ec.blogspot.com" title="保卫人民斗争阵线">保卫人民斗争阵线</a><a class="item" href="http://pukainti.blogspot.com/" target="_blank" data-domain="pukainti.blogspot.com" title="厄瓜多尔共产党-红太阳">厄瓜多尔共产党-红太阳</a><a class="item" href="http://www.anovademocracia.com.br/" target="_blank" data-domain="anovademocracia.com.br" title="新民主主义巴西">新民主主义巴西</a></div></div><div class="cat-sub" id="cat-12"><h3 class="cat-sub-title">奥地利</h3><div class="grid"><a class="item" href="https://revaufbau.wordpress.com/" target="_blank" data-domain="revaufbau.wordpress.com" title="革命建设">革命建设</a><a class="item" href="https://afainfoblatt.com/" target="_blank" data-domain="afainfoblatt.com" title="《反法西斯信息单》">《反法西斯信息单》</a><a class="item" href="https://rotfrontkollektiv.wordpress.com/" target="_blank" data-domain="rotfrontkollektiv.wordpress.com" title="红色阵线集体">红色阵线集体</a></div></div><div class="cat-sub" id="cat-13"><h3 class="cat-sub-title">日本</h3><div class="grid"><a class="item" href="http://www.jrcl.org/" target="_blank" data-domain="jrcl.org" title="革共同-革马派">革共同-革马派</a><a class="item" href="https://www.jcp.or.jp/" target="_blank" data-domain="jcp.or.jp" title="日共（英语）">日共（英语）</a><a class="item" href="http://www.jrcl.org/english/e-top.htm" target="_blank" data-domain="jrcl.org" title="革共同-革马派（英语）">革共同-革马派（英语）</a><a class="item" href="http://www.zenshin.org/index.htm" target="_blank" data-domain="zenshin.org" title="革共同-中核派">革共同-中核派</a><a class="item" href="http://www.zenshin.org/zh/" target="_blank" data-domain="zenshin.org" title="中核派前进社">中核派前进社</a><a class="item" href="http://0a2b3c.sakura.ne.jp/senki-b.html" target="_blank" data-domain="0a2b3c.sakura.ne.jp" title="共产同（战旗派旧址）">共产同（战旗派旧址）</a><a class="item" href="http://www.bund21.org/" target="_blank" data-domain="bund21.org" title="共产同（统一委员会）">共产同（统一委员会）</a></div></div><div class="cat-sub" id="cat-14"><h3 class="cat-sub-title">法国、加西利亚</h3><div class="grid"><a class="item" href="http://www.pcmaoiste.org/" target="_blank" data-domain="pcmaoiste.org" title="毛主义共产党">毛主义共产党</a><a class="item" href="https://www.jeunesrevolutionnaires.org/" target="_blank" data-domain="jeunesrevolutionnaires.org" title="青年革命者">青年革命者</a><a class="item" href="https://www.causedupeuple.info/" target="_blank" data-domain="causedupeuple.info" title="《人民事业》报">《人民事业》报</a><a class="item" href="https://www.action-revolutionnaire.lgbt/" target="_blank" data-domain="action-revolutionnaire.lgbt" title="LGBTI革命行动">LGBTI革命行动</a><a class="item" href="https://fraprovence.wordpress.com/" target="_blank" data-domain="fraprovence.wordpress.com" title="普罗旺斯反法西斯阵线">普罗旺斯反法西斯阵线</a><a class="item" href="http://dazibaorojo08.blogspot.com" target="_blank" data-domain="dazibaorojo08.blogspot.com" title="红色大字报">红色大字报</a><a class="item" href="https://www.pcf.fr/" target="_blank" data-domain="pcf.fr" title="法国共产党（修）">法国共产党（修）</a><a class="item" href="https://www.cgt-culture.fr/" target="_blank" data-domain="cgt-culture.fr" title="法国工会（革命）文化">法国工会（革命）文化</a></div></div><div class="cat-sub" id="cat-15"><h3 class="cat-sub-title">土耳其</h3><div class="grid"><a class="item" href="http://ikk-online.net/" target="_blank" data-domain="ikk-online.net" title="《工农解放》报">《工农解放》报</a><a class="item" href="http://www.partizanmlm7.net/" target="_blank" data-domain="partizanmlm7.net" title="《党人》报">《党人》报</a><a class="item" href="http://www.yenidemokrasi5.net/" target="_blank" data-domain="yenidemokrasi5.net" title="《新民主》报">《新民主》报</a><a class="item" href="http://www.avrupahaber5.org/" target="_blank" data-domain="avrupahaber5.org" title="《欧洲新闻》">《欧洲新闻》</a><a class="item" href="https://www.kaypakkayahaber.com/" target="_blank" data-domain="kaypakkayahaber.com" title="《凯帕卡亚党人》报">《凯帕卡亚党人》报</a><a class="item" href="https://www.atik-online.net/" target="_blank" data-domain="atik-online.net" title="欧洲土耳其工人联合会">欧洲土耳其工人联合会</a><a class="item" href="http://www.avrupahaber5.org/" target="_blank" data-domain="avrupahaber5.org" title="欧洲民主权利联盟">欧洲民主权利联盟</a><a class="item" href="https://www.icor.info/icor-documents/europe/turkey/communist-party-of-turkey-2013-marxist-leninist-tkp-ml" target="_blank" data-domain="icor.info" title="土耳其共产党（马列）">土耳其共产党（马列）</a></div></div><div class="cat-sub" id="cat-16"><h3 class="cat-sub-title">德国、丹麦</h3><div class="grid"><a class="item" href="http://www.demvolkedienen.org/" target="_blank" data-domain="demvolkedienen.org" title="为人民服务">为人民服务</a><a class="item" href="https://rotepresse.noblogs.org/" target="_blank" data-domain="rotepresse.noblogs.org" title="《红色报刊》杂志">《红色报刊》杂志</a><a class="item" href="https://proletarischelinke.wordpress.com" target="_blank" data-domain="proletarischelinke.wordpress.com" title="无产阶级左派">无产阶级左派</a><a class="item" href="https://rotesfrauenkomitee.wordpress.com/" target="_blank" data-domain="rotesfrauenkomitee.wordpress.com" title="红色妇女委员会">红色妇女委员会</a><a class="item" href="https://socialistiskrevolution.wordpress.com/" target="_blank" data-domain="socialistiskrevolution.wordpress.com" title="社会主义革命-丹麦">社会主义革命-丹麦</a></div></div><div class="cat-sub" id="cat-17"><h3 class="cat-sub-title">苏联-俄罗斯</h3><div class="grid"><a class="item" href="http://maoism.ru/" target="_blank" data-domain="maoism.ru" title="俄罗斯毛主义会">俄罗斯毛主义会</a></div></div><div class="cat-sub" id="cat-18"><h3 class="cat-sub-title">意大利、英国、爱尔兰和威尔士地区</h3><div class="grid"><a class="item" href="http://proletaricomunisti.blogspot.com" target="_blank" data-domain="proletaricomunisti.blogspot.com" title="《无产阶级共产党人》报">《无产阶级共产党人》报</a><a class="item" href="http://www.revolutionarypraxis.org/" target="_blank" data-domain="revolutionarypraxis.org" title="革命实践-英">革命实践-英</a><a class="item" href="https://democracyandclasstruggle.blogspot.com/" target="_blank" data-domain="democracyandclasstruggle.blogspot.com" title="《民主和阶级斗争》杂志-威尔士">《民主和阶级斗争》杂志-威尔士</a><a class="item" href="https://www.communistpartyofireland.ie/" target="_blank" data-domain="communistpartyofireland.ie" title="爱尔兰共产党">爱尔兰共产党</a><a class="item" href="http://www.rcpbml.org.uk/" target="_blank" data-domain="rcpbml.org.uk" title="英国共产党（马列）">英国共产党（马列）</a><a class="item" href="https://www.communistparty.org.uk/" target="_blank" data-domain="communistparty.org.uk" title="英国共产党">英国共产党</a><a class="item" href="https://espressostalinist.com/" target="_blank" data-domain="espressostalinist.com" title="意式斯大林主义">意式斯大林主义</a></div></div><div class="cat-sub" id="cat-19"><h3 class="cat-sub-title">墨西哥、巴拿马、乌拉圭、玻利维亚</h3><div class="grid"><a class="item" href="http://solrojista.blogspot.com/" target="_blank" data-domain="solrojista.blogspot.com" title="红太阳人民潮流">红太阳人民潮流</a><a class="item" href="https://vientodeleste.webnode.es/" target="_blank" data-domain="vientodeleste.webnode.es" title="巴拿马共产党（马列）">巴拿马共产党（马列）</a><a class="item" href="http://pcr.org.uy/?page_id=35" target="_blank" data-domain="pcr.org.uy" title="乌拉圭革命共产党-人民团结">乌拉圭革命共产党-人民团结</a><a class="item" href="https://analisisopinion.wordpress.com/" target="_blank" data-domain="analisisopinion.wordpress.com" title="玻利维亚观察">玻利维亚观察</a><a class="item" href="https://frpbolivia.wordpress.com/" target="_blank" data-domain="frpbolivia.wordpress.com" title="玻利维亚人民革命阵线（MLM）">玻利维亚人民革命阵线（MLM）</a></div></div><div class="cat-sub" id="cat-20"><h3 class="cat-sub-title">瑞士、瑞典、挪威、芬兰</h3><div class="grid"><a class="item" href="https://rssers.wordpress.com/" target="_blank" data-domain="rssers.wordpress.com" title="红星苏黎世">红星苏黎世</a><a class="item" href="https://kampfundkritik.wordpress.com/" target="_blank" data-domain="kampfundkritik.wordpress.com" title="《斗争与批判》">《斗争与批判》</a><a class="item" href="http://kommunisten.nu/" target="_blank" data-domain="kommunisten.nu" title="共产主义联盟">共产主义联盟</a><a class="item" href="http://tjen-folket.no/" target="_blank" data-domain="tjen-folket.no" title="为人民服务媒体">为人民服务媒体</a><a class="item" href="https://maoist.home.blog/" target="_blank" data-domain="maoist.home.blog" title="为人民服务——共产主义联盟">为人民服务——共产主义联盟</a><a class="item" href="https://punalippu.noblogs.org/" target="_blank" data-domain="punalippu.noblogs.org" title="红旗集体-芬兰">红旗集体-芬兰</a><a class="item" href="https://prariebrand.wordpress.com/" target="_blank" data-domain="prariebrand.wordpress.com" title="瑞典毛派">瑞典毛派</a><a class="item" href="https://the-red-flag.org/" target="_blank" data-domain="the-red-flag.org" title="瑞士红旗">瑞士红旗</a></div></div><div class="cat-sub" id="cat-21"><h3 class="cat-sub-title">希腊</h3><div class="grid"><a class="item" href="http://www.kkeml.gr/" target="_blank" data-domain="kkeml.gr" title="希腊共产党（马列）">希腊共产党（马列）</a></div></div><div class="cat-sub" id="cat-22"><h3 class="cat-sub-title">西班牙、葡萄牙</h3><div class="grid"><a class="item" href="http://www.pcpe.es/" target="_blank" data-domain="pcpe.es" title="西班牙人民共产党">西班牙人民共产党</a><a class="item" href="https://pce.es/" target="_blank" data-domain="pce.es" title="西班牙共产党">西班牙共产党</a><a class="item" href="https://madrid.pce.es/" target="_blank" data-domain="madrid.pce.es" title="西班牙共产党-马德里">西班牙共产党-马德里</a></div></div><div class="cat-sub" id="cat-23"><h3 class="cat-sub-title">联系邮箱——(第一个)</h3><div class="grid"><a class="item" href="http://www.xiaolvji.com/u/mlmism" target="_blank" data-domain="xiaolvji.com" title="vibred@qq.com">vibred@qq.com</a><a class="item" href="https://yopmail.com/zh/" target="_blank" data-domain="yopmail.com" title="临时加密邮箱">临时加密邮箱</a><a class="item" href="https://mail.protonmail.com/login" target="_blank" data-domain="mail.protonmail.com" title="加密邮箱1">加密邮箱1</a><a class="item" href="https://www.criptext.com/" target="_blank" data-domain="criptext.com" title="加密邮箱2">加密邮箱2</a><a class="item" href="https://mailfence.com/" target="_blank" data-domain="mailfence.com" title="加密邮箱3">加密邮箱3</a><a class="item" href="https://web.safeswiss.com/sign-up" target="_blank" data-domain="web.safeswiss.com" title="加密邮箱4">加密邮箱4</a><a class="item" href="https://mail.tutanota.com/login" target="_blank" data-domain="mail.tutanota.com" title="加密邮箱5">加密邮箱5</a><a class="item" href="https://www.finmail.com/" target="_blank" data-domain="finmail.com" title="加密邮箱6">加密邮箱6</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · mlmism", "children": [{"id": 2, "name": "马列毛图书馆", "children": []}, {"id": 3, "name": "新闻", "children": []}, {"id": 4, "name": "其他", "children": []}, {"id": 5, "name": "秘鲁、阿根廷", "children": []}, {"id": 6, "name": "印度、尼泊尔", "children": []}, {"id": 7, "name": "中国香港&台湾", "children": []}, {"id": 8, "name": "菲律宾", "children": []}, {"id": 9, "name": "阿富汗", "children": []}, {"id": 10, "name": "美国、加拿大", "children": []}, {"id": 11, "name": "巴西、哥伦比亚、智利、厄瓜多尔", "children": []}, {"id": 12, "name": "奥地利", "children": []}, {"id": 13, "name": "日本", "children": []}, {"id": 14, "name": "法国、加西利亚", "children": []}, {"id": 15, "name": "土耳其", "children": []}, {"id": 16, "name": "德国、丹麦", "children": []}, {"id": 17, "name": "苏联-俄罗斯", "children": []}, {"id": 18, "name": "意大利、英国、爱尔兰和威尔士地区", "children": []}, {"id": 19, "name": "墨西哥、巴拿马、乌拉圭、玻利维亚", "children": []}, {"id": 20, "name": "瑞士、瑞典、挪威、芬兰", "children": []}, {"id": 21, "name": "希腊", "children": []}, {"id": 22, "name": "西班牙、葡萄牙", "children": []}, {"id": 23, "name": "联系邮箱——(第一个)", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

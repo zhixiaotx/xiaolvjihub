@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · spatialtranscriptome 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · spatialtranscriptome 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · spatialtranscriptome</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · spatialtranscriptome</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">其他重要导航</h3><div class="grid"><a class="item" href="https://mp.weixin.qq.com/s?__biz=MzkyNTE5Nzk3NQ==&amp;mid=2247497906&amp;idx=1&amp;sn=5566f7b98f666810ffc415994b029c2a&amp;scene=21&amp;poc_token=HD5nSWmjMD1bUXksd01q9_WCp9ihqqZ8Zl2pvCWh" target="_blank" data-domain="mp.weixin.qq.com" title="培训班">培训班</a><a class="item" href="https://www.xiaolvji.com/u/taoxiangjiang" target="_blank" data-domain="xiaolvji.com" title="单细胞导航">单细胞导航</a><a class="item" href="https://singlecell.yuque.com/aie23e/cz2hkg/fkcybe8ogmhgk4dg" target="_blank" data-domain="singlecell.yuque.com" title="交流群矩阵">交流群矩阵</a><a class="item" href="https://mp.weixin.qq.com/s/hES849mj6g3o6EOn9tOYlA?token=1104340708&amp;lang=zh_CN" target="_blank" data-domain="mp.weixin.qq.com" title="生信百晓生2024年推文合集">生信百晓生2024年推文合集</a><a class="item" href="http://oncolab.cn/" target="_blank" data-domain="oncolab.cn" title="oncolab">oncolab</a><a class="item" href="https://www.xiaolvji.com/u/taoxiangjiang1" target="_blank" data-domain="xiaolvji.com" title="AI导航网">AI导航网</a><a class="item" href="https://yuanbao.tencent.com/chat/naQivTmsDa" target="_blank" data-domain="yuanbao.tencent.com" title="腾讯元宝">腾讯元宝</a><a class="item" href="https://www.yuque.com/qingyuntian/gb9gvo/uz4b9ddroaegeawv/edit?toc_node_uuid=MDy44UdTOlFDMgnD" target="_blank" data-domain="yuque.com" title="语雀交流群问题合集">语雀交流群问题合集</a><a class="item" href="https://www.yuque.com/qingyuntian/zh0pq0/vgrord8gtumnlpix" target="_blank" data-domain="yuque.com" title="空转微信群">空转微信群</a><a class="item" href="https://en.wikipedia.org/wiki/CD163" target="_blank" data-domain="en.wikipedia.org" title="gene wiki">gene wiki</a><a class="item" href="https://blog.stephenturner.us/t/papers" target="_blank" data-domain="blog.stephenturner.us" title="Paired Ends">Paired Ends</a><a class="item" href="https://aisite.medon.com.cn/category/ai-code-explanation" target="_blank" data-domain="aisite.medon.com.cn" title="AI导航">AI导航</a><a class="item" href="https://www.xiaolvji.com/u/cancerinfo" target="_blank" data-domain="xiaolvji.com" title="癌症医学视频">癌症医学视频</a><a class="item" href="https://www.xiaolvji.com/u/qingyuntian" target="_blank" data-domain="xiaolvji.com" title="癌症导航">癌症导航</a><a class="item" href="https://www.xiaolvji.com/u/taoxiangjiang1" target="_blank" data-domain="xiaolvji.com" title="AI机器学习导航">AI机器学习导航</a><a class="item" href="https://www.xiaolvji.com/u/taoxiangjiang593" target="_blank" data-domain="xiaolvji.com" title="遗传导航">遗传导航</a><a class="item" href="https://www.xiaolvji.com/u/taoxiangjiangmed" target="_blank" data-domain="xiaolvji.com" title="药学导航">药学导航</a><a class="item" href="https://bjmu.yuketang.cn/pro/portal/home/" target="_blank" data-domain="bjmu.yuketang.cn" title="北大基础医学院课程">北大基础医学院课程</a><a class="item" href="https://yanweb.top/" target="_blank" data-domain="yanweb.top" title="科研废物导航">科研废物导航</a><a class="item" href="https://www.keyanmate.com/#id-1" target="_blank" data-domain="keyanmate.com" title="科研meta导航">科研meta导航</a><a class="item" href="http://www.91tools.cn/" target="_blank" data-domain="91tools.cn" title="小虫科研">小虫科研</a><a class="item" href="https://www.dotaindex.com/" target="_blank" data-domain="dotaindex.com" title="灯塔索引">灯塔索引</a><a class="item" href="https://search.chongbuluo.com/" target="_blank" data-domain="search.chongbuluo.com" title="虫部落">虫部落</a><a class="item" href="https://cnspub.com/" target="_blank" data-domain="cnspub.com" title="CNS学术导航">CNS学术导航</a><a class="item" href="https://www.aihub.cn/tools/science/" target="_blank" data-domain="aihub.cn" title="AIhub">AIhub</a><a class="item" href="https://nav.research.top/" target="_blank" data-domain="nav.research.top" title="科研导航">科研导航</a><a class="item" href="https://www.sci-hub.icu/" target="_blank" data-domain="sci-hub.icu" title="sci-hub学术导航">sci-hub学术导航</a><a class="item" href="https://www.aigc.cn/" target="_blank" data-domain="aigc.cn" title="AIGC导航">AIGC导航</a><a class="item" href="https://www.xueshudashi.com/favorites/keyangongju" target="_blank" data-domain="xueshudashi.com" title="学术大师">学术大师</a><a class="item" href="https://hub.ac.cn/" target="_blank" data-domain="hub.ac.cn" title="hub.ac">hub.ac</a><a class="item" href="https://www.deepdh.com/learning" target="_blank" data-domain="deepdh.com" title="deepdh">deepdh</a><a class="item" href="https://www.vpcsvip.cn/" target="_blank" data-domain="vpcsvip.cn" title="温书学术">温书学术</a><a class="item" href="https://www.c.cn/#category-23" target="_blank" data-domain="c.cn" title="xwlunwen">xwlunwen</a><a class="item" href="https://www.wukongkeyan.com/" target="_blank" data-domain="wukongkeyan.com" title="悟空科研">悟空科研</a><a class="item" href="https://paper2x.noedgeai.com/" target="_blank" data-domain="paper2x.noedgeai.com" title="paper2x">paper2x</a><a class="item" href="https://www.scihub.net.cn/" target="_blank" data-domain="scihub.net.cn" title="scihub学术导航">scihub学术导航</a><a class="item" href="https://www.ablesci.com/daohang" target="_blank" data-domain="ablesci.com" title="科研通学术导航">科研通学术导航</a><a class="item" href="http://www.6453.net/" target="_blank" data-domain="6453.net" title="文献谷">文献谷</a><a class="item" href="http://459.org/" target="_blank" data-domain="459.org" title="文献部落">文献部落</a><a class="item" href="https://zread.ai/" target="_blank" data-domain="zread.ai" title="zread">zread</a><a class="item" href="https://www.ivysci.com/paper-tools" target="_blank" data-domain="ivysci.com" title="vysci科研导航">vysci科研导航</a><a class="item" href="https://www.aibase.com/zh" target="_blank" data-domain="aibase.com" title="AIbase">AIbase</a><a class="item" href="https://ai-kit.cn/" target="_blank" data-domain="ai-kit.cn" title="AI工具箱">AI工具箱</a><a class="item" href="https://www.sparkx.zone/index.html" target="_blank" data-domain="sparkx.zone" title="星火集">星火集</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">服务器</h3><div class="grid"><a class="item" href="https://mp.weixin.qq.com/s/W4WKx1_2HPNCX6ZqXQM-OA" target="_blank" data-domain="mp.weixin.qq.com" title="数信院">数信院</a><a class="item" href="https://mp.weixin.qq.com/s/d-EEXNWIfn6JcKvMkI_asA" target="_blank" data-domain="mp.weixin.qq.com" title="西柚云">西柚云</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">常用</h3><div class="grid"><a class="item" href="https://cran.r-project.org/src/contrib/Archive/Seurat/" target="_blank" data-domain="cran.r-project.org" title="CRAN包">CRAN包</a><a class="item" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/" target="_blank" data-domain="mirrors.tuna.tsinghua.edu.cn" title="anaconda镜像">anaconda镜像</a><a class="item" href="https://anaconda.org/bioconda" target="_blank" data-domain="anaconda.org" title="bioconda">bioconda</a><a class="item" href="https://deepwiki.org/" target="_blank" data-domain="deepwiki.org" title="deepwiki">deepwiki</a><a class="item" href="https://rdrr.io/" target="_blank" data-domain="rdrr.io" title="rdrr.io">rdrr.io</a><a class="item" href="https://www.rdocumentation.org/" target="_blank" data-domain="rdocumentation.org" title="rdocumentation">rdocumentation</a><a class="item" href="https://github.com/MCBRLab" target="_blank" data-domain="github.com" title="MCBRLab">MCBRLab</a><a class="item" href="https://codeocean.com/" target="_blank" data-domain="codeocean.com" title="codeocean">codeocean</a><a class="item" href="https://tool.lu/urlconvert/" target="_blank" data-domain="tool.lu" title="urlconvert">urlconvert</a><a class="item" href="https://zread.ai/" target="_blank" data-domain="zread.ai" title="zread.ai">zread.ai</a><a class="item" href="https://evomap.ai/" target="_blank" data-domain="evomap.ai" title="evomap">evomap</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">空间大牛课题组</h3><div class="grid"><a class="item" href="https://cqb.pku.edu.cn/zenglab/" target="_blank" data-domain="cqb.pku.edu.cn" title="曾泽贤">曾泽贤</a><a class="item" href="https://www.spatialresearch.org/" target="_blank" data-domain="spatialresearch.org" title="The Spatial Research Lab">The Spatial Research Lab</a><a class="item" href="https://saeyslab.sites.vib.be/en/our-research/spatial-omics-team" target="_blank" data-domain="saeyslab.sites.vib.be" title="spatial-omics-team">spatial-omics-team</a><a class="item" href="https://nilssonlab.org/" target="_blank" data-domain="nilssonlab.org" title="Mats Nilsson&#x27;s lab">Mats Nilsson&#x27;s lab</a><a class="item" href="https://bioinfo.ioz.ac.cn/" target="_blank" data-domain="bioinfo.ioz.ac.cn" title="赵方庆">赵方庆</a><a class="item" href="https://www.fan-lab.org/" target="_blank" data-domain="fan-lab.org" title="樊荣">樊荣</a><a class="item" href="http://www.yelab.site/" target="_blank" data-domain="yelab.site" title="叶幼琼">叶幼琼</a><a class="item" href="https://faculty.mdanderson.org/profiles/linghua_wang.html" target="_blank" data-domain="faculty.mdanderson.org" title="王凌华">王凌华</a><a class="item" href="http://jcyx.ustc.edu.cn/2021/0825/c24419a520691/page.htm" target="_blank" data-domain="jcyx.ustc.edu.cn" title="瞿昆">瞿昆</a><a class="item" href="https://people.ucas.ac.cn/~zsh" target="_blank" data-domain="people.ucas.ac.cn" title="张世华">张世华</a><a class="item" href="https://icg.pku.edu.cn/kxyj/yjtd/269282.htm" target="_blank" data-domain="icg.pku.edu.cn" title="高歌">高歌</a><a class="item" href="https://scholar.google.com/citations?hl=zh-CN&amp;user=le3TZVUAAAAJ&amp;sortby=pubdate&amp;view_op=list_works&amp;citft=1&amp;citft=2&amp;citft=3&amp;email_for_op=juzheng10000%40gmail.com&amp;gmla=ANZ5fUOh78ITdnInaVGEf_iptHRBDNjwNxeJ2F1F7L0S16zg4qmdRRre5lOXQs4TgRMXelbJ2x7XMIfsG5-l5s6KGv89YfnXQF639AAEMizC3GCU0y8PnxNCF0rr2d5QYZVEb3CybyHBF_NsTgIdLTSL05FrNHqjLyahmmE-0NAPyg-4JtYravj4WQAP9Gr72gyoo6PyFMuTuHGq2r8UZaqUiFalh6LPrT-PsTUBoOqNROVvf_UC9rnhiygdSCe7" target="_blank" data-domain="scholar.google.com" title="任仙文">任仙文</a><a class="item" href="https://person.zju.edu.cn/fanxh/#0" target="_blank" data-domain="person.zju.edu.cn" title="范骁辉">范骁辉</a><a class="item" href="https://www.insitubiology.org/team" target="_blank" data-domain="insitubiology.org" title="chen lab">chen lab</a><a class="item" href="https://compbio.mit.edu/" target="_blank" data-domain="compbio.mit.edu" title="Manolis kellis Lab">Manolis kellis Lab</a><a class="item" href="https://www.maths.ox.ac.uk/groups/mathematical-biology" target="_blank" data-domain="maths.ox.ac.uk" title="WCMB Research group">WCMB Research group</a><a class="item" href="https://yi-zhang-compbio-lab.github.io/" target="_blank" data-domain="yi-zhang-compbio-lab.github.io" title="zhang yi">zhang yi</a><a class="item" href="https://villablancalabcom.wordpress.com/" target="_blank" data-domain="villablancalabcom.wordpress.com" title="Villablanca lab">Villablanca lab</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">空间转录组 HD</h3><div class="grid"><a class="item" href="http://www.novogene.cn/novo/10xVisiumHD_cpjs_493.html" target="_blank" data-domain="novogene.cn" title="诺禾">诺禾</a><a class="item" href="https://www.annoroad.com/products/research/single_cell_RNA_sequencing/st/5733.html" target="_blank" data-domain="annoroad.com" title="安诺优达">安诺优达</a><a class="item" href="https://www.oebiotech.com/kjzlzcx/VisiumHD.html" target="_blank" data-domain="oebiotech.com" title="欧易生物">欧易生物</a><a class="item" href="https://www.genedenovo.com/product/1033" target="_blank" data-domain="genedenovo.com" title="基迪奥">基迪奥</a><a class="item" href="https://accuramed.com/" target="_blank" data-domain="accuramed.com" title="云准科技">云准科技</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">Xenium</h3><div class="grid"><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkyNTE5Nzk3NQ==&amp;action=getalbum&amp;album_id=3889314919744798725&amp;scene=173&amp;subscene=&amp;sessionid=svr_a76920e3644&amp;enterid=1741946662&amp;from_msgid=2247496022&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="Xenium">Xenium</a><a class="item" href="https://cn.novogene.com/novo/Xenium_cpjs_503.html" target="_blank" data-domain="cn.novogene.com" title="诺禾致源">诺禾致源</a><a class="item" href="https://accuramed.com/xeniumyxbkjywfxjjfa" target="_blank" data-domain="accuramed.com" title="云准科技">云准科技</a></div></div><div class="cat-sub" id="cat-8"><h3 class="cat-sub-title">Stereo-seq</h3><div class="grid"><a class="item" href="https://www.genedenovo.com/product/1042" target="_blank" data-domain="genedenovo.com" title="基迪奥">基迪奥</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzU3MTY3ODA2Mw==&amp;action=getalbum&amp;album_id=2880619306935123969&amp;scene=173&amp;subscene=&amp;sessionid=svr_9561c2d44df&amp;enterid=1749260062&amp;from_msgid=2247484963&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信编程自修室">生信编程自修室</a><a class="item" href="https://spateo-release.readthedocs.io/en/latest/" target="_blank" data-domain="spateo-release.readthedocs.io" title="spateo">spateo</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg5MTY0Mjc3Mg==&amp;action=getalbum&amp;album_id=3041712453287624706&amp;scene=173&amp;subscene=&amp;sessionid=svr_8b6aee0fc53&amp;enterid=1749811065&amp;from_msgid=2247510743&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="华大时空 线上讲座">华大时空 线上讲座</a><a class="item" href="https://github.com/STOmics/SDAS" target="_blank" data-domain="github.com" title="STOmics">STOmics</a></div></div><div class="cat-sub" id="cat-9"><h3 class="cat-sub-title">CosMx SMI</h3><div class="grid"><a class="item" href="https://brukerspatialbiology.com/" target="_blank" data-domain="brukerspatialbiology.com" title="bruker">bruker</a><a class="item" href="https://mp.weixin.qq.com/s/QxAzWzKaqrEyq08n8KLW-Q" target="_blank" data-domain="mp.weixin.qq.com" title="Bruker 布鲁克">Bruker 布鲁克</a><a class="item" href="http://www.yucebio.com/ScientificResearch/SMI" target="_blank" data-domain="yucebio.com" title="裕策">裕策</a><a class="item" href="https://nanostring.com/support/additional-resources/nanostring-cosmx-spatial-molecular-imager-grant-china/" target="_blank" data-domain="nanostring.com" title="nanostring">nanostring</a></div></div><div class="cat-sub" id="cat-10"><h3 class="cat-sub-title">空间转录组教程</h3><div class="grid"><a class="item" href="https://www.yuque.com/qingyuntian/zh0pq0" target="_blank" data-domain="yuque.com" title="语雀空间组学">语雀空间组学</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzk0OTc0MzUwNg==&amp;action=getalbum&amp;album_id=3593336076476940289&amp;scene=173&amp;subscene=&amp;sessionid=svr_702a4178961&amp;enterid=1749523382&amp;from_msgid=2247489484&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="MCBRLab">MCBRLab</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzk1NzMzNjgyOQ==&amp;action=getalbum&amp;album_id=3771012161905278983&amp;scene=173&amp;subscene=&amp;sessionid=svr_46c1de0711e&amp;enterid=1741917813&amp;from_msgid=2247483711&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="空间转录公众号">空间转录公众号</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg2NTExOTc0MA==&amp;action=getalbum&amp;album_id=3361718986182459395&amp;scene=173&amp;subscene=&amp;sessionid=svr_ec284ba23d1&amp;enterid=1741917860&amp;from_msgid=2247484175&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="空间组学公众号">空间组学公众号</a><a class="item" href="https://mp.weixin.qq.com/s/p2ZvMC8amXZa4fbErN2n9g" target="_blank" data-domain="mp.weixin.qq.com" title="基迪奥空转教程">基迪奥空转教程</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzk1NzQ5NzM0MA==&amp;action=getalbum&amp;album_id=3762219321749962758&amp;scene=173&amp;subscene=&amp;sessionid=svr_683c0748c45&amp;enterid=1745493765&amp;from_msgid=2247484009&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信大杂烩">生信大杂烩</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg5MjcxNzg1NA==&amp;action=getalbum&amp;album_id=2835326362902102023&amp;scene=173&amp;subscene=&amp;sessionid=svr_5ad5d103064&amp;enterid=1746347944&amp;from_msgid=2247488795&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信随笔">生信随笔</a><a class="item" href="https://www.bilibili.com/video/BV1Dy411q7hU?spm_id_from=333.788.videopod.sections&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="吉克学长">吉克学长</a><a class="item" href="https://www.bilibili.com/video/BV1gK4y1q7BK?spm_id_from=333.788.videopod.sections&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="枪手学长">枪手学长</a><a class="item" href="https://www.bilibili.com/video/BV1jppLeXEha/?spm_id_from=333.337.search-card.all.click&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="怡美通德">怡美通德</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzUyMjcwMDcyMw==&amp;action=getalbum&amp;album_id=2371815523434561536&amp;scene=173&amp;subscene=&amp;sessionid=svr_fa92fcf1ca4&amp;enterid=1736146631&amp;from_msgid=2247484185&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="西红柿的空间转录组">西红柿的空间转录组</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzI4MjY5ODI1Nw==&amp;action=getalbum&amp;album_id=3477444394595139588&amp;scene=173&amp;subscene=&amp;sessionid=svr_b9c513d94ef&amp;enterid=1720099439&amp;from_msgid=2247490983&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信宝库">生信宝库</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIyNDI1MzgzOQ==&amp;action=getalbum&amp;album_id=2969449944145231876&amp;scene=173&amp;subscene=&amp;sessionid=svr_8e66a94551e&amp;enterid=1732513335&amp;from_msgid=2650402597&amp;from_itemidx=2&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信补给站">生信补给站</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIyMzMwNDQ2MA==&amp;action=getalbum&amp;album_id=2541010525703471107&amp;scene=173&amp;subscene=&amp;sessionid=svr_d2e538b45da&amp;enterid=1732513381&amp;from_msgid=2247485237&amp;from_itemidx=3&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信会客厅">生信会客厅</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkwMzQwNjYyNg==&amp;action=getalbum&amp;album_id=3510826894994194437&amp;scene=173&amp;subscene=&amp;sessionid=svr_18944e35ea1&amp;enterid=1746347965&amp;from_msgid=2247493343&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="数据科学工厂">数据科学工厂</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkwMzY2NjkwNg==&amp;action=getalbum&amp;album_id=3430442070387458049&amp;subscene=159&amp;subscene=&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FJBH8dusf6EOsSG533bjeGg&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信钱同学">生信钱同学</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkyOTU0MDgwMA==&amp;action=getalbum&amp;album_id=3893482879572983816&amp;subscene=159&amp;subscene=&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FmKS-6Z2gzDEuN91WluhUMA&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="OMICat">OMICat</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzUzMTEwODk0Ng==&amp;action=getalbum&amp;album_id=3016863445956362245&amp;subscene=159&amp;subscene=189&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzUzMTEwODk0Ng%3D%3D%26mid%3D2247526084%26idx%3D1%26sn%3Dea56a5f56b11fbd93df13f41c611e319%26chksm%3Dfa45a3f9cd322aef55d5ed04237d601f22491605959716a6298f5d0bd18f755d3c6e9f1ddd2f%26cur_album_id%3D3016863445956362245%26scene%3D189%23wechat_redirect&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="赵小明的生信笔记">赵小明的生信笔记</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg5MjcxNzg1NA==&amp;action=getalbum&amp;album_id=2835326362902102023&amp;subscene=159&amp;subscene=21&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%3F__biz%3DMzg5MjcxNzg1NA%3D%3D%26mid%3D2247488215%26idx%3D1%26sn%3D154e93106f517dc279cb087f8c668cad%26scene%3D21%23wechat_redirect&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="空间转录组 赵小明">空间转录组 赵小明</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkzMTQyMTM0Nw==&amp;action=getalbum&amp;album_id=2661472753690394624&amp;scene=173&amp;subscene=&amp;sessionid=svr_b65ad7ce82a&amp;enterid=1749033001&amp;from_msgid=2247484359&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="BIO笔记本">BIO笔记本</a><a class="item" href="https://lmweber.org/OSTA/" target="_blank" data-domain="lmweber.org" title="OSTA">OSTA</a><a class="item" href="https://bioconductor.org/books/release/OSCA/" target="_blank" data-domain="bioconductor.org" title="OSCA/">OSCA/</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzAxMDkxODM1Ng==&amp;action=getalbum&amp;album_id=3174921433291128842&amp;subscene=159&amp;subscene=&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FejOXY0z43yiFc3Mo228H5Q&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="生信技能树">生信技能树</a></div></div><div class="cat-sub" id="cat-11"><h3 class="cat-sub-title">空间转录组前沿</h3><div class="grid"><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzU1MDk1NTY5MA==&amp;action=getalbum&amp;album_id=2351286883214934018&amp;scene=173&amp;subscene=&amp;sessionid=svr_2d8db7f2c7e&amp;enterid=1733992011&amp;from_msgid=2247533061&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="10x Genomics">10x Genomics</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?action=getalbum&amp;__biz=MjM5MzIwNTI4OA==&amp;scene=1&amp;album_id=2191609208230445059&amp;count=3#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="联川生物">联川生物</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzA4MDkwODYyOQ==&amp;action=getalbum&amp;album_id=1794619085964558337&amp;scene=173&amp;subscene=&amp;sessionid=svr_803086de8ed&amp;enterid=1736135712&amp;from_msgid=2452668968&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="深圳国家基因库大数据平台">深圳国家基因库大数据平台</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg5MTEzMTI1Mw==&amp;action=getalbum&amp;album_id=2987495430399901698&amp;scene=173&amp;subscene=&amp;sessionid=svr_e6c01997f7e&amp;enterid=1746347962&amp;from_msgid=2247500780&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="广科安德">广科安德</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?search_click_id=10881761431978310184-1746360821017-1569956115&amp;__biz=MjM5MjEyODY0OQ==&amp;action=getalbum&amp;album_id=1319187026083790849#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="欧易生物 单细胞 空间合集">欧易生物 单细胞 空间合集</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzA5NzQzOTgzMw==&amp;action=getalbum&amp;album_id=3452721042118983682&amp;subscene=159&amp;subscene=&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2F6x5-bkuydNhGeToJEvOkoA&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="基迪奥">基迪奥</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzg5MTY0Mjc3Mg==&amp;action=getalbum&amp;album_id=1964112791129112581&amp;scene=173&amp;subscene=&amp;sessionid=svr_d0c1faaed26&amp;enterid=1746518142&amp;from_msgid=2247509906&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="华大时空">华大时空</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=Mzk0OTc0MzUwNg==&amp;action=getalbum&amp;album_id=3593336076476940289&amp;subscene=159&amp;subscene=&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FAx1VyO0sck6VV4KAWxMZ9A&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="MCBRLab">MCBRLab</a><a class="item" href="https://space.bilibili.com/1726572568/upload/opus" target="_blank" data-domain="space.bilibili.com" title="华大时空">华大时空</a></div></div><div class="cat-sub" id="cat-12"><h3 class="cat-sub-title">单细胞前沿</h3><div class="grid"><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkxMjM4OTE5OQ==&amp;action=getalbum&amp;album_id=2477736246052683777&amp;subscene=159&amp;subscene=&amp;scenenote=https%3A%2F%2Fmp.weixin.qq.com%2Fs%2FFLDUlzkctjB3RGs1sqJpjA&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="“栋“析前沿">“栋“析前沿</a><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkzMTQyMTM0Nw==&amp;action=getalbum&amp;album_id=2661472753690394624&amp;scene=173&amp;subscene=&amp;sessionid=svr_682a7fbf641&amp;enterid=1747228400&amp;from_msgid=2247484226&amp;from_itemidx=1&amp;count=3&amp;nolastread=1#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="BIO笔记本">BIO笔记本</a></div></div><div class="cat-sub" id="cat-13"><h3 class="cat-sub-title">空间转录组数据库</h3><div class="grid"><a class="item" href="https://ngdc.cncb.ac.cn/crost/home" target="_blank" data-domain="ngdc.cncb.ac.cn" title="CROST">CROST</a><a class="item" href="https://gene.ai.tencent.com/SpatialOmics/" target="_blank" data-domain="gene.ai.tencent.com" title="SODB">SODB</a><a class="item" href="https://db.cngb.org/stomics/" target="_blank" data-domain="db.cngb.org" title="STOmics DB">STOmics DB</a><a class="item" href="http://cancersrt.info/" target="_blank" data-domain="cancersrt.info" title="CancerSRT">CancerSRT</a><a class="item" href="https://aquila.cheunglab.org/" target="_blank" data-domain="aquila.cheunglab.org" title="Aquila">Aquila</a><a class="item" href="https://cns-iu.github.io/hra-construction-usage-supporting-information/" target="_blank" data-domain="cns-iu.github.io" title="HuBMAP 3D">HuBMAP 3D</a><a class="item" href="https://data.humancellatlas.org/" target="_blank" data-domain="data.humancellatlas.org" title="HCA">HCA</a><a class="item" href="https://nanostring.com/products/cosmx-spatial-molecular-imager/ffpe-dataset/cosmx-smi-human-pancreas-ffpe-dataset/" target="_blank" data-domain="nanostring.com" title="CosMx DB">CosMx DB</a><a class="item" href="https://www.spatialtme.yelab.site/#!/" target="_blank" data-domain="spatialtme.yelab.site" title="SpatialTME">SpatialTME</a><a class="item" href="https://soar.fsm.northwestern.edu/" target="_blank" data-domain="soar.fsm.northwestern.edu" title="SOAR">SOAR</a><a class="item" href="http://wanglab-compbio.cn/TabulaTIME/" target="_blank" data-domain="wanglab-compbio.cn" title="TabulaTIME">TabulaTIME</a></div></div><div class="cat-sub" id="cat-14"><h3 class="cat-sub-title">空转视频</h3><div class="grid"><a class="item" href="https://www.stomics.tech/resources/Videos" target="_blank" data-domain="stomics.tech" title="华大空转">华大空转</a><a class="item" href="https://www.10xgenomics.com/cn/videos?refinementList%5Blanguage%5D%5B0%5D=English&amp;refinementList%5Blanguage%5D%5B1%5D=%E4%B8%AD%E6%96%87&amp;configure%5BhitsPerPage%5D=50&amp;configure%5BmaxValuesPerFacet%5D=1000" target="_blank" data-domain="10xgenomics.com" title="10x">10x</a><a class="item" href="https://space.bilibili.com/577881905" target="_blank" data-domain="space.bilibili.com" title="MCBRLab">MCBRLab</a><a class="item" href="https://app0roxbvcy4412.h5.xiaoeknow.com/p/decorate/homepage" target="_blank" data-domain="app0roxbvcy4412.h5.xiaoeknow.com" title="nanostring">nanostring</a><a class="item" href="https://www.bilibili.com/video/BV1Tv4y1w7QN/?spm_id_from=333.337.search-card.all.click&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="scverse">scverse</a><a class="item" href="https://www.bilibili.com/video/BV1mA411T7Xz/?spm_id_from=333.788.recommend_more_video.5&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="努力呗还能咋样呐">努力呗还能咋样呐</a><a class="item" href="https://www.bilibili.com/video/BV12mfHY4EMC/?spm_id_from=333.337.search-card.all.click&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="联川生物">联川生物</a><a class="item" href="https://www.bilibili.com/video/BV1TH4y1w7Zu/?spm_id_from=333.337.search-card.all.click&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="易研科技">易研科技</a><a class="item" href="https://www.bilibili.com/video/BV1HcYTewEtR/?spm_id_from=333.337.search-card.all.click&amp;vd_source=5192954f066222a36e500187eb9825f3" target="_blank" data-domain="bilibili.com" title="博奥晶典科研服务">博奥晶典科研服务</a></div></div><div class="cat-sub" id="cat-15"><h3 class="cat-sub-title">空间转录组软件</h3><div class="grid"><a class="item" href="https://github.com/crazyhottommy/awesome_spatial_omics" target="_blank" data-domain="github.com" title="awesome_spatial_omics">awesome_spatial_omics</a></div></div><div class="cat-sub" id="cat-16"><h3 class="cat-sub-title">M20</h3><div class="grid"><a class="item" href="https://www.m20genomics.cn/advantages/m20-spatial" target="_blank" data-domain="m20genomics.cn" title="跃真">跃真</a></div></div><div class="cat-sub" id="cat-17"><h3 class="cat-sub-title">空间蛋白组</h3><div class="grid"><a class="item" href="https://www.wayenbio.com/" target="_blank" data-domain="wayenbio.com" title="华盈生物">华盈生物</a><a class="item" href="https://mp.weixin.qq.com/s/navBNvKzV4-vP8tG1Ux66w" target="_blank" data-domain="mp.weixin.qq.com" title="芯超MA IO60+3">芯超MA IO60+3</a><a class="item" href="https://www.stomics.tech/products/Stereo-CITE/list.html" target="_blank" data-domain="stomics.tech" title="Stereo-CITE">Stereo-CITE</a></div></div><div class="cat-sub" id="cat-18"><h3 class="cat-sub-title">空间代谢组</h3><div class="grid"><a class="item" href="https://www.oebiotech.com/kjdxzx/scatam-seq.html" target="_blank" data-domain="oebiotech.com" title="欧易生物">欧易生物</a><a class="item" href="https://www.oebiotech.com/kjdxzx/spatialmetabolomics.html" target="_blank" data-domain="oebiotech.com" title="全谱空间代谢组">全谱空间代谢组</a></div></div><div class="cat-sub" id="cat-19"><h3 class="cat-sub-title">空间病理</h3><div class="grid"><a class="item" href="https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzkwODY2Nzg0NQ==&amp;action=getalbum&amp;album_id=3680769253449318409#wechat_redirect" target="_blank" data-domain="mp.weixin.qq.com" title="联川时空 空间病理">联川时空 空间病理</a></div></div><div class="cat-sub" id="cat-20"><h3 class="cat-sub-title">病理资源</h3><div class="grid"><a class="item" href="https://www.histologyguide.com" target="_blank" data-domain="histologyguide.com" title="Histology guide">Histology guide</a><a class="item" href="https://webpath.med.utah.edu/" target="_blank" data-domain="webpath.med.utah.edu" title="webpath">webpath</a><a class="item" href="https://peir.path.uab.edu/wiki/Main_Page" target="_blank" data-domain="peir.path.uab.edu" title="Pathology Education Instructional Resource (PEIR)">Pathology Education Instructional Resource (PEIR)</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · spatialtranscriptome", "children": [{"id": 2, "name": "其他重要导航", "children": []}, {"id": 3, "name": "服务器", "children": []}, {"id": 4, "name": "常用", "children": []}, {"id": 5, "name": "空间大牛课题组", "children": []}, {"id": 6, "name": "空间转录组 HD", "children": []}, {"id": 7, "name": "Xenium", "children": []}, {"id": 8, "name": "Stereo-seq", "children": []}, {"id": 9, "name": "CosMx SMI", "children": []}, {"id": 10, "name": "空间转录组教程", "children": []}, {"id": 11, "name": "空间转录组前沿", "children": []}, {"id": 12, "name": "单细胞前沿", "children": []}, {"id": 13, "name": "空间转录组数据库", "children": []}, {"id": 14, "name": "空转视频", "children": []}, {"id": 15, "name": "空间转录组软件", "children": []}, {"id": 16, "name": "M20", "children": []}, {"id": 17, "name": "空间蛋白组", "children": []}, {"id": 18, "name": "空间代谢组", "children": []}, {"id": 19, "name": "空间病理", "children": []}, {"id": 20, "name": "病理资源", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>效率集 · titan 的收藏导航</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f6fb 100%);
+    min-height: 100vh; color: #333;
+  }
+  header {
+    text-align: center; padding: 36px 16px 22px;
+    background: linear-gradient(135deg, #4f8cff 0%, #6c5ce7 100%);
+    color: #fff;
+  }
+  header h1 { font-size: 30px; font-weight: 700; letter-spacing: 2px; text-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+  header p { margin-top: 8px; font-size: 15px; opacity: 0.92; }
+  header .date { margin-top: 6px; font-size: 13px; opacity: 0.75; }
+  /* 搜索栏 + 导航栏 固定顶部 */
+  .top-sticky { position: sticky; top: 0; z-index: 1000; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+  .search-bar {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px; background: #fff; border-bottom: 1px solid #eef2f8;
+    max-width: 860px; margin: 0 auto;
+  }
+  .search-bar select {
+    padding: 8px 10px; border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 13px; color: #3b4a6b; background: #f8fafd; outline: none; cursor: pointer;
+    max-width: 110px;
+  }
+  .search-bar input {
+    flex: 1; min-width: 120px; padding: 8px 14px;
+    border: 1px solid #d5deea; border-radius: 8px;
+    font-size: 14px; outline: none; transition: border 0.2s;
+  }
+  .search-bar input:focus { border-color: #4f8cff; box-shadow: 0 0 0 3px rgba(79,140,255,0.12); }
+  .search-bar .btn-search {
+    padding: 8px 18px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+  }
+  .search-bar .btn-search:hover { opacity: 0.85; }
+  .search-tip { font-size: 11px; color: #a8b8d4; padding: 0 4px; }
+  /* 一键置顶 */
+  #back-top {
+    position: fixed; right: 24px; bottom: 32px; z-index: 999;
+    width: 46px; height: 46px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff, #6c5ce7); color: #fff;
+    font-size: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(76,110,245,0.35);
+    display: none; align-items: center; justify-content: center;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  #back-top:hover { transform: translateY(-3px); }
+  #back-top.show { display: flex; }
+  .cat-nav { border-bottom: 1px solid #e2e8f0; }
+  .nav-row1 { display: flex; align-items: center; overflow-x: auto; white-space: nowrap; padding: 0 12px; scrollbar-width: thin; }
+  .nav-row1::-webkit-scrollbar { height: 3px; }
+  .nav-l1 { display: inline-block; padding: 12px 14px; color: #3b4a6b; font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 3px solid transparent; flex-shrink: 0; }
+  .nav-l1:hover { color: #4f8cff; }
+  .nav-l1.active { color: #4f8cff; border-bottom-color: #4f8cff; background: #f0f5ff; }
+  .nav-row2 { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 2px; background: #f8fafd; border-top: 1px solid #eef2f8; padding: 8px 12px; min-height: 20px; }
+  .nav-l2 { display: inline-block; padding: 5px 12px; color: #5a6c8d; font-size: 13px; text-decoration: none; border-radius: 6px; transition: all 0.15s; }
+  .nav-l2:hover { background: #e3edff; color: #4f8cff; }
+  .nav-l3 { display: inline-block; padding: 5px 10px; color: #7c8cab; font-size: 12px; text-decoration: none; border-radius: 6px; }
+  .nav-l3:hover { background: #eef3fb; color: #4f8cff; }
+  .nav-sep { color: #ccd6e8; font-size: 11px; margin: 0 2px; }
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 16px 60px; }
+  .cat { margin-bottom: 32px; scroll-margin-top: 110px; }
+  .cat-title { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: #3b4a6b; padding: 0 4px 12px; border-bottom: 2px solid #e2e8f0; margin-bottom: 16px; }
+  .cat-title::before { content: ""; width: 6px; height: 20px; background: linear-gradient(180deg, #4f8cff, #6c5ce7); border-radius: 3px; }
+  .cat-sub { margin: 14px 0 4px; padding-left: 14px; scroll-margin-top: 110px; }
+  .cat-sub-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 600; color: #4a5b7a; padding: 6px 4px 10px; margin-bottom: 12px; border-bottom: 1px dashed #d5deea; }
+  .cat-sub-title::before { content: ""; width: 4px; height: 16px; background: linear-gradient(180deg, #7ba3ff, #9b8cff); border-radius: 2px; }
+  .cat-sub-sub { margin: 10px 0 2px; padding-left: 24px; scroll-margin-top: 110px; }
+  .cat-sub-sub-title { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 600; color: #5d6f8f; padding: 4px 4px 8px; margin-bottom: 10px; border-bottom: 1px dotted #dde5f0; }
+  .cat-sub-sub-title::before { content: ""; width: 3px; height: 13px; background: linear-gradient(180deg, #a9c2ff, #b8adff); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+  .item { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: #fff; border: 1px solid #e8edf5; border-radius: 12px; padding: 14px 10px; text-decoration: none; color: #3b4a6b; font-size: 14px; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+  .item:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(76,110,245,0.15); border-color: #4f8cff; color: #4f8cff; }
+  .item img { width: 30px; height: 30px; object-fit: contain; padding: 4px; box-sizing: border-box; background: #fff; border: 1px solid #eee; border-radius: 8px; flex-shrink: 0; }
+  .item .fallback-letter { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fff; font-weight: bold; font-size: 13px; border-radius: 8px; flex-shrink: 0; }
+  footer { text-align: center; padding: 20px; color: #94a3b8; font-size: 13px; }
+  @media (max-width: 600px) { .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); } header h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>效率集 · titan 的收藏导航</h1>
+  <p>多级分类嵌套导航 · 站内搜 + 站外搜</p>
+  <div class="date" id="date"></div>
+</header>
+
+<div class="top-sticky">
+  <!-- 站内搜 + 站外搜 -->
+  <div class="search-bar">
+    <select id="search-engine" title="选择搜索引擎"></select>
+    <input type="text" id="search-input" placeholder="搜索网址（回车站外搜索 / 输入实时站内过滤）" autocomplete="off">
+    <button class="btn-search" id="btn-search" type="button">搜索</button>
+  </div>
+  <!-- 固定多级导航栏 -->
+  <nav class="cat-nav">
+    <div class="nav-row1" id="nav-row1">
+<a class="nav-l1" data-id="1" href="#cat-1">效率集 · titan</a>
+    </div>
+    <div class="nav-row2" id="nav-panel"></div>
+  </nav>
+</div>
+
+<main>
+<section class="cat" id="cat-1"><h2 class="cat-title">效率集 · titan</h2><div class="cat-sub" id="cat-2"><h3 class="cat-sub-title">Titan Slim</h3><div class="grid"><a class="item" href="https://u.jd.com/jLIXYjd" target="_blank" data-domain="u.jd.com" title="京东官方下单">京东官方下单</a><a class="item" href="https://www.unihertz.com/collections/smartphones/products/titan-slim" target="_blank" data-domain="unihertz.com" title="官方参数页">官方参数页</a><a class="item" href="https://www.bilibili.com/video/BV1Av4y1u7Dx" target="_blank" data-domain="bilibili.com" title="国行媒体测评">国行媒体测评</a><a class="item" href="https://www.bilibili.com/video/BV1c94y1m7S1" target="_blank" data-domain="bilibili.com" title="国行玩家测评">国行玩家测评</a><a class="item" href="https://www.bilibili.com/video/BV1aY411P7nX" target="_blank" data-domain="bilibili.com" title="Slim使用体验视频">Slim使用体验视频</a><a class="item" href="https://www.bilibili.com/video/BV1S34y1Y7rU" target="_blank" data-domain="bilibili.com" title="Slim开箱及配置">Slim开箱及配置</a><a class="item" href="https://www.bilibili.com/video/BV1m541127Bq" target="_blank" data-domain="bilibili.com" title="Slim开箱视频">Slim开箱视频</a><a class="item" href="https://twitter.com/unihertz" target="_blank" data-domain="twitter.com" title="官方Twitter">官方Twitter</a><a class="item" href="https://www.kickstarter.com/projects/jellyphone/titan-slim-the-new-sleek-and-slim-qwerty-android-smartphone?ref=discovery&amp;term=unihertz" target="_blank" data-domain="kickstarter.com" title="众筹地址">众筹地址</a><a class="item" href="https://browser.geekbench.com/v5/cpu/14170965" target="_blank" data-domain="browser.geekbench.com" title="Geekbench">Geekbench</a><a class="item" href="https://fcc.report/FCC-ID/2AK6CTITANSLIM/5822681" target="_blank" data-domain="fcc.report" title="FCC测试机照片">FCC测试机照片</a><a class="item" href="https://fcc.report/FCC-ID/2AK6CTITANSLIM/5822703" target="_blank" data-domain="fcc.report" title="FCC测试机规格">FCC测试机规格</a><a class="item" href="https://fcc.report/FCC-ID/2AK6CTITANSLIM/5822682" target="_blank" data-domain="fcc.report" title="FCC各模组照片">FCC各模组照片</a><a class="item" href="https://fcc.report/FCC-ID/2AK6CTITANSLIM/5822623" target="_blank" data-domain="fcc.report" title="FCC手机说明书">FCC手机说明书</a></div></div><div class="cat-sub" id="cat-3"><h3 class="cat-sub-title">Titan Pocket</h3><div class="grid"><a class="item" href="https://u.jd.com/rtBbhVu" target="_blank" data-domain="u.jd.com" title="京东官方下单">京东官方下单</a><a class="item" href="http://www.unihertz.cc/?product=titan-pocket" target="_blank" data-domain="unihertz.cc" title="官方参数及介绍">官方参数及介绍</a><a class="item" href="https://www.kickstarter.com/projects/jellyphone/titan-pocket-the-smallest-qwerty-android-11-smartphone?ref=discovery&amp;term=titan%20pocket" target="_blank" data-domain="kickstarter.com" title="众筹介绍">众筹介绍</a><a class="item" href="https://zhuanlan.zhihu.com/p/406013752" target="_blank" data-domain="zhuanlan.zhihu.com" title="开箱">开箱</a><a class="item" href="https://zhuanlan.zhihu.com/p/408107089" target="_blank" data-domain="zhuanlan.zhihu.com" title="手机深度体验">手机深度体验</a><a class="item" href="https://zhuanlan.zhihu.com/p/407733647" target="_blank" data-domain="zhuanlan.zhihu.com" title="输入法哪个好用">输入法哪个好用</a><a class="item" href="https://www.bilibili.com/video/BV1rf4y1g74p?from=search&amp;seid=12208718807638828877" target="_blank" data-domain="bilibili.com" title="TP整机拆解视频">TP整机拆解视频</a><a class="item" href="https://www.bilibili.com/video/BV1bV411s7CR" target="_blank" data-domain="bilibili.com" title="灶猫TP测评(上)">灶猫TP测评(上)</a><a class="item" href="https://www.bilibili.com/video/BV1Q54y1H7CR" target="_blank" data-domain="bilibili.com" title="灶猫TP测评(下)">灶猫TP测评(下)</a></div></div><div class="cat-sub" id="cat-4"><h3 class="cat-sub-title">Titan</h3><div class="grid"><a class="item" href="https://u.jd.com/rM2CmYK" target="_blank" data-domain="u.jd.com" title="京东官方下单">京东官方下单</a><a class="item" href="http://www.unihertz.cc/?product=unihertz-titan" target="_blank" data-domain="unihertz.cc" title="官方参数及介绍">官方参数及介绍</a><a class="item" href="https://www.kickstarter.com/projects/jellyphone/titan-unihertz-rugged-qwerty-smartphone?ref=discovery&amp;term=titan" target="_blank" data-domain="kickstarter.com" title="众筹介绍">众筹介绍</a><a class="item" href="https://u.jd.com/rd2wBkC" target="_blank" data-domain="u.jd.com" title="保护壳京东下单地址">保护壳京东下单地址</a><a class="item" href="https://tieba.baidu.com/p/6806293641" target="_blank" data-domain="tieba.baidu.com" title="Root方法">Root方法</a></div></div><div class="cat-sub" id="cat-5"><h3 class="cat-sub-title">使用技巧</h3><div class="grid"><a class="item" href="https://pinran.net/unihertz/manual_book/Titan%20pocket%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8CV2.pdf" target="_blank" data-domain="pinran.net" title="官方使用说明书">官方使用说明书</a><a class="item" href="https://mp.weixin.qq.com/s/1hHqm1pC-wqUIdFZq0ikcg" target="_blank" data-domain="mp.weixin.qq.com" title="TP键盘使用说明">TP键盘使用说明</a><a class="item" href="https://zhuanlan.zhihu.com/p/412995529" target="_blank" data-domain="zhuanlan.zhihu.com" title="关闭Google助理">关闭Google助理</a><a class="item" href="https://zhuanlan.zhihu.com/p/420271804" target="_blank" data-domain="zhuanlan.zhihu.com" title="设置Home键功能">设置Home键功能</a><a class="item" href="https://zhuanlan.zhihu.com/p/413002264" target="_blank" data-domain="zhuanlan.zhihu.com" title="隐藏输入法切换栏黑边">隐藏输入法切换栏黑边</a><a class="item" href="https://zhuanlan.zhihu.com/p/413009524" target="_blank" data-domain="zhuanlan.zhihu.com" title="省电，降伏流氓软件">省电，降伏流氓软件</a><a class="item" href="https://zhuanlan.zhihu.com/p/413006826" target="_blank" data-domain="zhuanlan.zhihu.com" title="增强拍照体验">增强拍照体验</a><a class="item" href="https://zhuanlan.zhihu.com/p/413015793" target="_blank" data-domain="zhuanlan.zhihu.com" title="讯飞最优设置方案">讯飞最优设置方案</a><a class="item" href="https://zhuanlan.zhihu.com/p/413017631" target="_blank" data-domain="zhuanlan.zhihu.com" title="设置一键启动">设置一键启动</a><a class="item" href="https://mp.weixin.qq.com/s/2m7eZIlNM6gNQHg5H3CJNA" target="_blank" data-domain="mp.weixin.qq.com" title="区分双卡来电设置">区分双卡来电设置</a><a class="item" href="https://zhuanlan.zhihu.com/p/409288983" target="_blank" data-domain="zhuanlan.zhihu.com" title="获取ROOT权限">获取ROOT权限</a><a class="item" href="https://zhuanlan.zhihu.com/p/413347009" target="_blank" data-domain="zhuanlan.zhihu.com" title="ROOT后升级方法">ROOT后升级方法</a></div></div><div class="cat-sub" id="cat-6"><h3 class="cat-sub-title">安卓资源</h3><div class="grid"><a class="item" href="https://play.google.com" target="_blank" data-domain="play.google.com" title="Google Play">Google Play</a><a class="item" href="https://www.wandoujia.com/category/app" target="_blank" data-domain="wandoujia.com" title="豌豆荚">豌豆荚</a><a class="item" href="https://sj.qq.com/myapp/" target="_blank" data-domain="sj.qq.com" title="腾讯应用宝">腾讯应用宝</a><a class="item" href="https://www.coolapk.com/apk/" target="_blank" data-domain="coolapk.com" title="酷安">酷安</a><a class="item" href="https://apk-dl.com/" target="_blank" data-domain="apk-dl.com" title="APK-DL">APK-DL</a><a class="item" href="http://www.apkmirror.com" target="_blank" data-domain="apkmirror.com" title="APKMirror">APKMirror</a><a class="item" href="https://apkpure.com" target="_blank" data-domain="apkpure.com" title="APKPure">APKPure</a><a class="item" href="https://f-droid.org" target="_blank" data-domain="f-droid.org" title="F-Droid">F-Droid</a></div></div><div class="cat-sub" id="cat-7"><h3 class="cat-sub-title">机友交流</h3><div class="grid"><a class="item" href="https://qm.qq.com/cgi-bin/qm/qr?k=DDduO8C6s791uioxR5K0LftyXuXyt-bM&amp;jump_from=webapi" target="_blank" data-domain="qm.qq.com" title="154816837(QQ群)">154816837(QQ群)</a><a class="item" href="http://img.xiaolvji.com/QQ%E5%9B%BE%E7%89%8720210923142812.png" target="_blank" data-domain="img.xiaolvji.com" title="微信玩机群">微信玩机群</a></div></div><div class="cat-sub" id="cat-8"><h3 class="cat-sub-title">APP下载</h3><div class="grid"><a class="item" href="https://cocozq.com/?p=580" target="_blank" data-domain="cocozq.com" title="可可输入法">可可输入法</a><a class="item" href="https://share.weiyun.com/6FnK0krX" target="_blank" data-domain="share.weiyun.com" title="365日历">365日历</a><a class="item" href="https://share.weiyun.com/TUgU2PJK" target="_blank" data-domain="share.weiyun.com" title="李跳跳">李跳跳</a><a class="item" href="https://share.weiyun.com/lD7MsYCT" target="_blank" data-domain="share.weiyun.com" title="图库精简版">图库精简版</a><a class="item" href="https://share.weiyun.com/dI02kXlO" target="_blank" data-domain="share.weiyun.com" title="Accu​Battery">Accu​Battery</a><a class="item" href="https://share.weiyun.com/ASbcWYwZ" target="_blank" data-domain="share.weiyun.com" title="AlReader">AlReader</a><a class="item" href="https://share.weiyun.com/bM4fKqVf" target="_blank" data-domain="share.weiyun.com" title="Bluetooth Keyboard &amp; Mouse">Bluetooth Keyboard &amp; Mouse</a><a class="item" href="https://share.weiyun.com/FeQfI4na" target="_blank" data-domain="share.weiyun.com" title="Chrome">Chrome</a><a class="item" href="https://share.weiyun.com/YtzptRAh" target="_blank" data-domain="share.weiyun.com" title="Cx FileExplorer">Cx FileExplorer</a><a class="item" href="https://share.weiyun.com/h8waQYcO" target="_blank" data-domain="share.weiyun.com" title="Dynalist">Dynalist</a><a class="item" href="https://share.weiyun.com/JTl6hyPN" target="_blank" data-domain="share.weiyun.com" title="Edge">Edge</a><a class="item" href="https://share.weiyun.com/haMkA1F8" target="_blank" data-domain="share.weiyun.com" title="FeedMe">FeedMe</a><a class="item" href="https://share.weiyun.com/1UlPRy70" target="_blank" data-domain="share.weiyun.com" title="Fluid Navigation Gestures">Fluid Navigation Gestures</a><a class="item" href="https://share.weiyun.com/fvcZnsNl" target="_blank" data-domain="share.weiyun.com" title="免费分身应用">免费分身应用</a><a class="item" href="https://share.weiyun.com/rkuUGyyc" target="_blank" data-domain="share.weiyun.com" title="KeePassDX">KeePassDX</a><a class="item" href="https://share.weiyun.com/YrZzIegA" target="_blank" data-domain="share.weiyun.com" title="Primitive FTPd">Primitive FTPd</a><a class="item" href="https://share.weiyun.com/Uk1NaBSH" target="_blank" data-domain="share.weiyun.com" title="Office">Office</a><a class="item" href="https://share.weiyun.com/ONpUKE93" target="_blank" data-domain="share.weiyun.com" title="Open Camera">Open Camera</a><a class="item" href="https://share.weiyun.com/vMnyiCLb" target="_blank" data-domain="share.weiyun.com" title="照片扫描仪">照片扫描仪</a><a class="item" href="https://share.weiyun.com/01uDrSwU" target="_blank" data-domain="share.weiyun.com" title="Samsung Max">Samsung Max</a><a class="item" href="https://share.weiyun.com/u3UkZeVB" target="_blank" data-domain="share.weiyun.com" title="Total Commander">Total Commander</a><a class="item" href="https://share.weiyun.com/jGqN0Ghk" target="_blank" data-domain="share.weiyun.com" title="Vivaldi">Vivaldi</a><a class="item" href="https://share.weiyun.com/Rqz7y1Fs" target="_blank" data-domain="share.weiyun.com" title="VLC">VLC</a><a class="item" href="https://share.weiyun.com/FJLkf6Th" target="_blank" data-domain="share.weiyun.com" title="Yahoo天气">Yahoo天气</a><a class="item" href="https://share.weiyun.com/GNLB7ujy" target="_blank" data-domain="share.weiyun.com" title="ZArchiver">ZArchiver</a></div></div><div class="cat-sub" id="cat-9"><h3 class="cat-sub-title">APP下载</h3><div class="grid"><a class="item" href="https://play.google.com/store/apps/details?id=com.yahoo.mobile.client.android.weather" target="_blank" data-domain="play.google.com" title="Yahoo天气">Yahoo天气</a><a class="item" href="https://play.google.com/store/apps/details?id=com.google.android.apps.photosgo" target="_blank" data-domain="play.google.com" title="图库精简版">图库精简版</a><a class="item" href="https://play.google.com/store/apps/details?id=com.google.android.apps.photos.scanner" target="_blank" data-domain="play.google.com" title="照片扫描仪">照片扫描仪</a><a class="item" href="https://play.google.com/store/apps/details?id=com.android.chrome" target="_blank" data-domain="play.google.com" title="Chrome">Chrome</a><a class="item" href="https://play.google.com/store/apps/details?id=com.vivaldi.browser" target="_blank" data-domain="play.google.com" title="Vivaldi">Vivaldi</a><a class="item" href="https://play.google.com/store/apps/details?id=com.microsoft.emmx" target="_blank" data-domain="play.google.com" title="Edge">Edge</a><a class="item" href="https://play.google.com/store/apps/details?id=com.oasisfeng.island" target="_blank" data-domain="play.google.com" title="Island(炼妖壶)">Island(炼妖壶)</a><a class="item" href="https://play.google.com/store/apps/details?id=com.seazon.feedme" target="_blank" data-domain="play.google.com" title="FeedMe">FeedMe</a><a class="item" href="https://play.google.com/store/apps/details?id=com.ghisler.android.TotalCommander" target="_blank" data-domain="play.google.com" title="Total Commander">Total Commander</a><a class="item" href="https://play.google.com/store/apps/details?id=com.cxinventor.file.explorer" target="_blank" data-domain="play.google.com" title="Cx FileExplorer">Cx FileExplorer</a><a class="item" href="https://play.google.com/store/apps/details?id=ru.zdevs.zarchiver" target="_blank" data-domain="play.google.com" title="ZArchiver">ZArchiver</a><a class="item" href="https://play.google.com/store/apps/details?id=net.sourceforge.opencamera" target="_blank" data-domain="play.google.com" title="Open Camera">Open Camera</a><a class="item" href="https://play.google.com/store/apps/details?id=com.microsoft.office.officehubrow" target="_blank" data-domain="play.google.com" title="Office">Office</a><a class="item" href="https://play.google.com/store/apps/details?id=io.dynalist" target="_blank" data-domain="play.google.com" title="Dynalist">Dynalist</a><a class="item" href="https://play.google.com/store/apps/details?id=com.neverland.alreader" target="_blank" data-domain="play.google.com" title="AlReader">AlReader</a><a class="item" href="https://play.google.com/store/apps/details?id=org.videolan.vlc" target="_blank" data-domain="play.google.com" title="VLC">VLC</a><a class="item" href="https://play.google.com/store/apps/details?id=com.fb.fluid" target="_blank" data-domain="play.google.com" title="Fluid Navigation Gestures">Fluid Navigation Gestures</a><a class="item" href="https://play.google.com/store/apps/details?id=com.digibites.accubattery" target="_blank" data-domain="play.google.com" title="Accu​Battery">Accu​Battery</a><a class="item" href="https://play.google.com/store/apps/details?id=com.kunzisoft.keepass.free" target="_blank" data-domain="play.google.com" title="KeePassDX">KeePassDX</a><a class="item" href="https://play.google.com/store/apps/details?id=io.appground.blek" target="_blank" data-domain="play.google.com" title="Bluetooth Keyboard &amp; Mouse">Bluetooth Keyboard &amp; Mouse</a><a class="item" href="https://play.google.com/store/apps/details?id=com.aaronjwood.portauthority.free" target="_blank" data-domain="play.google.com" title="Port Authority">Port Authority</a><a class="item" href="https://play.google.com/store/apps/details?id=org.primftpd" target="_blank" data-domain="play.google.com" title="Primitive FTPd">Primitive FTPd</a></div></div><div class="cat-sub" id="cat-10"><h3 class="cat-sub-title">国内APP官网</h3><div class="grid"><a class="item" href="https://cocozq.com/?p=580" target="_blank" data-domain="cocozq.com" title="可可输入法">可可输入法</a><a class="item" href="https://srf.xunfei.cn" target="_blank" data-domain="srf.xunfei.cn" title="讯飞输入法">讯飞输入法</a><a class="item" href="https://weixin.qq.com/" target="_blank" data-domain="weixin.qq.com" title="微信">微信</a><a class="item" href="https://im.qq.com/download" target="_blank" data-domain="im.qq.com" title="QQ">QQ</a><a class="item" href="https://www.ideanote.cc" target="_blank" data-domain="ideanote.cc" title="Idea Note">Idea Note</a><a class="item" href="http://www.365rili.com" target="_blank" data-domain="365rili.com" title="365日历">365日历</a><a class="item" href="https://mubu.com/apps" target="_blank" data-domain="mubu.com" title="幕布">幕布</a><a class="item" href="https://www.zhihu.com/app/" target="_blank" data-domain="zhihu.com" title="知乎">知乎</a><a class="item" href="https://island.oasisfeng.com" target="_blank" data-domain="island.oasisfeng.com" title="Island(炼妖壶)">Island(炼妖壶)</a><a class="item" href="https://www.amap.com/" target="_blank" data-domain="amap.com" title="高德地图">高德地图</a><a class="item" href="https://pan.baidu.com/" target="_blank" data-domain="pan.baidu.com" title="百度网盘">百度网盘</a><a class="item" href="https://y.qq.com/download/" target="_blank" data-domain="y.qq.com" title="QQ音乐">QQ音乐</a><a class="item" href="https://music.163.com/#/download" target="_blank" data-domain="music.163.com" title="网易云音乐">网易云音乐</a><a class="item" href="https://www.alipay.com" target="_blank" data-domain="alipay.com" title="支付宝">支付宝</a><a class="item" href="https://market.m.taobao.com/app/fdilab/download-page/main/index.html" target="_blank" data-domain="market.m.taobao.com" title="淘宝">淘宝</a><a class="item" href="https://www.tmall.com/wow/portal/act/app-download" target="_blank" data-domain="tmall.com" title="天猫">天猫</a><a class="item" href="https://2.taobao.com/" target="_blank" data-domain="2.taobao.com" title="闲鱼">闲鱼</a><a class="item" href="https://app.jd.com/" target="_blank" data-domain="app.jd.com" title="京东">京东</a><a class="item" href="https://www.pinduoduo.com/home/download/" target="_blank" data-domain="pinduoduo.com" title="拼多多">拼多多</a><a class="item" href="https://i.meituan.com/mobile/down/meituan" target="_blank" data-domain="i.meituan.com" title="美团">美团</a><a class="item" href="https://www.yangshipin.cn/" target="_blank" data-domain="yangshipin.cn" title="央视频">央视频</a><a class="item" href="https://v.qq.com/download.html#Android" target="_blank" data-domain="v.qq.com" title="腾讯视频">腾讯视频</a><a class="item" href="https://app.bilibili.com/" target="_blank" data-domain="app.bilibili.com" title="BiliBili">BiliBili</a><a class="item" href="http://www.douyin.com" target="_blank" data-domain="douyin.com" title="抖音">抖音</a><a class="item" href="http://www.iqiyi.com" target="_blank" data-domain="iqiyi.com" title="爱奇艺">爱奇艺</a><a class="item" href="https://pd.youku.com/" target="_blank" data-domain="pd.youku.com" title="优酷">优酷</a><a class="item" href="https://www.coolapk.com/" target="_blank" data-domain="coolapk.com" title="酷安">酷安</a></div></div><div class="cat-sub" id="cat-11"><h3 class="cat-sub-title">国外APP官网</h3><div class="grid"><a class="item" href="http://mobile.yahoo.com/weather/" target="_blank" data-domain="mobile.yahoo.com" title="Yahoo天气">Yahoo天气</a><a class="item" href="http://www.google.com/chrome/android" target="_blank" data-domain="google.com" title="Chrome">Chrome</a><a class="item" href="https://vivaldi.com/zh-hans/android/" target="_blank" data-domain="vivaldi.com" title="Vivaldi浏览器">Vivaldi浏览器</a><a class="item" href="https://www.microsoft.com/zh-cn/edge#platform" target="_blank" data-domain="microsoft.com" title="Edge">Edge</a><a class="item" href="https://github.com/seazon/FeedMe" target="_blank" data-domain="github.com" title="FeedMe">FeedMe</a><a class="item" href="https://www.ghisler.com/android.htm" target="_blank" data-domain="ghisler.com" title="Total Commander">Total Commander</a><a class="item" href="http://zdevs.ru/" target="_blank" data-domain="zdevs.ru" title="ZArchiver">ZArchiver</a><a class="item" href="https://opencamera.org.uk/" target="_blank" data-domain="opencamera.org.uk" title="Open Camera">Open Camera</a><a class="item" href="https://www.microsoft.com/zh-cn/microsoft-365/mobile/microsoft-365-mobile-apps-for-android" target="_blank" data-domain="microsoft.com" title="Office">Office</a><a class="item" href="https://dynalist.io" target="_blank" data-domain="dynalist.io" title="Dynalist">Dynalist</a><a class="item" href="http://www.videolan.org/" target="_blank" data-domain="videolan.org" title="VLC">VLC</a><a class="item" href="http://alreader.com/?lang=en" target="_blank" data-domain="alreader.com" title="AlReader">AlReader</a><a class="item" href="http://www.accubatteryapp.com/" target="_blank" data-domain="accubatteryapp.com" title="Accu​Battery">Accu​Battery</a><a class="item" href="https://www.keepassdx.com/" target="_blank" data-domain="keepassdx.com" title="KeePassDX">KeePassDX</a><a class="item" href="https://github.com/aaronjwood/PortAuthority" target="_blank" data-domain="github.com" title="Port Authority">Port Authority</a><a class="item" href="https://github.com/splondike/polipoid" target="_blank" data-domain="github.com" title="Polipoid">Polipoid</a><a class="item" href="https://github.com/wolpi/prim-ftpd" target="_blank" data-domain="github.com" title="Primitive FTPd">Primitive FTPd</a></div></div></section>
+</main>
+
+<footer>Copyright © 2026 · All Rights Reserved</footer>
+
+<!-- 一键置顶 -->
+<button id="back-top" title="回到顶部">↑</button>
+
+<script>
+var CAT_TREE = [{"id": 1, "name": "效率集 · titan", "children": [{"id": 2, "name": "Titan Slim", "children": []}, {"id": 3, "name": "Titan Pocket", "children": []}, {"id": 4, "name": "Titan", "children": []}, {"id": 5, "name": "使用技巧", "children": []}, {"id": 6, "name": "安卓资源", "children": []}, {"id": 7, "name": "机友交流", "children": []}, {"id": 8, "name": "APP下载", "children": []}, {"id": 9, "name": "APP下载", "children": []}, {"id": 10, "name": "国内APP官网", "children": []}, {"id": 11, "name": "国外APP官网", "children": []}]}];
+
+// 20 个搜索引擎（默认必应）
+var ENGINES = [{"name": "必应", "url": "https://www.bing.com/search?q="}, {"name": "百度", "url": "https://www.baidu.com/s?wd="}, {"name": "谷歌", "url": "https://www.google.com/search?q="}, {"name": "搜狗", "url": "https://www.sogou.com/web?query="}, {"name": "360搜索", "url": "https://www.so.com/s?q="}, {"name": "神马", "url": "https://m.sm.cn/s?q="}, {"name": "夸克", "url": "https://quark.sm.cn/s?q="}, {"name": "头条", "url": "https://so.toutiao.com/search?dvpf=pc&source=input&q="}, {"name": "B站", "url": "https://search.bilibili.com/all?keyword="}, {"name": "知乎", "url": "https://www.zhihu.com/search?type=content&q="}, {"name": "微信", "url": "https://weixin.sogou.com/weixin?type=2&query="}, {"name": "抖音", "url": "https://www.douyin.com/search/"}, {"name": "DuckDuckGo", "url": "https://duckduckgo.com/?q="}, {"name": "Yandex", "url": "https://yandex.com/search/?text="}, {"name": "Startpage", "url": "https://www.startpage.com/sp/search?query="}, {"name": "Google学术", "url": "https://scholar.google.com/scholar?q="}, {"name": "PubMed", "url": "https://pubmed.ncbi.nlm.nih.gov/?term="}, {"name": "知网CNKI", "url": "https://kns.cnki.net/kns8s/defaultresult/index?korder=SU&kw="}, {"name": "万方", "url": "https://s.wanfangdata.com.cn/paper?q="}, {"name": "维普", "url": "https://qikan.cqvip.com/Qikan/Search/Index?key="}];
+
+try {
+  (function () {
+    var d = new Date();
+    var week = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    var el = document.getElementById('date');
+    if (el) el.textContent = d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 ' + week[d.getDay()];
+  })();
+} catch(e) {}
+
+document.addEventListener('DOMContentLoaded', function () {
+  // ===== 搜索引擎初始化 =====
+  var engSel = document.getElementById('search-engine');
+  var engInput = document.getElementById('search-input');
+  var btnSearch = document.getElementById('btn-search');
+  var engIndex = 0; // 默认必应
+  for (var ei = 0; ei < ENGINES.length; ei++) {
+    var op = document.createElement('option');
+    op.value = ei;
+    op.textContent = ENGINES[ei].name;
+    if (ENGINES[ei].name === '必应') engIndex = ei;
+    engSel.appendChild(op);
+  }
+  engSel.value = engIndex;
+  engSel.addEventListener('change', function () { engIndex = parseInt(this.value); });
+
+  function doSearch() {
+    var kw = engInput.value.trim();
+    if (!kw) return;
+    window.open(ENGINES[engIndex].url + encodeURIComponent(kw), '_blank');
+  }
+  btnSearch.addEventListener('click', doSearch);
+  engInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') doSearch(); });
+
+  // ===== 站内实时过滤 =====
+  var allItems = document.querySelectorAll('.item');
+  var allText = [];
+  for (var ai = 0; ai < allItems.length; ai++) {
+    allText.push((allItems[ai].textContent || '').toLowerCase());
+  }
+  engInput.addEventListener('input', function () {
+    var kw = this.value.trim().toLowerCase();
+    var matched = 0;
+    for (var bi = 0; bi < allItems.length; bi++) {
+      var show = !kw || allText[bi].indexOf(kw) >= 0;
+      allItems[bi].style.display = show ? '' : 'none';
+      if (show) matched++;
+    }
+    // 关键词变化时隐藏空分类（多级容器一并处理）
+    var containers = document.querySelectorAll('section.cat, div.cat-sub, div.cat-sub-sub');
+    for (var ci = 0; ci < containers.length; ci++) {
+      var visible = containers[ci].querySelectorAll('.item[style=""]').length;
+      containers[ci].style.display = (!kw || visible > 0) ? '' : 'none';
+    }
+  });
+
+  // ===== 一键置顶 =====
+  var backTop = document.getElementById('back-top');
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 300) backTop.classList.add('show');
+    else backTop.classList.remove('show');
+  });
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  var panel = document.getElementById('nav-panel');
+  var l1s = document.querySelectorAll('.nav-l1');
+  var currentId = l1s.length ? parseInt(l1s[0].getAttribute('data-id')) : 0;
+
+  function renderPanel(id) {
+    var node = null;
+    for (var i = 0; i < CAT_TREE.length; i++) { if (CAT_TREE[i].id === id) { node = CAT_TREE[i]; break; } }
+    if (!node) { panel.innerHTML = ''; return; }
+    var html = '';
+    if (node.children.length === 0) {
+      html = '<span style="color:#a8b8d4;font-size:12px;padding:3px 8px;">该分类无子分类</span>';
+    }
+    for (var j = 0; j < node.children.length; j++) {
+      var kid = node.children[j];
+      html += '<a class="nav-l2" href="#cat-' + kid.id + '">' + kid.name + '</a>';
+      if (kid.children.length > 0) {
+        html += '<span class="nav-sep">›</span>';
+        for (var k = 0; k < kid.children.length; k++) {
+          html += '<a class="nav-l3" href="#cat-' + kid.children[k].id + '">' + kid.children[k].name + '</a>';
+        }
+      }
+      html += '<span class="nav-sep">|</span>';
+    }
+    panel.innerHTML = html;
+  }
+
+  for (var i = 0; i < l1s.length; i++) {
+    l1s[i].addEventListener('click', function (e) {
+      var id = parseInt(this.getAttribute('data-id'));
+      currentId = id;
+      for (var j = 0; j < l1s.length; j++) l1s[j].classList.remove('active');
+      this.classList.add('active');
+      renderPanel(id);
+    });
+  }
+
+  if (l1s.length > 0) { l1s[0].classList.add('active'); renderPanel(currentId); }
+
+  var sectionsAll = document.querySelectorAll('section.cat');
+  window.addEventListener('scroll', function () {
+    var pos = window.scrollY + 130;
+    var current = null;
+    for (var i = 0; i < sectionsAll.length; i++) {
+      if (sectionsAll[i].offsetTop <= pos) current = sectionsAll[i];
+    }
+    if (current) {
+      var cid = parseInt(current.id.replace('cat-', ''));
+      for (var j = 0; j < l1s.length; j++) {
+        var lid = parseInt(l1s[j].getAttribute('data-id'));
+        if (lid === cid) { l1s[j].classList.add('active'); if (currentId !== cid) { currentId = cid; renderPanel(cid); } }
+        else { l1s[j].classList.remove('active'); }
+      }
+    }
+  });
+
+  // ===== favicon 自动获取：favicon.im 优先 -> 多源回退 -> 字母头像 =====
+  var APIS = [
+    function (d) { return 'https://favicon.im/' + d; },
+    function (d) { return 'https://api.xinac.net/icon/?url=' + d; },
+    function (d) { return 'https://www.favicon.vip/get.php?url=' + d; },
+    function (d) { return 'https://cn.cravatar.com/favicon/api/index.php?url=' + d; },
+    function (d) { return 'https://favicon.baidu.com/favicon?site=' + d; }
+  ];
+  var TIMEOUTS = [8000, 5000, 5000, 5000, 5000];
+  function getDomain(url) {
+    try { return new URL(url.startsWith('http') ? url : 'https://' + url).hostname; }
+    catch (e) { return ''; }
+  }
+  function colorFrom(s) {
+    var h = 0, str = String(s || '');
+    for (var i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) % 360;
+    return 'hsl(' + h + ', 65%, 52%)';
+  }
+  function makeFallback(title) {
+    var s = document.createElement('span');
+    s.textContent = (title.trim().charAt(0) || '?').toUpperCase();
+    s.className = 'fallback-letter';
+    s.style.background = colorFrom(title);
+    return s;
+  }
+  function tryNext(img, domain, title, idx) {
+    if (idx >= APIS.length) { img.replaceWith(makeFallback(title)); return; }
+    var timer = setTimeout(function () { tryNext(img, domain, title, idx + 1); }, TIMEOUTS[idx]);
+    img.onload = function () { clearTimeout(timer); };
+    img.onerror = function () { clearTimeout(timer); tryNext(img, domain, title, idx + 1); };
+    img.src = APIS[idx](domain);
+  }
+  function addFavicon(a, title) {
+    var domain = a.getAttribute('data-domain') || getDomain(a.getAttribute('href') || '');
+    if (!domain) return;
+    var img = document.createElement('img');
+    img.alt = title; img.loading = 'lazy';
+    tryNext(img, domain, title, 0);
+    a.insertBefore(img, a.firstChild);
+  }
+  var items = document.querySelectorAll('.item');
+  for (var i = 0; i < items.length; i++) {
+    var a = items[i];
+    var title = a.getAttribute('title') || a.textContent.trim();
+    if (a.querySelector('img')) continue;
+    addFavicon(a, title);
+  }
+});
+</script>
+</body>
+</html>

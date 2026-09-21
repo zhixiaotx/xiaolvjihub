@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>效率集 · 单页导航总览</title>
+<style>
+  *{box-sizing:border-box}
+  body{
+    margin:0;padding:24px;
+    font-family:system-ui,"Microsoft YaHei",sans-serif;
+    background:#0f1115;color:#e6e6e6;
+  }
+  .wrap{max-width:1400px;margin:0 auto}
+  h1{font-size:22px;margin:0 0 6px;letter-spacing:.5px}
+  h1 span{color:#7ee0a8}
+  .sum{color:#8ab4f8;font-size:13px;margin-bottom:16px}
+  .sum b{color:#e6e6e6}
+
+  .toolbar{
+    display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+    margin-bottom:18px;position:sticky;top:0;z-index:10;
+    background:#0f1115;padding:12px 0;
+    border-bottom:1px solid #1c212b;
+  }
+  input#q{
+    flex:1;min-width:220px;
+    background:#171c26;border:1px solid #2a2f3a;color:#e6e6e6;
+    padding:10px 14px;border-radius:10px;font-size:14px;outline:none;
+    transition:.15s;
+  }
+  input#q::placeholder{color:#5d6675}
+  input#q:focus{border-color:#7ee0a8;box-shadow:0 0 0 3px rgba(126,224,168,.08)}
+  .hint{font-size:12px;color:#8b93a3;white-space:nowrap}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+    gap:14px;
+  }
+
+  .card{
+    background:#171c26;border:1px solid #2a2f3a;border-radius:14px;
+    padding:16px;display:flex;flex-direction:column;gap:12px;
+    transition:transform .15s,border-color .15s,box-shadow .15s;
+  }
+  .card:hover{
+    transform:translateY(-2px);
+    border-color:#3a4657;
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+  }
+
+  .head{display:flex;align-items:center;gap:12px}
+  .avatar{
+    width:40px;height:40px;flex:0 0 40px;
+    display:flex;align-items:center;justify-content:center;
+    border-radius:11px;font-weight:700;font-size:17px;
+    background:rgba(126,224,168,.12);color:#7ee0a8;
+    border:1px solid rgba(126,224,168,.25);
+  }
+  .name{
+    font-size:15px;font-weight:600;color:#e6e6e6;
+    word-break:break-all;line-height:1.3;
+  }
+  .meta{font-size:12px;color:#8b93a3;margin-top:3px}
+  .meta b{color:#8ab4f8;font-weight:600}
+
+  .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+  .btn{
+    font-size:12px;padding:6px 10px;border-radius:8px;
+    background:#1e2532;color:#9fb0c7;text-decoration:none;
+    border:1px solid #2a2f3a;transition:.15s;white-space:nowrap;
+  }
+  .btn:hover{background:#26303f;color:#e6e6e6;border-color:#3a4657}
+  .btn.primary{
+    flex:1 0 100%;text-align:center;
+    background:#143324;color:#7ee0a8;border-color:#1f5c3f;
+    font-weight:600;padding:8px 10px;
+  }
+  .btn.primary:hover{background:#1a4530;color:#a6ffcb}
+
+  #empty{display:none;text-align:center;color:#8b93a3;padding:48px 0;font-size:14px}
+
+  .foot{margin-top:28px;font-size:12px;color:#5d6675;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>效率集 · <span>单页导航总览</span></h1>
+  <div class="sum">
+    共 <b>33</b> 个用户 · 累计站点 <b>14364</b> 个 · 文件夹 <b>699</b> 个 ·
+    每个用户 5 件套：数据(json/csv/xlsx) / 书签(html) / 单页导航(html)
+  </div>
+
+  <div class="toolbar">
+    <input id="q" type="text" placeholder="搜索用户名 / 站点数 / 文件夹数…" autocomplete="off">
+    <span class="hint">点击「单页导航」进入该用户导航页</span>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <div class="card" data-search="ljyandlwl 1007 34">
+      <div class="head">
+        <span class="avatar">L</span>
+        <div>
+          <div class="name">ljyandlwl</div>
+          <div class="meta"><b>1007</b> 站点 · <b>34</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="ljyandlwl.html">单页导航 →</a>
+        <a class="btn" href="xiaolvji_nested.json">JSON</a>
+        <a class="btn" href="xiaolvji_nested.csv">CSV</a>
+        <a class="btn" href="xiaolvji_nested.xlsx">XLSX</a>
+        <a class="btn" href="xiaolvji_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="lhw12345678 643 45">
+      <div class="head">
+        <span class="avatar">L</span>
+        <div>
+          <div class="name">lhw12345678</div>
+          <div class="meta"><b>643</b> 站点 · <b>45</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="lhw12345678.html">单页导航 →</a>
+        <a class="btn" href="lhw12345678_nested.json">JSON</a>
+        <a class="btn" href="lhw12345678_nested.csv">CSV</a>
+        <a class="btn" href="lhw12345678_nested.xlsx">XLSX</a>
+        <a class="btn" href="lhw12345678_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="leviathan 432 25">
+      <div class="head">
+        <span class="avatar">L</span>
+        <div>
+          <div class="name">leviathan</div>
+          <div class="meta"><b>432</b> 站点 · <b>25</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="leviathan.html">单页导航 →</a>
+        <a class="btn" href="leviathan_nested.json">JSON</a>
+        <a class="btn" href="leviathan_nested.csv">CSV</a>
+        <a class="btn" href="leviathan_nested.xlsx">XLSX</a>
+        <a class="btn" href="leviathan_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="zhaohui 360 29">
+      <div class="head">
+        <span class="avatar">Z</span>
+        <div>
+          <div class="name">zhaohui</div>
+          <div class="meta"><b>360</b> 站点 · <b>29</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="zhaohui.html">单页导航 →</a>
+        <a class="btn" href="zhaohui_nested.json">JSON</a>
+        <a class="btn" href="zhaohui_nested.csv">CSV</a>
+        <a class="btn" href="zhaohui_nested.xlsx">XLSX</a>
+        <a class="btn" href="zhaohui_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="2301908761 817 24">
+      <div class="head">
+        <span class="avatar">2</span>
+        <div>
+          <div class="name">2301908761</div>
+          <div class="meta"><b>817</b> 站点 · <b>24</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="2301908761.html">单页导航 →</a>
+        <a class="btn" href="2301908761_nested.json">JSON</a>
+        <a class="btn" href="2301908761_nested.csv">CSV</a>
+        <a class="btn" href="2301908761_nested.xlsx">XLSX</a>
+        <a class="btn" href="2301908761_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="wufeng 289 21">
+      <div class="head">
+        <span class="avatar">W</span>
+        <div>
+          <div class="name">wufeng</div>
+          <div class="meta"><b>289</b> 站点 · <b>21</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="wufeng.html">单页导航 →</a>
+        <a class="btn" href="wufeng_nested.json">JSON</a>
+        <a class="btn" href="wufeng_nested.csv">CSV</a>
+        <a class="btn" href="wufeng_nested.xlsx">XLSX</a>
+        <a class="btn" href="wufeng_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="waimao 30 4">
+      <div class="head">
+        <span class="avatar">W</span>
+        <div>
+          <div class="name">waimao</div>
+          <div class="meta"><b>30</b> 站点 · <b>4</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="waimao.html">单页导航 →</a>
+        <a class="btn" href="waimao_nested.json">JSON</a>
+        <a class="btn" href="waimao_nested.csv">CSV</a>
+        <a class="btn" href="waimao_nested.xlsx">XLSX</a>
+        <a class="btn" href="waimao_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="yongyuanshipengyou 1596 38">
+      <div class="head">
+        <span class="avatar">Y</span>
+        <div>
+          <div class="name">yongyuanshipengyou</div>
+          <div class="meta"><b>1596</b> 站点 · <b>38</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="yongyuanshipengyou.html">单页导航 →</a>
+        <a class="btn" href="yongyuanshipengyou_nested.json">JSON</a>
+        <a class="btn" href="yongyuanshipengyou_nested.csv">CSV</a>
+        <a class="btn" href="yongyuanshipengyou_nested.xlsx">XLSX</a>
+        <a class="btn" href="yongyuanshipengyou_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="cywang 891 29">
+      <div class="head">
+        <span class="avatar">C</span>
+        <div>
+          <div class="name">cywang</div>
+          <div class="meta"><b>891</b> 站点 · <b>29</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="cywang.html">单页导航 →</a>
+        <a class="btn" href="cywang_nested.json">JSON</a>
+        <a class="btn" href="cywang_nested.csv">CSV</a>
+        <a class="btn" href="cywang_nested.xlsx">XLSX</a>
+        <a class="btn" href="cywang_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="peixunshi 77 14">
+      <div class="head">
+        <span class="avatar">P</span>
+        <div>
+          <div class="name">peixunshi</div>
+          <div class="meta"><b>77</b> 站点 · <b>14</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="peixunshi.html">单页导航 →</a>
+        <a class="btn" href="peixunshi_nested.json">JSON</a>
+        <a class="btn" href="peixunshi_nested.csv">CSV</a>
+        <a class="btn" href="peixunshi_nested.xlsx">XLSX</a>
+        <a class="btn" href="peixunshi_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="researchtools 653 27">
+      <div class="head">
+        <span class="avatar">R</span>
+        <div>
+          <div class="name">researchtools</div>
+          <div class="meta"><b>653</b> 站点 · <b>27</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="researchtools.html">单页导航 →</a>
+        <a class="btn" href="researchtools_nested.json">JSON</a>
+        <a class="btn" href="researchtools_nested.csv">CSV</a>
+        <a class="btn" href="researchtools_nested.xlsx">XLSX</a>
+        <a class="btn" href="researchtools_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="daihuo 344 17">
+      <div class="head">
+        <span class="avatar">D</span>
+        <div>
+          <div class="name">daihuo</div>
+          <div class="meta"><b>344</b> 站点 · <b>17</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="daihuo.html">单页导航 →</a>
+        <a class="btn" href="daihuo_nested.json">JSON</a>
+        <a class="btn" href="daihuo_nested.csv">CSV</a>
+        <a class="btn" href="daihuo_nested.xlsx">XLSX</a>
+        <a class="btn" href="daihuo_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="tiantian 586 26">
+      <div class="head">
+        <span class="avatar">T</span>
+        <div>
+          <div class="name">tiantian</div>
+          <div class="meta"><b>586</b> 站点 · <b>26</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="tiantian.html">单页导航 →</a>
+        <a class="btn" href="tiantian_nested.json">JSON</a>
+        <a class="btn" href="tiantian_nested.csv">CSV</a>
+        <a class="btn" href="tiantian_nested.xlsx">XLSX</a>
+        <a class="btn" href="tiantian_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="cancerinfo 78 10">
+      <div class="head">
+        <span class="avatar">C</span>
+        <div>
+          <div class="name">cancerinfo</div>
+          <div class="meta"><b>78</b> 站点 · <b>10</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="cancerinfo.html">单页导航 →</a>
+        <a class="btn" href="cancerinfo_nested.json">JSON</a>
+        <a class="btn" href="cancerinfo_nested.csv">CSV</a>
+        <a class="btn" href="cancerinfo_nested.xlsx">XLSX</a>
+        <a class="btn" href="cancerinfo_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="mlmism 147 22">
+      <div class="head">
+        <span class="avatar">M</span>
+        <div>
+          <div class="name">mlmism</div>
+          <div class="meta"><b>147</b> 站点 · <b>22</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="mlmism.html">单页导航 →</a>
+        <a class="btn" href="mlmism_nested.json">JSON</a>
+        <a class="btn" href="mlmism_nested.csv">CSV</a>
+        <a class="btn" href="mlmism_nested.xlsx">XLSX</a>
+        <a class="btn" href="mlmism_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="spatialtranscriptome 157 19">
+      <div class="head">
+        <span class="avatar">S</span>
+        <div>
+          <div class="name">spatialtranscriptome</div>
+          <div class="meta"><b>157</b> 站点 · <b>19</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="spatialtranscriptome.html">单页导航 →</a>
+        <a class="btn" href="spatialtranscriptome_nested.json">JSON</a>
+        <a class="btn" href="spatialtranscriptome_nested.csv">CSV</a>
+        <a class="btn" href="spatialtranscriptome_nested.xlsx">XLSX</a>
+        <a class="btn" href="spatialtranscriptome_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="communism 111 9">
+      <div class="head">
+        <span class="avatar">C</span>
+        <div>
+          <div class="name">communism</div>
+          <div class="meta"><b>111</b> 站点 · <b>9</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="communism.html">单页导航 →</a>
+        <a class="btn" href="communism_nested.json">JSON</a>
+        <a class="btn" href="communism_nested.csv">CSV</a>
+        <a class="btn" href="communism_nested.xlsx">XLSX</a>
+        <a class="btn" href="communism_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="qingyuntian 147 17">
+      <div class="head">
+        <span class="avatar">Q</span>
+        <div>
+          <div class="name">qingyuntian</div>
+          <div class="meta"><b>147</b> 站点 · <b>17</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="qingyuntian.html">单页导航 →</a>
+        <a class="btn" href="qingyuntian_nested.json">JSON</a>
+        <a class="btn" href="qingyuntian_nested.csv">CSV</a>
+        <a class="btn" href="qingyuntian_nested.xlsx">XLSX</a>
+        <a class="btn" href="qingyuntian_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="meitiren 140 16">
+      <div class="head">
+        <span class="avatar">M</span>
+        <div>
+          <div class="name">meitiren</div>
+          <div class="meta"><b>140</b> 站点 · <b>16</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="meitiren.html">单页导航 →</a>
+        <a class="btn" href="meitiren_nested.json">JSON</a>
+        <a class="btn" href="meitiren_nested.csv">CSV</a>
+        <a class="btn" href="meitiren_nested.xlsx">XLSX</a>
+        <a class="btn" href="meitiren_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="junwei 87 13">
+      <div class="head">
+        <span class="avatar">J</span>
+        <div>
+          <div class="name">junwei</div>
+          <div class="meta"><b>87</b> 站点 · <b>13</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="junwei.html">单页导航 →</a>
+        <a class="btn" href="junwei_nested.json">JSON</a>
+        <a class="btn" href="junwei_nested.csv">CSV</a>
+        <a class="btn" href="junwei_nested.xlsx">XLSX</a>
+        <a class="btn" href="junwei_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="titan 141 10">
+      <div class="head">
+        <span class="avatar">T</span>
+        <div>
+          <div class="name">titan</div>
+          <div class="meta"><b>141</b> 站点 · <b>10</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="titan.html">单页导航 →</a>
+        <a class="btn" href="titan_nested.json">JSON</a>
+        <a class="btn" href="titan_nested.csv">CSV</a>
+        <a class="btn" href="titan_nested.xlsx">XLSX</a>
+        <a class="btn" href="titan_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="fangzichang 111 4">
+      <div class="head">
+        <span class="avatar">F</span>
+        <div>
+          <div class="name">fangzichang</div>
+          <div class="meta"><b>111</b> 站点 · <b>4</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="fangzichang.html">单页导航 →</a>
+        <a class="btn" href="fangzichang_nested.json">JSON</a>
+        <a class="btn" href="fangzichang_nested.csv">CSV</a>
+        <a class="btn" href="fangzichang_nested.xlsx">XLSX</a>
+        <a class="btn" href="fangzichang_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="yanmulan 991 47">
+      <div class="head">
+        <span class="avatar">Y</span>
+        <div>
+          <div class="name">yanmulan</div>
+          <div class="meta"><b>991</b> 站点 · <b>47</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="yanmulan.html">单页导航 →</a>
+        <a class="btn" href="yanmulan_nested.json">JSON</a>
+        <a class="btn" href="yanmulan_nested.csv">CSV</a>
+        <a class="btn" href="yanmulan_nested.xlsx">XLSX</a>
+        <a class="btn" href="yanmulan_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="yzhrjd 205 13">
+      <div class="head">
+        <span class="avatar">Y</span>
+        <div>
+          <div class="name">yzhrjd</div>
+          <div class="meta"><b>205</b> 站点 · <b>13</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="yzhrjd.html">单页导航 →</a>
+        <a class="btn" href="yzhrjd_nested.json">JSON</a>
+        <a class="btn" href="yzhrjd_nested.csv">CSV</a>
+        <a class="btn" href="yzhrjd_nested.xlsx">XLSX</a>
+        <a class="btn" href="yzhrjd_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="taoxiangjiang 1044 49">
+      <div class="head">
+        <span class="avatar">T</span>
+        <div>
+          <div class="name">taoxiangjiang</div>
+          <div class="meta"><b>1044</b> 站点 · <b>49</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="taoxiangjiang.html">单页导航 →</a>
+        <a class="btn" href="taoxiangjiang_nested.json">JSON</a>
+        <a class="btn" href="taoxiangjiang_nested.csv">CSV</a>
+        <a class="btn" href="taoxiangjiang_nested.xlsx">XLSX</a>
+        <a class="btn" href="taoxiangjiang_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="pcsoftware 181 20">
+      <div class="head">
+        <span class="avatar">P</span>
+        <div>
+          <div class="name">pcsoftware</div>
+          <div class="meta"><b>181</b> 站点 · <b>20</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="pcsoftware.html">单页导航 →</a>
+        <a class="btn" href="pcsoftware_nested.json">JSON</a>
+        <a class="btn" href="pcsoftware_nested.csv">CSV</a>
+        <a class="btn" href="pcsoftware_nested.xlsx">XLSX</a>
+        <a class="btn" href="pcsoftware_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="bangong 37 6">
+      <div class="head">
+        <span class="avatar">B</span>
+        <div>
+          <div class="name">bangong</div>
+          <div class="meta"><b>37</b> 站点 · <b>6</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="bangong.html">单页导航 →</a>
+        <a class="btn" href="bangong_nested.json">JSON</a>
+        <a class="btn" href="bangong_nested.csv">CSV</a>
+        <a class="btn" href="bangong_nested.xlsx">XLSX</a>
+        <a class="btn" href="bangong_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="xianshi 47 4">
+      <div class="head">
+        <span class="avatar">X</span>
+        <div>
+          <div class="name">xianshi</div>
+          <div class="meta"><b>47</b> 站点 · <b>4</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="xianshi.html">单页导航 →</a>
+        <a class="btn" href="xianshi_nested.json">JSON</a>
+        <a class="btn" href="xianshi_nested.csv">CSV</a>
+        <a class="btn" href="xianshi_nested.xlsx">XLSX</a>
+        <a class="btn" href="xianshi_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="edcsion 121 10">
+      <div class="head">
+        <span class="avatar">E</span>
+        <div>
+          <div class="name">edcsion</div>
+          <div class="meta"><b>121</b> 站点 · <b>10</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="edcsion.html">单页导航 →</a>
+        <a class="btn" href="edcsion_nested.json">JSON</a>
+        <a class="btn" href="edcsion_nested.csv">CSV</a>
+        <a class="btn" href="edcsion_nested.xlsx">XLSX</a>
+        <a class="btn" href="edcsion_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="wesafe 108 15">
+      <div class="head">
+        <span class="avatar">W</span>
+        <div>
+          <div class="name">wesafe</div>
+          <div class="meta"><b>108</b> 站点 · <b>15</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="wesafe.html">单页导航 →</a>
+        <a class="btn" href="wesafe_nested.json">JSON</a>
+        <a class="btn" href="wesafe_nested.csv">CSV</a>
+        <a class="btn" href="wesafe_nested.xlsx">XLSX</a>
+        <a class="btn" href="wesafe_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="changyong 176 20">
+      <div class="head">
+        <span class="avatar">C</span>
+        <div>
+          <div class="name">changyong</div>
+          <div class="meta"><b>176</b> 站点 · <b>20</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="changyong.html">单页导航 →</a>
+        <a class="btn" href="changyong_nested.json">JSON</a>
+        <a class="btn" href="changyong_nested.csv">CSV</a>
+        <a class="btn" href="changyong_nested.xlsx">XLSX</a>
+        <a class="btn" href="changyong_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="yingshiziyuan 73 10">
+      <div class="head">
+        <span class="avatar">Y</span>
+        <div>
+          <div class="name">yingshiziyuan</div>
+          <div class="meta"><b>73</b> 站点 · <b>10</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="yingshiziyuan.html">单页导航 →</a>
+        <a class="btn" href="yingshiziyuan_nested.json">JSON</a>
+        <a class="btn" href="yingshiziyuan_nested.csv">CSV</a>
+        <a class="btn" href="yingshiziyuan_nested.xlsx">XLSX</a>
+        <a class="btn" href="yingshiziyuan_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+    <div class="card" data-search="anywhere 2537 52">
+      <div class="head">
+        <span class="avatar">A</span>
+        <div>
+          <div class="name">anywhere</div>
+          <div class="meta"><b>2537</b> 站点 · <b>52</b> 文件夹</div>
+        </div>
+      </div>
+      <div class="links">
+        <a class="btn primary" href="anywhere.html">单页导航 →</a>
+        <a class="btn" href="anywhere_nested.json">JSON</a>
+        <a class="btn" href="anywhere_nested.csv">CSV</a>
+        <a class="btn" href="anywhere_nested.xlsx">XLSX</a>
+        <a class="btn" href="anywhere_bookmarks.html">书签</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="empty">没有匹配的用户</div>
+
+  <div class="foot">效率集 xiaolvji.com · 单页导航总览 · 共 33 个用户 / 14364 个站点 / 699 个文件夹</div>
+
+</div>
+
+<script>
+  (function () {
+    var q = document.getElementById('q');
+    var cards = Array.prototype.slice.call(document.querySelectorAll('#grid .card'));
+    var empty = document.getElementById('empty');
+
+    q.addEventListener('input', function () {
+      var v = q.value.trim().toLowerCase();
+      var shown = 0;
+      cards.forEach(function (c) {
+        var hit = !v || (c.getAttribute('data-search') || '').indexOf(v) !== -1;
+        c.style.display = hit ? '' : 'none';
+        if (hit) shown++;
+      });
+      empty.style.display = shown ? 'none' : 'block';
+    });
+
+    // 按 Esc 清空搜索
+    q.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { q.value = ''; q.dispatchEvent(new Event('input')); }
+    });
+  })();
+</script>
+</body>
+</html>

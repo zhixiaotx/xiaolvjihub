@@ -1,0 +1,471 @@
+{
+  "generated_at": "2026-09-21 10:56:01",
+  "unique_users": 33,
+  "success_users": 33,
+  "total_sites": 14364,
+  "total_folders": 699,
+  "records": [
+    {
+      "user": "ljyandlwl",
+      "prefix": "xiaolvji",
+      "sites": 1007,
+      "folders": 34,
+      "files": [
+        "xiaolvji_nested.json",
+        "xiaolvji_nested.csv",
+        "xiaolvji_nested.xlsx",
+        "xiaolvji_bookmarks.html",
+        "xiaolvji_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "lhw12345678",
+      "prefix": "lhw12345678",
+      "sites": 643,
+      "folders": 45,
+      "files": [
+        "lhw12345678_nested.json",
+        "lhw12345678_nested.csv",
+        "lhw12345678_nested.xlsx",
+        "lhw12345678_bookmarks.html",
+        "lhw12345678_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "leviathan",
+      "prefix": "leviathan",
+      "sites": 432,
+      "folders": 25,
+      "files": [
+        "leviathan_nested.json",
+        "leviathan_nested.csv",
+        "leviathan_nested.xlsx",
+        "leviathan_bookmarks.html",
+        "leviathan_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "zhaohui",
+      "prefix": "zhaohui",
+      "sites": 360,
+      "folders": 29,
+      "files": [
+        "zhaohui_nested.json",
+        "zhaohui_nested.csv",
+        "zhaohui_nested.xlsx",
+        "zhaohui_bookmarks.html",
+        "zhaohui_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "2301908761",
+      "prefix": "2301908761",
+      "sites": 817,
+      "folders": 24,
+      "files": [
+        "2301908761_nested.json",
+        "2301908761_nested.csv",
+        "2301908761_nested.xlsx",
+        "2301908761_bookmarks.html",
+        "2301908761_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "wufeng",
+      "prefix": "wufeng",
+      "sites": 289,
+      "folders": 21,
+      "files": [
+        "wufeng_nested.json",
+        "wufeng_nested.csv",
+        "wufeng_nested.xlsx",
+        "wufeng_bookmarks.html",
+        "wufeng_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "waimao",
+      "prefix": "waimao",
+      "sites": 30,
+      "folders": 4,
+      "files": [
+        "waimao_nested.json",
+        "waimao_nested.csv",
+        "waimao_nested.xlsx",
+        "waimao_bookmarks.html",
+        "waimao_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "yongyuanshipengyou",
+      "prefix": "yongyuanshipengyou",
+      "sites": 1596,
+      "folders": 38,
+      "files": [
+        "yongyuanshipengyou_nested.json",
+        "yongyuanshipengyou_nested.csv",
+        "yongyuanshipengyou_nested.xlsx",
+        "yongyuanshipengyou_bookmarks.html",
+        "yongyuanshipengyou_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "cywang",
+      "prefix": "cywang",
+      "sites": 891,
+      "folders": 29,
+      "files": [
+        "cywang_nested.json",
+        "cywang_nested.csv",
+        "cywang_nested.xlsx",
+        "cywang_bookmarks.html",
+        "cywang_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "peixunshi",
+      "prefix": "peixunshi",
+      "sites": 77,
+      "folders": 14,
+      "files": [
+        "peixunshi_nested.json",
+        "peixunshi_nested.csv",
+        "peixunshi_nested.xlsx",
+        "peixunshi_bookmarks.html",
+        "peixunshi_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "researchtools",
+      "prefix": "researchtools",
+      "sites": 653,
+      "folders": 27,
+      "files": [
+        "researchtools_nested.json",
+        "researchtools_nested.csv",
+        "researchtools_nested.xlsx",
+        "researchtools_bookmarks.html",
+        "researchtools_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "daihuo",
+      "prefix": "daihuo",
+      "sites": 344,
+      "folders": 17,
+      "files": [
+        "daihuo_nested.json",
+        "daihuo_nested.csv",
+        "daihuo_nested.xlsx",
+        "daihuo_bookmarks.html",
+        "daihuo_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "tiantian",
+      "prefix": "tiantian",
+      "sites": 586,
+      "folders": 26,
+      "files": [
+        "tiantian_nested.json",
+        "tiantian_nested.csv",
+        "tiantian_nested.xlsx",
+        "tiantian_bookmarks.html",
+        "tiantian_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "cancerinfo",
+      "prefix": "cancerinfo",
+      "sites": 78,
+      "folders": 10,
+      "files": [
+        "cancerinfo_nested.json",
+        "cancerinfo_nested.csv",
+        "cancerinfo_nested.xlsx",
+        "cancerinfo_bookmarks.html",
+        "cancerinfo_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "mlmism",
+      "prefix": "mlmism",
+      "sites": 147,
+      "folders": 22,
+      "files": [
+        "mlmism_nested.json",
+        "mlmism_nested.csv",
+        "mlmism_nested.xlsx",
+        "mlmism_bookmarks.html",
+        "mlmism_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "spatialtranscriptome",
+      "prefix": "spatialtranscriptome",
+      "sites": 157,
+      "folders": 19,
+      "files": [
+        "spatialtranscriptome_nested.json",
+        "spatialtranscriptome_nested.csv",
+        "spatialtranscriptome_nested.xlsx",
+        "spatialtranscriptome_bookmarks.html",
+        "spatialtranscriptome_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "communism",
+      "prefix": "communism",
+      "sites": 111,
+      "folders": 9,
+      "files": [
+        "communism_nested.json",
+        "communism_nested.csv",
+        "communism_nested.xlsx",
+        "communism_bookmarks.html",
+        "communism_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "qingyuntian",
+      "prefix": "qingyuntian",
+      "sites": 147,
+      "folders": 17,
+      "files": [
+        "qingyuntian_nested.json",
+        "qingyuntian_nested.csv",
+        "qingyuntian_nested.xlsx",
+        "qingyuntian_bookmarks.html",
+        "qingyuntian_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "meitiren",
+      "prefix": "meitiren",
+      "sites": 140,
+      "folders": 16,
+      "files": [
+        "meitiren_nested.json",
+        "meitiren_nested.csv",
+        "meitiren_nested.xlsx",
+        "meitiren_bookmarks.html",
+        "meitiren_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "junwei",
+      "prefix": "junwei",
+      "sites": 87,
+      "folders": 13,
+      "files": [
+        "junwei_nested.json",
+        "junwei_nested.csv",
+        "junwei_nested.xlsx",
+        "junwei_bookmarks.html",
+        "junwei_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "titan",
+      "prefix": "titan",
+      "sites": 141,
+      "folders": 10,
+      "files": [
+        "titan_nested.json",
+        "titan_nested.csv",
+        "titan_nested.xlsx",
+        "titan_bookmarks.html",
+        "titan_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "fangzichang",
+      "prefix": "fangzichang",
+      "sites": 111,
+      "folders": 4,
+      "files": [
+        "fangzichang_nested.json",
+        "fangzichang_nested.csv",
+        "fangzichang_nested.xlsx",
+        "fangzichang_bookmarks.html",
+        "fangzichang_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "yanmulan",
+      "prefix": "yanmulan",
+      "sites": 991,
+      "folders": 47,
+      "files": [
+        "yanmulan_nested.json",
+        "yanmulan_nested.csv",
+        "yanmulan_nested.xlsx",
+        "yanmulan_bookmarks.html",
+        "yanmulan_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "yzhrjd",
+      "prefix": "yzhrjd",
+      "sites": 205,
+      "folders": 13,
+      "files": [
+        "yzhrjd_nested.json",
+        "yzhrjd_nested.csv",
+        "yzhrjd_nested.xlsx",
+        "yzhrjd_bookmarks.html",
+        "yzhrjd_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "taoxiangjiang",
+      "prefix": "taoxiangjiang",
+      "sites": 1044,
+      "folders": 49,
+      "files": [
+        "taoxiangjiang_nested.json",
+        "taoxiangjiang_nested.csv",
+        "taoxiangjiang_nested.xlsx",
+        "taoxiangjiang_bookmarks.html",
+        "taoxiangjiang_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "pcsoftware",
+      "prefix": "pcsoftware",
+      "sites": 181,
+      "folders": 20,
+      "files": [
+        "pcsoftware_nested.json",
+        "pcsoftware_nested.csv",
+        "pcsoftware_nested.xlsx",
+        "pcsoftware_bookmarks.html",
+        "pcsoftware_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "bangong",
+      "prefix": "bangong",
+      "sites": 37,
+      "folders": 6,
+      "files": [
+        "bangong_nested.json",
+        "bangong_nested.csv",
+        "bangong_nested.xlsx",
+        "bangong_bookmarks.html",
+        "bangong_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "xianshi",
+      "prefix": "xianshi",
+      "sites": 47,
+      "folders": 4,
+      "files": [
+        "xianshi_nested.json",
+        "xianshi_nested.csv",
+        "xianshi_nested.xlsx",
+        "xianshi_bookmarks.html",
+        "xianshi_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "edcsion",
+      "prefix": "edcsion",
+      "sites": 121,
+      "folders": 10,
+      "files": [
+        "edcsion_nested.json",
+        "edcsion_nested.csv",
+        "edcsion_nested.xlsx",
+        "edcsion_bookmarks.html",
+        "edcsion_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "wesafe",
+      "prefix": "wesafe",
+      "sites": 108,
+      "folders": 15,
+      "files": [
+        "wesafe_nested.json",
+        "wesafe_nested.csv",
+        "wesafe_nested.xlsx",
+        "wesafe_bookmarks.html",
+        "wesafe_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "changyong",
+      "prefix": "changyong",
+      "sites": 176,
+      "folders": 20,
+      "files": [
+        "changyong_nested.json",
+        "changyong_nested.csv",
+        "changyong_nested.xlsx",
+        "changyong_bookmarks.html",
+        "changyong_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "yingshiziyuan",
+      "prefix": "yingshiziyuan",
+      "sites": 73,
+      "folders": 10,
+      "files": [
+        "yingshiziyuan_nested.json",
+        "yingshiziyuan_nested.csv",
+        "yingshiziyuan_nested.xlsx",
+        "yingshiziyuan_bookmarks.html",
+        "yingshiziyuan_nav_v2.html"
+      ],
+      "error": ""
+    },
+    {
+      "user": "anywhere",
+      "prefix": "anywhere",
+      "sites": 2537,
+      "folders": 52,
+      "files": [
+        "anywhere_nested.json",
+        "anywhere_nested.csv",
+        "anywhere_nested.xlsx",
+        "anywhere_bookmarks.html",
+        "anywhere_nav_v2.html"
+      ],
+      "error": ""
+    }
+  ]
+}
